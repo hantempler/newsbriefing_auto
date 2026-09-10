@@ -1,0 +1,27 @@
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Virtual environments
+venv/
+env/
+.env
+
+# Secrets & Credentials
+config/application_default_credentials.json
+config/.env
+config/kakao_js_key.txt
+
+# Data & Heavy Media Files
+data/
+*.mp4
+*.mp3
+*.jpg
+*.png
+
+# Logs
+logs/
+*.log
+
+# OS generated files
+.DS_Store

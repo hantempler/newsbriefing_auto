@@ -1,0 +1,73 @@
+name: Daily News Briefing Pipeline
+
+on:
+  schedule:
+    # GitHub Actions cron은 UTC 기준입니다. (한국 KST = UTC + 9)
+    # 아침 06:30 KST -> UTC 21:30 (이전 날)
+    - cron: '30 21 * * *'
+    # 점심 11:00 KST -> UTC 02:00
+    - cron: '0 2 * * *'
+    # 저녁 16:00 KST -> UTC 07:00
+    - cron: '0 7 * * *'
+  
+  # 수동 실행을 위한 워크플로우 디스패치
+  workflow_dispatch:
+    inputs:
+      edition:
+        description: '실행할 버전 (morning, lunch, evening)'
+        required: true
+        default: 'lunch'
+
+jobs:
+  run-pipeline:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11' # 필요에 따라 버전을 맞추세요
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+      - name: Setup Google Cloud Credentials
+        env:
+          GCP_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS_JSON }}
+        run: |
+          mkdir -p config
+          echo "$GCP_CREDENTIALS" > config/application_default_credentials.json
+
+      - name: Setup Naver API keys
+        run: |
+          echo "NAVER_CLIENT_ID=${{ secrets.NAVER_CLIENT_ID }}" > config/.env
+          echo "NAVER_CLIENT_SECRET=${{ secrets.NAVER_CLIENT_SECRET }}" >> config/.env
+
+      - name: Determine Edition based on time
+        id: set_edition
+        run: |
+          # 기본적으로 수동 실행(workflow_dispatch)일 경우 해당 입력을 사용
+          EDITION="${{ github.event.inputs.edition }}"
+          
+          # 스케줄(cron) 실행일 경우 시간에 따라 분기
+          if [ "${{ github.event_name }}" == "schedule" ]; then
+            HOUR=$(date -u +'%H')
+            if [ "$HOUR" == "21" ]; then
+              EDITION="morning"
+            elif [ "$HOUR" == "02" ]; then
+              EDITION="lunch"
+            elif [ "$HOUR" == "07" ]; then
+              EDITION="evening"
+            fi
+          fi
+          echo "edition=$EDITION" >> $GITHUB_ENV
+
+      - name: Run Pipeline (Headless mode)
+        run: |
+          echo "Executing headless pipeline for edition: ${{ env.edition }}"
+          python src/auto_run.py --edition ${{ env.edition }}
