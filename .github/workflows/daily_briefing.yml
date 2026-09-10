@@ -68,6 +68,8 @@ jobs:
           echo "edition=$EDITION" >> $GITHUB_ENV
 
       - name: Run Pipeline (Headless mode)
+        env:
+          GCS_BUCKET_NAME: ${{ secrets.GCS_BUCKET_NAME }}
         run: |
           echo "Executing headless pipeline for edition: ${{ env.edition }}"
           python src/auto_run.py --edition ${{ env.edition }}

@@ -11,6 +11,34 @@ from src.script_gen import run_script_gen
 from src.tts_gen import run_tts_gen
 from src.renderer_1_thumb import run_renderer_thumb
 from src.renderer_2_video import run_renderer_video
+from google.cloud import storage
+
+def upload_video_to_gcs(target_date, edition):
+    bucket_name = os.environ.get("GCS_BUCKET_NAME")
+    if not bucket_name:
+        print("GCS_BUCKET_NAME environment variable is not set. Skipping GCS upload.")
+        return
+
+    from src.config import EDITION_CONFIG, get_daily_dir
+    video_suffix = EDITION_CONFIG[edition]['video_suffix']
+    daily_dir = get_daily_dir(target_date, edition)
+    video_filename = f"{target_date}{video_suffix}"
+    video_path = os.path.join(daily_dir, video_filename)
+
+    if not os.path.exists(video_path):
+        print(f"Video file not found at {video_path}. Cannot upload.")
+        return
+
+    print(f"Uploading {video_filename} to GCS bucket '{bucket_name}'...")
+    try:
+        client = storage.Client()
+        bucket = client.bucket(bucket_name)
+        blob = bucket.blob(f"newsbriefing/{edition}/{target_date}/{video_filename}")
+        
+        blob.upload_from_filename(video_path)
+        print(f"Successfully uploaded to gs://{bucket_name}/newsbriefing/{edition}/{target_date}/{video_filename}")
+    except Exception as e:
+        print(f"Failed to upload to GCS: {e}")
 
 def main():
     parser = argparse.ArgumentParser(description="뉴스 브리핑 자동화 파이프라인 (클라우드/무인 실행용)")
@@ -39,6 +67,9 @@ def main():
         
         print("\n--- 5. 영상 렌더링 ---")
         run_renderer_video(target_date, edition=edition)
+        
+        print("\n--- 6. GCS 버킷 업로드 ---")
+        upload_video_to_gcs(target_date, edition=edition)
         
         print(f"\n[{edition.upper()}] 모든 작업이 성공적으로 완료되었습니다!")
     except Exception as e:
