@@ -3,6 +3,6 @@ beautifulsoup4
 google-genai
 google-cloud-texttospeech
 moviepy==1.0.3
-Pillow
+Pillow<10.0.0
 inquirer
 python-dotenv
