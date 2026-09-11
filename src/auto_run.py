@@ -29,7 +29,7 @@ def _get_video_path(target_date, edition):
 
 def upload_video_to_gdrive(target_date, edition):
     """Google Drive에 영상 업로드 (OAuth 토큰 방식)"""
-    folder_id = os.environ.get("GDRIVE_FOLDER_ID")
+    folder_id = os.environ.get("GDRIVE_FOLDER_ID", "").strip()  # 공백 제거
     if not folder_id:
         print("[GDrive] GDRIVE_FOLDER_ID 미설정. 업로드 건너뜀.")
         return
@@ -45,11 +45,21 @@ def upload_video_to_gdrive(target_date, edition):
         print(f"[GDrive] 영상 파일 없음: {video_path}")
         return
 
-    print(f"[GDrive] '{video_filename}' 업로드 중...")
+    print(f"[GDrive] '{video_filename}' 업로드 중... (folder_id: {folder_id})")
     try:
         creds = Credentials.from_authorized_user_file(token_path)
         service = build('drive', 'v3', credentials=creds)
-        file_metadata = {'name': video_filename, 'parents': [folder_id]}
+
+        # 폴더 존재 여부 사전 확인
+        try:
+            service.files().get(fileId=folder_id, fields='id,name').execute()
+            file_metadata = {'name': video_filename, 'parents': [folder_id]}
+            print(f"[GDrive] 폴더 확인 완료. 폴더에 업로드합니다.")
+        except Exception:
+            # 폴더를 찾을 수 없으면 루트에 업로드 (fallback)
+            print(f"[GDrive] 폴더(ID: {folder_id}) 접근 실패. 루트에 업로드합니다.")
+            file_metadata = {'name': video_filename}
+
         media = MediaFileUpload(video_path, mimetype='video/mp4', resumable=True)
         file = service.files().create(body=file_metadata, media_body=media, fields='id').execute()
         print(f"[GDrive] 업로드 완료! File ID: {file.get('id')}")
@@ -92,7 +102,7 @@ def upload_video_to_youtube(target_date, edition):
                 'categoryId': '25'  # 25 = News & Politics
             },
             'status': {
-                'privacyStatus': 'public'
+                'privacyStatus': 'unlisted'  # 미등록(링크 있는 사람만 시청 가능). 관리자 확인 후 'public'으로 변경 가능.
             }
         }
         media = MediaFileUpload(video_path, mimetype='video/mp4', resumable=True)
