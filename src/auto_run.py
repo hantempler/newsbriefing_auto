@@ -102,7 +102,7 @@ def upload_video_to_youtube(target_date, edition):
                 'categoryId': '25'  # 25 = News & Politics
             },
             'status': {
-                'privacyStatus': 'unlisted'  # 미등록(링크 있는 사람만 시청 가능). 관리자 확인 후 'public'으로 변경 가능.
+                'privacyStatus': 'private'  # 비공개. YouTube Studio에서 직접 확인 후 공개로 전환하세요.
             }
         }
         media = MediaFileUpload(video_path, mimetype='video/mp4', resumable=True)
