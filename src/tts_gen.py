@@ -39,7 +39,7 @@ def run_tts_gen(target_date, edition='morning'):
     
     audio_config = texttospeech.AudioConfig(
         audio_encoding=texttospeech.AudioEncoding.MP3,
-        speaking_rate=1.2, # 속도감 있게 전달
+        speaking_rate=1.05, # 속도감 있게 전달
         pitch=0.0
     )
 

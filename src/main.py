@@ -17,7 +17,13 @@ def main():
     questions = [
         inquirer.List('edition',
                       message="어느 버전을 실행하시겠습니까?",
-                      choices=['morning (출근길 뉴스)', 'lunch (점심시간 뉴스)', 'evening (퇴근길 뉴스)'],
+                      choices=[
+                          'morning (출근길 뉴스)',
+                          'lunch (점심시간 뉴스)',
+                          'evening (퇴근길 뉴스)',
+                          'weekend_morning (주말 아침 라이프)',
+                          'weekend_evening (주말 저녁 라이프)',
+                      ],
                   ),
         inquirer.List('date_option',
                       message="어느 날짜의 기사를 수집/처리하시겠습니까?",
@@ -29,7 +35,11 @@ def main():
     if not answers:
         return
         
-    if 'morning' in answers['edition']:
+    if 'weekend_morning' in answers['edition']:
+        edition = 'weekend_morning'
+    elif 'weekend_evening' in answers['edition']:
+        edition = 'weekend_evening'
+    elif 'morning' in answers['edition']:
         edition = 'morning'
     elif 'lunch' in answers['edition']:
         edition = 'lunch'

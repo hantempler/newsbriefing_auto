@@ -69,7 +69,7 @@ jobs:
 
       - name: Run Pipeline (Headless mode)
         env:
-          GCS_BUCKET_NAME: ${{ secrets.GCS_BUCKET_NAME }}
+          GDRIVE_FOLDER_ID: ${{ secrets.GDRIVE_FOLDER_ID }}
         run: |
           echo "Executing headless pipeline for edition: ${{ env.edition }}"
           python src/auto_run.py --edition ${{ env.edition }}

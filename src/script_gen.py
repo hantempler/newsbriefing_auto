@@ -93,6 +93,8 @@ def run_script_gen(target_date=None, edition='morning'):
         
     if edition == 'lunch':
         prompt_topic_condition = "이 중에서 점심시간에 가볍고 재미있게 읽을 수 있는 라이프스타일, 연예, 문화, IT/트렌드, 유머 등 무겁지 않은 주제의 흥미로운 이슈 6가지를 우선순위대로 골라주세요. 정치/사건사고/무거운 경제 뉴스는 피해주세요."
+    elif edition in ('weekend_morning', 'weekend_evening'):
+        prompt_topic_condition = "이 중에서 주말에 즐길 수 있는 라이프스타일, 레저, 여행, 문화, 맛집, 연예/엔터테인먼트, IT 트렌드 등 풍요롭고 가벼운 주제의 이슈 5가지와, 이번 주 놓치면 안 될 핵심 시사 이슈 1가지를 합쳐 총 6가지를 우선순위대로 골라주세요. 무거운 정치 분쟁이나 사건사고 위주의 뉴스는 피해주세요."
     else:
         prompt_topic_condition = "이 중에서 2040 직장인들이 가장 관심 가질 만한 핵심 이슈 6가지를 우선순위대로 골라주세요."
 
