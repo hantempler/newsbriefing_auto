@@ -14,9 +14,9 @@ on:
   workflow_dispatch:
     inputs:
       edition:
-        description: '실행할 버전 (morning, lunch, evening)'
+        description: '실행할 버전 (morning, lunch, evening, weekend_morning, weekend_evening)'
         required: true
-        default: 'lunch'
+        default: 'morning'
 
 jobs:
   run-pipeline:
@@ -29,7 +29,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11' # 필요에 따라 버전을 맞추세요
+          python-version: '3.11'
 
       - name: Install dependencies
         run: |
@@ -47,6 +47,18 @@ jobs:
         run: |
           echo "NAVER_CLIENT_ID=${{ secrets.NAVER_CLIENT_ID }}" > config/.env
           echo "NAVER_CLIENT_SECRET=${{ secrets.NAVER_CLIENT_SECRET }}" >> config/.env
+
+      - name: Setup Google Drive Token
+        env:
+          GDRIVE_TOKEN: ${{ secrets.GDRIVE_TOKEN_JSON }}
+        run: |
+          echo "$GDRIVE_TOKEN" > config/gdrive_token.json
+
+      - name: Setup YouTube Token
+        env:
+          YOUTUBE_TOKEN: ${{ secrets.YOUTUBE_TOKEN_JSON }}
+        run: |
+          echo "$YOUTUBE_TOKEN" > config/youtube_token.json
 
       - name: Determine Edition based on time
         id: set_edition

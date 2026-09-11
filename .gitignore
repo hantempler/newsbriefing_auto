@@ -11,6 +11,10 @@ env/
 config/application_default_credentials.json
 config/.env
 config/kakao_js_key.txt
+config/client_secrets.json
+config/gdrive_token.json
+config/youtube_token.json
+client_secret*.json
 
 # Data & Heavy Media Files
 data/
