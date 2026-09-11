@@ -65,8 +65,14 @@ def run_script_gen(target_date=None, edition='morning'):
     
     # 히스토리 파일 로드 및 중복 배제 로직
     if not target_date:
-        target_date = datetime.now().strftime("%Y%m%d")
-        
+        from datetime import timezone, timedelta
+        target_date = datetime.now(timezone(timedelta(hours=9))).strftime("%Y%m%d")
+
+    # KST 기준 날짜/요일 계산 (Gemini 프롬프트에 주입용)
+    _WEEKDAYS_KO = ["월요일", "화요일", "수요일", "목요일", "금요일", "토요일", "일요일"]
+    _dt = datetime(int(target_date[:4]), int(target_date[4:6]), int(target_date[6:8]))
+    kst_date_str = f"{target_date[:4]}년 {int(target_date[4:6])}월 {int(target_date[6:8])}일 ({_WEEKDAYS_KO[_dt.weekday()]})"
+
     history_path = os.path.join(BASE_DIR, "data", f"history_{target_date}.json")
     history_data = {}
     if os.path.exists(history_path):
@@ -182,9 +188,15 @@ def run_script_gen(target_date=None, edition='morning'):
     for i, news in enumerate(selected_news):
         context += f"이슈 {i+1}:\n제목: {news['title']}\n내용: {news['description']}\n\n"
         
-    system_instruction = "당신은 2040 직장인 타겟의 정보 전달형 쇼츠(1분 이내) 스크립트 작가입니다."
+    system_instruction = (
+        "당신은 2040 직장인 타겟의 정보 전달형 쇼츠(1분 이내) 스크립트 작가입니다.\n"
+        f"[필수 준수] 오늘 날짜는 정확히 '{kst_date_str}'입니다. "
+        "대본 어디에도 이 날짜/요일과 다른 표현을 절대 사용하지 마세요. "
+        "날짜나 요일을 언급해야 할 경우 반드시 위 날짜 정보만 사용하세요."
+    )
     
     script_prompt = f"""
+    [오늘 날짜: {kst_date_str}] — 이 날짜/요일을 대본에서 언급할 때 반드시 그대로 사용할 것.
     아래는 오늘 가장 핵심적인 3가지 이슈(기사 본문 전체)입니다.
     이 3가지 이슈를 속도감 있게 전달하고 브리핑하는 1분 분량의 쇼츠 대본을 작성해주세요.
     
