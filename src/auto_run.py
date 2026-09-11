@@ -1,7 +1,10 @@
 import os
 import sys
 import argparse
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
+
+# GitHub Actions 서버는 UTC 기준. 한국 시간(KST = UTC+9)으로 날짜/요일 판단
+KST = timezone(timedelta(hours=9))
 
 # Add src to Python path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -106,13 +109,14 @@ def main():
     args = parser.parse_args()
 
     edition = args.edition
-    target_date = args.date if args.date else datetime.now().strftime("%Y%m%d")
+    # KST 기준 오늘 날짜 사용 (GitHub Actions 서버는 UTC)
+    # 예: 토 KST 06:30 = 금 UTC 21:30 → UTC 날짜 쓰면 금요일로 오인
+    _now_kst = datetime.now(KST)
+    target_date = args.date if args.date else _now_kst.strftime("%Y%m%d")
 
     # --- 주말 자동 감지 (Weekend Auto-Detection) ---
-    # YAML이 morning/evening을 인자로 넘겨도, 주말이면 자동 전환
-    # 주말 에디션을 직접 지정하려면: --edition weekend_morning 으로 override 가능
-    _today = datetime.now()
-    _is_weekend = _today.weekday() >= 5  # 5=토, 6=일
+    # KST 기준 요일로 판단 (UTC 기준이면 토 아침이 금요일로 오인되는 버그 발생)
+    _is_weekend = _now_kst.weekday() >= 5  # 5=토, 6=일
 
     WEEKEND_EDITION_MAP = {
         'morning': 'weekend_morning',
