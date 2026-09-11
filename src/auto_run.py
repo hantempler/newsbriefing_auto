@@ -13,39 +13,91 @@ from src.renderer_1_thumb import run_renderer_thumb
 from src.renderer_2_video import run_renderer_video
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
-import google.auth
+from google.oauth2.credentials import Credentials
 
-def upload_video_to_gdrive(target_date, edition):
-    folder_id = os.environ.get("GDRIVE_FOLDER_ID")
-    if not folder_id:
-        print("GDRIVE_FOLDER_ID environment variable is not set. Skipping Google Drive upload.")
-        return
-
+def _get_video_path(target_date, edition):
+    """영상 파일 경로를 반환하는 공통 헬퍼"""
     from src.config import EDITION_CONFIG, get_daily_dir
     video_suffix = EDITION_CONFIG[edition]['video_suffix']
     daily_dir = get_daily_dir(target_date, edition)
     video_filename = f"{target_date}{video_suffix}"
     video_path = os.path.join(daily_dir, video_filename)
+    return video_path, video_filename
 
-    if not os.path.exists(video_path):
-        print(f"Video file not found at {video_path}. Cannot upload.")
+def upload_video_to_gdrive(target_date, edition):
+    """Google Drive에 영상 업로드 (OAuth 토큰 방식)"""
+    folder_id = os.environ.get("GDRIVE_FOLDER_ID")
+    if not folder_id:
+        print("[GDrive] GDRIVE_FOLDER_ID 미설정. 업로드 건너뜀.")
         return
 
-    print(f"Uploading {video_filename} to Google Drive folder '{folder_id}'...")
+    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    token_path = os.path.join(BASE_DIR, "config", "gdrive_token.json")
+    if not os.path.exists(token_path):
+        print(f"[GDrive] 토큰 파일 없음 ({token_path}). 업로드 건너뜀.")
+        return
+
+    video_path, video_filename = _get_video_path(target_date, edition)
+    if not os.path.exists(video_path):
+        print(f"[GDrive] 영상 파일 없음: {video_path}")
+        return
+
+    print(f"[GDrive] '{video_filename}' 업로드 중...")
     try:
-        credentials, project = google.auth.default(scopes=['https://www.googleapis.com/auth/drive'])
-        service = build('drive', 'v3', credentials=credentials)
-        
-        file_metadata = {
-            'name': video_filename,
-            'parents': [folder_id]
+        creds = Credentials.from_authorized_user_file(token_path)
+        service = build('drive', 'v3', credentials=creds)
+        file_metadata = {'name': video_filename, 'parents': [folder_id]}
+        media = MediaFileUpload(video_path, mimetype='video/mp4', resumable=True)
+        file = service.files().create(body=file_metadata, media_body=media, fields='id').execute()
+        print(f"[GDrive] 업로드 완료! File ID: {file.get('id')}")
+    except Exception as e:
+        print(f"[GDrive] 업로드 실패: {e}")
+
+def upload_video_to_youtube(target_date, edition):
+    """YouTube에 영상 업로드 (OAuth 토큰 방식)"""
+    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    token_path = os.path.join(BASE_DIR, "config", "youtube_token.json")
+    if not os.path.exists(token_path):
+        print(f"[YouTube] 토큰 파일 없음 ({token_path}). 업로드 건너뜀.")
+        return
+
+    video_path, video_filename = _get_video_path(target_date, edition)
+    if not os.path.exists(video_path):
+        print(f"[YouTube] 영상 파일 없음: {video_path}")
+        return
+
+    from src.config import EDITION_CONFIG
+    top_title = EDITION_CONFIG[edition]['top_title']
+    # 날짜 포맷: YYYYMMDD -> YYYY.MM.DD
+    date_formatted = f"{target_date[:4]}.{target_date[4:6]}.{target_date[6:8]}"
+    yt_title = f"{date_formatted} {top_title} 뉴스브리핑"
+    yt_description = (
+        f"{date_formatted} {top_title}\n\n"
+        "#뉴스브리핑 #쇼츠 #Shorts\n"
+        f"#{edition}"
+    )
+
+    print(f"[YouTube] '{yt_title}' 업로드 중...")
+    try:
+        creds = Credentials.from_authorized_user_file(token_path)
+        youtube = build('youtube', 'v3', credentials=creds)
+        body = {
+            'snippet': {
+                'title': yt_title,
+                'description': yt_description,
+                'tags': ['뉴스브리핑', '쇼츠', 'Shorts', top_title],
+                'categoryId': '25'  # 25 = News & Politics
+            },
+            'status': {
+                'privacyStatus': 'public'
+            }
         }
         media = MediaFileUpload(video_path, mimetype='video/mp4', resumable=True)
-        
-        file = service.files().create(body=file_metadata, media_body=media, fields='id').execute()
-        print(f"Successfully uploaded to Google Drive! File ID: {file.get('id')}")
+        request = youtube.videos().insert(part='snippet,status', body=body, media_body=media)
+        response = request.execute()
+        print(f"[YouTube] 업로드 완료! https://youtu.be/{response['id']}")
     except Exception as e:
-        print(f"Failed to upload to Google Drive: {e}")
+        print(f"[YouTube] 업로드 실패: {e}")
 
 def main():
     parser = argparse.ArgumentParser(description="뉴스 브리핑 자동화 파이프라인 (클라우드/무인 실행용)")
@@ -99,6 +151,9 @@ def main():
         
         print("\n--- 6. Google Drive 업로드 ---")
         upload_video_to_gdrive(target_date, edition=edition)
+
+        print("\n--- 7. YouTube 업로드 ---")
+        upload_video_to_youtube(target_date, edition=edition)
         
         print(f"\n[{edition.upper()}] 모든 작업이 성공적으로 완료되었습니다!")
     except Exception as e:
