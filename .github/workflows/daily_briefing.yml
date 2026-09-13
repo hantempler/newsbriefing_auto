@@ -1,338 +1,157 @@
-import os
-import sys
-import time
-import argparse
-from datetime import datetime, timezone, timedelta
+name: Daily News Briefing Pipeline
 
-# GitHub Actions 서버는 UTC 기준. 한국 시간(KST = UTC+9)으로 날짜/요일 판단
-KST = timezone(timedelta(hours=9))
+on:
+  schedule:
+    # GitHub Actions cron은 UTC 기준입니다. (한국 KST = UTC + 9)
+    # ※ 정각/30분은 Runner 큐 혼잡으로 지연이 잦음 → 비교적 한산한 분(minute) 사용
+    # 아침 06:30 KST -> UTC 21:30 (이전 날) → 혼잡 회피용 21:33
+    - cron: '33 21 * * *'
+    # 점심 11:00 KST -> UTC 02:00 → 혼잡 회피용 02:07
+    - cron: '7 2 * * *'
+    # 저녁 16:00 KST -> UTC 07:00 → 혼잡 회피용 07:11
+    - cron: '11 7 * * *'
 
-# Add src to Python path
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+  # 수동 실행을 위한 워크플로우 디스패치
+  workflow_dispatch:
+    inputs:
+      edition:
+        description: '실행할 버전 (morning, lunch, evening, weekend_morning, weekend_evening)'
+        required: true
+        default: 'morning'
 
-from src.scraper import scrape_naver_ranking_news
-from src.script_gen import run_script_gen
-from src.tts_gen import run_tts_gen
-from src.renderer_1_thumb import run_renderer_thumb
-from src.renderer_2_video import run_renderer_video
-from googleapiclient.discovery import build
-from googleapiclient.http import MediaFileUpload
-from google.oauth2.credentials import Credentials
+# 동일 그룹의 job이 이미 실행 중이면 이전 것을 취소하고 새 것을 실행
+concurrency:
+  group: briefing-pipeline
+  cancel-in-progress: true
 
+jobs:
+  run-pipeline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60  # 전체 job 타임아웃 (렌더링 hang 방지)
 
-# ---------------------------------------------------------------------------
-# 재시도 유틸리티
-# ---------------------------------------------------------------------------
-def run_with_retry(func, step_name, max_attempts=3, wait_seconds=30, *args, **kwargs):
-    """
-    주어진 함수를 최대 max_attempts 회까지 재시도합니다.
-    성공 시 True, 모든 시도 실패 시 마지막 예외를 raise 합니다.
-    """
-    last_exc = None
-    for attempt in range(1, max_attempts + 1):
-        try:
-            print(f"[{step_name}] 시도 {attempt}/{max_attempts} ...")
-            result = func(*args, **kwargs)
-            print(f"[{step_name}] ✅ 성공 (시도 {attempt}회)")
-            return result
-        except Exception as e:
-            last_exc = e
-            print(f"[{step_name}] ❌ 실패 (시도 {attempt}회): {e}")
-            if attempt < max_attempts:
-                print(f"[{step_name}] {wait_seconds}초 후 재시도합니다...")
-                time.sleep(wait_seconds)
-    raise last_exc
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
 
-# ---------------------------------------------------------------------------
-# 각 단계 완료 여부 체크 헬퍼
-# ---------------------------------------------------------------------------
-def _is_step_done(daily_dir, marker_filename):
-    """
-    중간 결과 파일이 존재하고 크기가 0 이상이면 해당 단계가 완료된 것으로 간주합니다.
-    재시도(retry) 시 이미 완료된 단계를 건너뛸 수 있습니다.
-    """
-    path = os.path.join(daily_dir, marker_filename)
-    return os.path.exists(path) and os.path.getsize(path) > 0
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
+      - name: Setup Google Cloud Credentials
+        env:
+          GCP_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS_JSON }}
+        run: |
+          mkdir -p config
+          echo "$GCP_CREDENTIALS" > config/application_default_credentials.json
 
-# ---------------------------------------------------------------------------
-# 단계별 완료 마커 파일 정의
-# (각 단계 함수가 생성하는 대표 출력 파일)
-# ---------------------------------------------------------------------------
-STEP_MARKERS = {
-    "scrape":    "1_all_titles.json",   # scraper.py 출력
-    "script":    "3_script.json",       # script_gen.py 출력
-    "tts":       "4_audio_hook.mp3",    # tts_gen.py 출력 (hook이 첫 번째)
-    "thumb":     "5_thumbnail.png",     # renderer_1_thumb.py 출력 (추정)
-    # video: video_path 자체로 체크하므로 여기선 제외
-}
+      - name: Setup Naver API keys
+        run: |
+          echo "NAVER_CLIENT_ID=${{ secrets.NAVER_CLIENT_ID }}" > config/.env
+          echo "NAVER_CLIENT_SECRET=${{ secrets.NAVER_CLIENT_SECRET }}" >> config/.env
 
+      - name: Setup Google Drive Token
+        env:
+          GDRIVE_TOKEN: ${{ secrets.GDRIVE_TOKEN_JSON }}
+        run: |
+          echo "$GDRIVE_TOKEN" > config/gdrive_token.json
 
-# ---------------------------------------------------------------------------
-# GDrive / YouTube 업로드
-# ---------------------------------------------------------------------------
-def _get_video_path(target_date, edition):
-    """영상 파일 경로를 반환하는 공통 헬퍼"""
-    from src.config import EDITION_CONFIG, get_daily_dir
-    video_suffix = EDITION_CONFIG[edition]['video_suffix']
-    daily_dir = get_daily_dir(target_date, edition)
-    video_filename = f"{target_date}{video_suffix}"
-    video_path = os.path.join(daily_dir, video_filename)
-    return video_path, video_filename
+      - name: Setup YouTube Token
+        env:
+          YOUTUBE_TOKEN: ${{ secrets.YOUTUBE_TOKEN_JSON }}
+        run: |
+          echo "$YOUTUBE_TOKEN" > config/youtube_token.json
 
+      # -----------------------------------------------------------------------
+      # edition 결정
+      # 핵심 버그 수정:
+      #   - 기존: $GITHUB_ENV + ${{ env.edition }} → YAML 렌더링 타이밍 문제로 빈 값 전달
+      #   - 수정: GITHUB_OUTPUT 방식 사용 → steps.set_edition.outputs.edition 으로 참조
+      #   - 기존: HOUR 정확히 일치(==) → cron 지연 시 miss 발생
+      #   - 수정: HOUR 범위 체크(±1시간 이내) + 시각이 안 맞으면 가장 가까운 edition 선택
+      # -----------------------------------------------------------------------
+      - name: Determine Edition based on time
+        id: set_edition
+        run: |
+          EDITION=""
 
-def upload_video_to_gdrive(target_date, edition):
-    """Google Drive에 영상 업로드 (OAuth 토큰 방식)"""
-    folder_id = os.environ.get("GDRIVE_FOLDER_ID", "").strip()
-    if not folder_id:
-        print("[GDrive] GDRIVE_FOLDER_ID 미설정. 업로드 건너뜀.")
-        return
+          # 수동 실행(workflow_dispatch)일 경우 입력값 사용
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            EDITION="${{ github.event.inputs.edition }}"
+          fi
 
-    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    token_path = os.path.join(BASE_DIR, "config", "gdrive_token.json")
-    if not os.path.exists(token_path):
-        print(f"[GDrive] 토큰 파일 없음 ({token_path}). 업로드 건너뜀.")
-        return
+          # 스케줄(cron) 실행일 경우 UTC 시간 기준으로 분기
+          # cron 지연을 고려해 정확한 시각 일치 대신 "가장 가까운 edition" 방식 사용
+          if [ "${{ github.event_name }}" == "schedule" ]; then
+            HOUR=$(date -u +'%H')
+            MIN=$(date -u +'%M')
+            # 전체 분(0~1439) 단위로 환산해 거리 비교
+            NOW_MINS=$(( HOUR * 60 + MIN ))
 
-    video_path, video_filename = _get_video_path(target_date, edition)
-    if not os.path.exists(video_path):
-        print(f"[GDrive] 영상 파일 없음: {video_path}")
-        return
+            # 각 edition의 목표 UTC 시각 (분 단위)
+            MORNING_MINS=$(( 21 * 60 + 33 ))  # 21:33 UTC
+            LUNCH_MINS=$(( 2 * 60 + 7 ))       # 02:07 UTC
+            EVENING_MINS=$(( 7 * 60 + 11 ))    # 07:11 UTC
 
-    print(f"[GDrive] '{video_filename}' 업로드 중... (folder_id: {folder_id})")
-    try:
-        creds = Credentials.from_authorized_user_file(token_path)
-        service = build('drive', 'v3', credentials=creds)
-
-        # 폴더 존재 여부 사전 확인
-        try:
-            service.files().get(fileId=folder_id, fields='id,name').execute()
-            file_metadata = {'name': video_filename, 'parents': [folder_id]}
-            print(f"[GDrive] 폴더 확인 완료. 폴더에 업로드합니다.")
-        except Exception:
-            # 폴더를 찾을 수 없으면 루트에 업로드 (fallback)
-            print(f"[GDrive] 폴더(ID: {folder_id}) 접근 실패. 루트에 업로드합니다.")
-            file_metadata = {'name': video_filename}
-
-        media = MediaFileUpload(video_path, mimetype='video/mp4', resumable=True)
-        file = service.files().create(body=file_metadata, media_body=media, fields='id').execute()
-        print(f"[GDrive] 업로드 완료! File ID: {file.get('id')}")
-    except Exception as e:
-        print(f"[GDrive] 업로드 실패: {e}")
-
-
-def upload_video_to_youtube(target_date, edition):
-    """YouTube에 영상 업로드 (OAuth 토큰 방식)"""
-    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    token_path = os.path.join(BASE_DIR, "config", "youtube_token.json")
-    if not os.path.exists(token_path):
-        print(f"[YouTube] 토큰 파일 없음 ({token_path}). 업로드 건너뜀.")
-        return
-
-    video_path, video_filename = _get_video_path(target_date, edition)
-    if not os.path.exists(video_path):
-        print(f"[YouTube] 영상 파일 없음: {video_path}")
-        return
-
-    from src.config import EDITION_CONFIG
-    top_title = EDITION_CONFIG[edition]['top_title']
-    # 날짜 포맷: YYYYMMDD -> YYYY.MM.DD
-    date_formatted = f"{target_date[:4]}.{target_date[4:6]}.{target_date[6:8]}"
-    yt_title = f"{date_formatted} {top_title} 뉴스브리핑"
-    yt_description = (
-        f"{date_formatted} {top_title}\n\n"
-        "#뉴스브리핑 #쇼츠 #Shorts\n"
-        f"#{edition}"
-    )
-
-    print(f"[YouTube] '{yt_title}' 업로드 중...")
-    try:
-        creds = Credentials.from_authorized_user_file(token_path)
-        youtube = build('youtube', 'v3', credentials=creds)
-        body = {
-            'snippet': {
-                'title': yt_title,
-                'description': yt_description,
-                'tags': ['뉴스브리핑', '쇼츠', 'Shorts', top_title],
-                'categoryId': '25'  # 25 = News & Politics
-            },
-            'status': {
-                'privacyStatus': 'private'  # 비공개. YouTube Studio에서 직접 확인 후 공개로 전환하세요.
+            # 거리 계산 (자정을 넘는 경우 처리)
+            dist() {
+              local a=$1 b=$2 total=1440
+              local d=$(( a - b ))
+              d=${d#-}  # 절댓값
+              if [ $d -gt 720 ]; then d=$(( total - d )); fi
+              echo $d
             }
-        }
-        media = MediaFileUpload(video_path, mimetype='video/mp4', resumable=True)
-        request = youtube.videos().insert(part='snippet,status', body=body, media_body=media)
-        response = request.execute()
-        print(f"[YouTube] 업로드 완료! https://youtu.be/{response['id']}")
-    except Exception as e:
-        print(f"[YouTube] 업로드 실패: {e}")
 
+            D_MORNING=$(dist $NOW_MINS $MORNING_MINS)
+            D_LUNCH=$(dist $NOW_MINS $LUNCH_MINS)
+            D_EVENING=$(dist $NOW_MINS $EVENING_MINS)
 
-# ---------------------------------------------------------------------------
-# 메인 파이프라인
-# ---------------------------------------------------------------------------
-def main():
-    parser = argparse.ArgumentParser(description="뉴스 브리핑 자동화 파이프라인 (클라우드/무인 실행용)")
-    parser.add_argument("--edition", type=str, choices=['morning', 'lunch', 'evening', 'weekend_morning', 'weekend_evening'], required=True, help="실행할 버전을 지정하세요")
-    parser.add_argument("--date", type=str, default=None, help="대상 날짜 (YYYYMMDD 형식). 지정하지 않으면 오늘 날짜를 사용합니다.")
-    args = parser.parse_args()
+            echo "DEBUG: NOW=${HOUR}:${MIN} UTC (${NOW_MINS}min)"
+            echo "DEBUG: dist_morning=${D_MORNING}, dist_lunch=${D_LUNCH}, dist_evening=${D_EVENING}"
 
-    edition = args.edition
-    # KST 기준 오늘 날짜 사용 (GitHub Actions 서버는 UTC)
-    # 예: 토 KST 06:30 = 금 UTC 21:30 → UTC 날짜 쓰면 금요일로 오인
-    _now_kst = datetime.now(KST)
-    target_date = args.date if args.date else _now_kst.strftime("%Y%m%d")
+            # 가장 가까운 edition 선택 (단, 90분 이내일 때만 — 너무 먼 건 오동작 방지)
+            MIN_DIST=$D_MORNING
+            EDITION="morning"
+            if [ $D_LUNCH -lt $MIN_DIST ]; then MIN_DIST=$D_LUNCH; EDITION="lunch"; fi
+            if [ $D_EVENING -lt $MIN_DIST ]; then MIN_DIST=$D_EVENING; EDITION="evening"; fi
 
-    # --- 주말 자동 감지 (Weekend Auto-Detection) ---
-    # KST 기준 요일로 판단 (UTC 기준이면 토 아침이 금요일로 오인되는 버그 발생)
-    _is_weekend = _now_kst.weekday() >= 5  # 5=토, 6=일
+            if [ $MIN_DIST -gt 90 ]; then
+              echo "ERROR: 현재 시각(${HOUR}:${MIN} UTC)이 어떤 edition과도 90분 이상 차이납니다. 실행 중단."
+              exit 1
+            fi
+          fi
 
-    WEEKEND_EDITION_MAP = {
-        'morning': 'weekend_morning',
-        'evening': 'weekend_evening',
-        'lunch': None,  # 주말에는 점심 에디션 없음
-    }
+          # 최종 fallback — 여기까지 왔는데 EDITION이 비어있으면 강제 오류
+          if [ -z "$EDITION" ]; then
+            echo "ERROR: edition을 결정할 수 없습니다. event_name=${{ github.event_name }}"
+            exit 1
+          fi
 
-    if _is_weekend and edition in WEEKEND_EDITION_MAP:
-        _mapped = WEEKEND_EDITION_MAP[edition]
-        if _mapped is None:
-            print(f"[WEEKEND] 오늘은 주말입니다. '{edition}' 에디션은 주말에 실행되지 않습니다. 종료.")
-            sys.exit(0)
-        print(f"[WEEKEND] 주말 감지: '{edition}' → '{_mapped}' 으로 자동 전환됩니다.")
-        edition = _mapped
-    # -----------------------------------------------
+          echo "✅ 결정된 edition: $EDITION"
+          # GITHUB_OUTPUT 방식으로 저장 (다음 step에서 steps.set_edition.outputs.edition 으로 참조)
+          echo "edition=$EDITION" >> $GITHUB_OUTPUT
 
-    # daily_dir 참조 (마커 파일 체크에 사용)
-    from src.config import get_daily_dir
-    daily_dir = get_daily_dir(target_date, edition)
-
-    print(f"=== 뉴스 브리핑 무인 파이프라인 ===")
-    print(f"[{edition.upper()}] 파이프라인 시작 (대상 날짜: {target_date})")
-    print(f"[작업 디렉토리] {daily_dir}")
-
-    try:
-        # ------------------------------------------------------------------
-        # 1단계: 기사 스크랩
-        # 출력: 1_all_titles.json
-        # 네트워크 의존 → 재시도 3회
-        # ------------------------------------------------------------------
-        print("\n--- 1. 기사 스크랩 ---")
-        if _is_step_done(daily_dir, STEP_MARKERS["scrape"]):
-            print(f"[스크랩] ⏩ 이미 완료된 단계입니다. 건너뜁니다.")
-        else:
-            run_with_retry(
-                scrape_naver_ranking_news,
-                "스크랩",
-                3, 30,          # max_attempts=3, wait=30초
-                target_date, edition=edition
-            )
-
-        # ------------------------------------------------------------------
-        # 2단계: 대본 작성
-        # 출력: 3_script.json
-        # AI API 의존 → 재시도 3회
-        # ------------------------------------------------------------------
-        print("\n--- 2. 대본 작성 ---")
-        if _is_step_done(daily_dir, STEP_MARKERS["script"]):
-            print(f"[대본] ⏩ 이미 완료된 단계입니다. 건너뜁니다.")
-        else:
-            run_with_retry(
-                run_script_gen,
-                "대본",
-                3, 30,
-                target_date, edition=edition
-            )
-
-        # ------------------------------------------------------------------
-        # 3단계: 음성 합성(TTS)
-        # 출력: 4_audio_hook.mp3 외
-        # Google Cloud TTS API 의존 → 재시도 3회
-        # ------------------------------------------------------------------
-        print("\n--- 3. 음성 합성 (TTS) ---")
-        if _is_step_done(daily_dir, STEP_MARKERS["tts"]):
-            print(f"[TTS] ⏩ 이미 완료된 단계입니다. 건너뜁니다.")
-        else:
-            run_with_retry(
-                run_tts_gen,
-                "TTS",
-                3, 30,
-                target_date, edition=edition
-            )
-
-        # ------------------------------------------------------------------
-        # 4단계: 썸네일 생성
-        # 출력: 5_thumbnail.png (추정)
-        # CPU 연산 → 재시도 2회
-        # ------------------------------------------------------------------
-        print("\n--- 4. 썸네일 생성 ---")
-        if _is_step_done(daily_dir, STEP_MARKERS["thumb"]):
-            print(f"[썸네일] ⏩ 이미 완료된 단계입니다. 건너뜁니다.")
-        else:
-            run_with_retry(
-                run_renderer_thumb,
-                "썸네일",
-                2, 15,
-                target_date, edition=edition
-            )
-
-        # ------------------------------------------------------------------
-        # 5단계: 영상 렌더링
-        # 출력: {target_date}{video_suffix}.mp4
-        # CPU 연산 → 재시도 2회
-        # ------------------------------------------------------------------
-        print("\n--- 5. 영상 렌더링 ---")
-        video_path, _ = _get_video_path(target_date, edition)
-        if os.path.exists(video_path) and os.path.getsize(video_path) > 0:
-            print(f"[렌더링] ⏩ 이미 완료된 단계입니다. 건너뜁니다.")
-        else:
-            run_with_retry(
-                run_renderer_video,
-                "렌더링",
-                2, 15,
-                target_date, edition=edition
-            )
-
-        # ------------------------------------------------------------------
-        # 6단계: Google Drive 업로드
-        # 업로드 실패는 파이프라인 전체 실패로 처리하지 않음
-        # 네트워크 의존 → 재시도 3회 (단, 실패해도 계속 진행)
-        # ------------------------------------------------------------------
-        print("\n--- 6. Google Drive 업로드 ---")
-        try:
-            run_with_retry(
-                upload_video_to_gdrive,
-                "GDrive",
-                3, 20,
-                target_date, edition=edition
-            )
-        except Exception as e:
-            print(f"[GDrive] ⚠️ 최종 업로드 실패 (파이프라인은 계속): {e}")
-
-        # ------------------------------------------------------------------
-        # 7단계: YouTube 업로드
-        # 업로드 실패는 파이프라인 전체 실패로 처리하지 않음
-        # 네트워크 의존 → 재시도 3회 (단, 실패해도 계속 진행)
-        # ------------------------------------------------------------------
-        print("\n--- 7. YouTube 업로드 ---")
-        try:
-            run_with_retry(
-                upload_video_to_youtube,
-                "YouTube",
-                3, 20,
-                target_date, edition=edition
-            )
-        except Exception as e:
-            print(f"[YouTube] ⚠️ 최종 업로드 실패 (파이프라인은 계속): {e}")
-
-        print(f"\n[{edition.upper()}] 모든 작업이 성공적으로 완료되었습니다!")
-
-    except Exception as e:
-        print(f"\n[PIPELINE ERROR] 파이프라인 중단: {e}")
-        import traceback
-        traceback.print_exc()
-        sys.exit(1)
-
-
-if __name__ == "__main__":
-    main()
+      # -----------------------------------------------------------------------
+      # 파이프라인 실행 (실패 시 최대 3회 재시도)
+      # nick-fields/retry action 사용:
+      #   - max_attempts: 3
+      #   - retry_wait_seconds: 60 (1분 대기 후 재시도)
+      #   - timeout_minutes: 50 (단일 시도 타임아웃)
+      # -----------------------------------------------------------------------
+      - name: Run Pipeline (Headless mode) with retry
+        uses: nick-fields/retry@v3
+        with:
+          max_attempts: 3
+          retry_wait_seconds: 60
+          timeout_minutes: 50
+          command: |
+            EDITION="${{ steps.set_edition.outputs.edition }}"
+            echo "Executing headless pipeline for edition: $EDITION"
+            python src/auto_run.py --edition "$EDITION"
+        env:
+          GDRIVE_FOLDER_ID: ${{ secrets.GDRIVE_FOLDER_ID }}
