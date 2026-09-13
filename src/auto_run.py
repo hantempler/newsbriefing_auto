@@ -135,13 +135,34 @@ def upload_video_to_youtube(target_date, edition):
         print(f"[YouTube] 영상 파일 없음: {video_path}")
         return
 
-    from src.config import EDITION_CONFIG
+    from src.config import EDITION_CONFIG, get_daily_dir
+    import json
+    
     top_title = EDITION_CONFIG[edition]['top_title']
     # 날짜 포맷: YYYYMMDD -> YYYY.MM.DD
     date_formatted = f"{target_date[:4]}.{target_date[4:6]}.{target_date[6:8]}"
     yt_title = f"{date_formatted} {top_title} 뉴스브리핑"
+    
+    # 기사 링크 불러오기
+    daily_dir = get_daily_dir(target_date, edition)
+    articles_path = os.path.join(daily_dir, "2_selected_articles.json")
+    
+    news_links_text = ""
+    if os.path.exists(articles_path):
+        try:
+            with open(articles_path, "r", encoding="utf-8") as f:
+                articles = json.load(f)
+            
+            if articles:
+                news_links_text = "\n\n[오늘의 주요 뉴스 원문 링크]\n"
+                for idx, article in enumerate(articles, 1):
+                    news_links_text += f"{idx}. {article.get('title')}\n👉 {article.get('link')}\n"
+        except Exception as e:
+            print(f"[YouTube] 기사 링크 불러오기 실패: {e}")
+
     yt_description = (
-        f"{date_formatted} {top_title}\n\n"
+        f"{date_formatted} {top_title}"
+        f"{news_links_text}\n"
         "#뉴스브리핑 #쇼츠 #Shorts\n"
         f"#{edition}"
     )
