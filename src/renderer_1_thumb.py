@@ -312,7 +312,7 @@ def make_bg_clip(img_path, source_text, title_text, font_path, temp_dir, part_na
     if part_name != "hook" and date_str and top_title:
         header_text = f"{date_str}  |  {top_title}"
         header_clip = create_pil_text_clip(header_text, font_path, 40, temp_dir, text_type="header")
-        header_clip = header_clip.set_position(("center", 50))
+        header_clip = header_clip.set_position(("center", 100))
         layers.append(header_clip)
             
     final_bg_clip = CompositeVideoClip(layers, size=(1080, 1920))
