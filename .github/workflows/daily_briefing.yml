@@ -19,6 +19,10 @@ on:
         required: true
         default: 'morning'
 
+  # Cloudflare Workers 등 외부 API 호출을 위한 디스패치
+  repository_dispatch:
+    types: [trigger-news-briefing]
+
 # 동일 그룹의 job이 이미 실행 중이면 이전 것을 취소하고 새 것을 실행
 concurrency:
   group: briefing-pipeline
@@ -83,6 +87,11 @@ jobs:
           # 수동 실행(workflow_dispatch)일 경우 입력값 사용
           if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
             EDITION="${{ github.event.inputs.edition }}"
+          fi
+
+          # 외부 API 호출(repository_dispatch)일 경우 페이로드 데이터 사용
+          if [ "${{ github.event_name }}" == "repository_dispatch" ]; then
+            EDITION="${{ github.event.client_payload.edition }}"
           fi
 
           # 스케줄(cron) 실행일 경우 UTC 시간 기준으로 분기
