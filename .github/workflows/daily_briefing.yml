@@ -1,16 +1,6 @@
 name: Daily News Briefing Pipeline
 
 on:
-  schedule:
-    # GitHub Actions cron은 UTC 기준입니다. (한국 KST = UTC + 9)
-    # ※ 정각/30분은 Runner 큐 혼잡으로 지연이 잦음 → 비교적 한산한 분(minute) 사용
-    # 아침 06:30 KST -> UTC 21:30 (이전 날) → 혼잡 회피용 21:33
-    - cron: '33 21 * * *'
-    # 점심 11:00 KST -> UTC 02:00 → 혼잡 회피용 02:07
-    - cron: '7 2 * * *'
-    # 저녁 16:00 KST -> UTC 07:00 → 혼잡 회피용 07:11
-    - cron: '11 7 * * *'
-
   # 수동 실행을 위한 워크플로우 디스패치
   workflow_dispatch:
     inputs:
