@@ -85,46 +85,6 @@ def _get_video_path(target_date, edition):
     return video_path, video_filename
 
 
-def upload_video_to_gdrive(target_date, edition):
-    """Google Drive에 영상 업로드 (OAuth 토큰 방식)"""
-    folder_id = os.environ.get("GDRIVE_FOLDER_ID", "").strip()
-    if not folder_id:
-        print("[GDrive] GDRIVE_FOLDER_ID 미설정. 업로드 건너뜀.")
-        return
-
-    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    token_path = os.path.join(BASE_DIR, "config", "gdrive_token.json")
-    if not os.path.exists(token_path):
-        print(f"[GDrive] 토큰 파일 없음 ({token_path}). 업로드 건너뜀.")
-        return
-
-    video_path, video_filename = _get_video_path(target_date, edition)
-    if not os.path.exists(video_path):
-        print(f"[GDrive] 영상 파일 없음: {video_path}")
-        return
-
-    print(f"[GDrive] '{video_filename}' 업로드 중... (folder_id: {folder_id})")
-    try:
-        creds = Credentials.from_authorized_user_file(token_path)
-        service = build('drive', 'v3', credentials=creds)
-
-        # 폴더 존재 여부 사전 확인
-        try:
-            service.files().get(fileId=folder_id, fields='id,name').execute()
-            file_metadata = {'name': video_filename, 'parents': [folder_id]}
-            print(f"[GDrive] 폴더 확인 완료. 폴더에 업로드합니다.")
-        except Exception:
-            # 폴더를 찾을 수 없으면 루트에 업로드 (fallback)
-            print(f"[GDrive] 폴더(ID: {folder_id}) 접근 실패. 루트에 업로드합니다.")
-            file_metadata = {'name': video_filename}
-
-        media = MediaFileUpload(video_path, mimetype='video/mp4', resumable=True)
-        file = service.files().create(body=file_metadata, media_body=media, fields='id').execute()
-        print(f"[GDrive] 업로드 완료! File ID: {file.get('id')}")
-    except Exception as e:
-        print(f"[GDrive] 업로드 실패: {e}")
-
-
 def upload_video_to_youtube(target_date, edition):
     """YouTube에 영상 업로드 (OAuth 토큰 방식)"""
     BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -329,23 +289,7 @@ def main():
             )
 
         # ------------------------------------------------------------------
-        # 6단계: Google Drive 업로드
-        # 업로드 실패는 파이프라인 전체 실패로 처리하지 않음
-        # 네트워크 의존 → 재시도 3회 (단, 실패해도 계속 진행)
-        # ------------------------------------------------------------------
-        print("\n--- 6. Google Drive 업로드 ---")
-        try:
-            run_with_retry(
-                upload_video_to_gdrive,
-                "GDrive",
-                3, 20,
-                target_date, edition=edition
-            )
-        except Exception as e:
-            print(f"[GDrive] ⚠️ 최종 업로드 실패 (파이프라인은 계속): {e}")
-
-        # ------------------------------------------------------------------
-        # 7단계: YouTube 업로드
+        # 6단계: YouTube 업로드
         # 업로드 실패는 파이프라인 전체 실패로 처리하지 않음
         # 네트워크 의존 → 재시도 3회 (단, 실패해도 계속 진행)
         # ------------------------------------------------------------------

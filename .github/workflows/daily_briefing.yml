@@ -49,12 +49,6 @@ jobs:
           echo "NAVER_CLIENT_ID=${{ secrets.NAVER_CLIENT_ID }}" > config/.env
           echo "NAVER_CLIENT_SECRET=${{ secrets.NAVER_CLIENT_SECRET }}" >> config/.env
 
-      - name: Setup Google Drive Token
-        env:
-          GDRIVE_TOKEN: ${{ secrets.GDRIVE_TOKEN_JSON }}
-        run: |
-          echo "$GDRIVE_TOKEN" > config/gdrive_token.json
-
       - name: Setup YouTube Token
         env:
           YOUTUBE_TOKEN: ${{ secrets.YOUTUBE_TOKEN_JSON }}
@@ -152,8 +146,6 @@ jobs:
             EDITION="${{ steps.set_edition.outputs.edition }}"
             echo "Executing headless pipeline for edition: $EDITION"
             python src/auto_run.py --edition "$EDITION"
-        env:
-          GDRIVE_FOLDER_ID: ${{ secrets.GDRIVE_FOLDER_ID }}
 
       - name: Save history and cleanup old files
         run: |
@@ -164,8 +156,8 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           
-          # 변경된 히스토리 파일 추가
-          git add data/history_*.json
+          # 변경된 히스토리 파일 추가 (강제)
+          git add -f data/history_*.json
           
           # 변경사항이 있을 때만 커밋하고 푸시
           if git diff --staged --quiet; then
