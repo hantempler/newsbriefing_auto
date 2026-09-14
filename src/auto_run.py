@@ -139,8 +139,11 @@ def upload_video_to_youtube(target_date, edition):
     import json
     
     top_title = EDITION_CONFIG[edition]['top_title']
-    # 날짜 포맷: YYYYMMDD -> YYYY.MM.DD
-    date_formatted = f"{target_date[:4]}.{target_date[4:6]}.{target_date[6:8]}"
+    # 날짜 포맷: YYYYMMDD -> YYYY.MM.DD(요일)
+    dt = datetime.strptime(target_date, "%Y%m%d")
+    weekdays = ["월", "화", "수", "목", "금", "토", "일"]
+    weekday_str = weekdays[dt.weekday()]
+    date_formatted = f"{target_date[:4]}.{target_date[4:6]}.{target_date[6:8]}({weekday_str})"
     yt_title = f"{date_formatted} {top_title} 뉴스브리핑"
     
     # 기사 링크 불러오기
@@ -156,7 +159,7 @@ def upload_video_to_youtube(target_date, edition):
             if articles:
                 news_links_text = "\n\n[오늘의 주요 뉴스 원문 링크]\n"
                 for idx, article in enumerate(articles, 1):
-                    news_links_text += f"{idx}. {article.get('title')}\n👉 {article.get('link')}\n"
+                    news_links_text += f"{idx}. {article.get('title')}\n{article.get('link')}\n"
         except Exception as e:
             print(f"[YouTube] 기사 링크 불러오기 실패: {e}")
 
