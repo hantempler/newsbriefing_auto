@@ -71,7 +71,17 @@ def run_script_gen(target_date=None, edition='morning'):
     # KST 기준 날짜/요일 계산 (Gemini 프롬프트에 주입용)
     _WEEKDAYS_KO = ["월요일", "화요일", "수요일", "목요일", "금요일", "토요일", "일요일"]
     _dt = datetime(int(target_date[:4]), int(target_date[4:6]), int(target_date[6:8]))
-    kst_date_str = f"{target_date[:4]}년 {int(target_date[4:6])}월 {int(target_date[6:8])}일 ({_WEEKDAYS_KO[_dt.weekday()]})"
+    
+    import holidays
+    kr_holidays = holidays.KR(years=_dt.year)
+    holiday_name = kr_holidays.get(_dt.date())
+    
+    if holiday_name:
+        kst_date_str = f"{target_date[:4]}년 {int(target_date[4:6])}월 {int(target_date[6:8])}일 ({_WEEKDAYS_KO[_dt.weekday()]}, {holiday_name})"
+        holiday_context_prompt = f"\n[중요 지침] 오늘은 법정공휴일인 '{holiday_name}'입니다. 대본 인사말(hook 또는 closing)에 반드시 '{holiday_name}'(예: 연휴 잘 보내고 계신가요 등)와 관련된 시즈널한 언급을 자연스럽게 포함하여 시청자와 친밀감을 형성해주세요."
+    else:
+        kst_date_str = f"{target_date[:4]}년 {int(target_date[4:6])}월 {int(target_date[6:8])}일 ({_WEEKDAYS_KO[_dt.weekday()]})"
+        holiday_context_prompt = ""
 
     history_path = os.path.join(BASE_DIR, "data", f"history_{target_date}.json")
     history_data = {}
@@ -193,6 +203,7 @@ def run_script_gen(target_date=None, edition='morning'):
         f"[필수 준수] 오늘 날짜는 정확히 '{kst_date_str}'입니다. "
         "대본 어디에도 이 날짜/요일과 다른 표현을 절대 사용하지 마세요. "
         "날짜나 요일을 언급해야 할 경우 반드시 위 날짜 정보만 사용하세요."
+        f"{holiday_context_prompt}"
     )
     
     script_prompt = f"""

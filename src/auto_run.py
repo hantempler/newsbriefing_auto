@@ -41,7 +41,10 @@ def run_with_retry(func, step_name, max_attempts=3, wait_seconds=30, *args, **kw
             if attempt < max_attempts:
                 print(f"[{step_name}] {wait_seconds}초 후 재시도합니다...")
                 time.sleep(wait_seconds)
-    raise last_exc
+    
+    if last_exc is not None:
+        raise last_exc
+    raise RuntimeError(f"[{step_name}] 실행 횟수(max_attempts)가 잘못 설정되었습니다.")
 
 
 # ---------------------------------------------------------------------------
@@ -208,22 +211,30 @@ def main():
     _now_kst = datetime.now(KST)
     target_date = args.date if args.date else _now_kst.strftime("%Y%m%d")
 
-    # --- 주말 자동 감지 (Weekend Auto-Detection) ---
-    # KST 기준 요일로 판단 (UTC 기준이면 토 아침이 금요일로 오인되는 버그 발생)
-    _is_weekend = _now_kst.weekday() >= 5  # 5=토, 6=일
-
+    # --- 주말 및 공휴일 자동 감지 (Weekend & Holiday Auto-Detection) ---
+    # KST 기준 요일/날짜로 판단 (UTC 기준이면 오인될 수 있음)
+    import holidays
+    _dt = datetime.strptime(target_date, "%Y%m%d").date()
+    kr_holidays = holidays.KR(years=_dt.year)
+    
+    _is_weekend = _dt.weekday() >= 5  # 5=토, 6=일
+    _is_holiday = _dt in kr_holidays
+    
     WEEKEND_EDITION_MAP = {
         'morning': 'weekend_morning',
         'evening': 'weekend_evening',
-        'lunch': None,  # 주말에는 점심 에디션 없음
+        'lunch': None,  # 주말/공휴일에는 점심 에디션 없음
     }
 
-    if _is_weekend and edition in WEEKEND_EDITION_MAP:
+    if (_is_weekend or _is_holiday) and edition in WEEKEND_EDITION_MAP:
         _mapped = WEEKEND_EDITION_MAP[edition]
         if _mapped is None:
-            print(f"[WEEKEND] 오늘은 주말입니다. '{edition}' 에디션은 주말에 실행되지 않습니다. 종료.")
+            reason = "주말" if _is_weekend else f"공휴일({kr_holidays.get(_dt)})"
+            print(f"[HOLIDAY/WEEKEND] 오늘은 {reason}입니다. '{edition}' 에디션은 실행되지 않습니다. 종료.")
             sys.exit(0)
-        print(f"[WEEKEND] 주말 감지: '{edition}' → '{_mapped}' 으로 자동 전환됩니다.")
+        
+        reason = "주말" if _is_weekend else f"공휴일({kr_holidays.get(_dt)})"
+        print(f"[HOLIDAY/WEEKEND] {reason} 감지: '{edition}' → '{_mapped}' 으로 자동 전환됩니다.")
         edition = _mapped
     # -----------------------------------------------
 
