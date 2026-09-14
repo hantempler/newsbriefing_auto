@@ -154,3 +154,23 @@ jobs:
             python src/auto_run.py --edition "$EDITION"
         env:
           GDRIVE_FOLDER_ID: ${{ secrets.GDRIVE_FOLDER_ID }}
+
+      - name: Save history and cleanup old files
+        run: |
+          # 3일 지난 히스토리 파일 삭제
+          find data/ -name "history_*.json" -type f -mtime +3 -delete
+          
+          # Git 설정 (GitHub Actions 봇으로 커밋)
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          
+          # 변경된 히스토리 파일 추가
+          git add data/history_*.json
+          
+          # 변경사항이 있을 때만 커밋하고 푸시
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "chore: update daily history and cleanup [skip ci]"
+            git push
+          fi
