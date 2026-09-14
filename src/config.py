@@ -27,7 +27,7 @@ EDITION_CONFIG = {
     "morning": {
         "data_dir": os.path.join(BASE_DIR, "data", "morning"),
         "voice_name": "ko-KR-Wavenet-D",
-        "top_title": "1분 출근길 뉴스",
+        "top_title": "1분 출근길",
         "video_suffix": "_출근길_뉴스브리핑.mp4",
         "hook_prompt": "출근길 직장인들의 잠을 깨워주는 상쾌하고 활기찬 이슈 브리핑 시작 알림",
         "closing_prompt": "오늘 하루를 시작하는 2040 직장인 시청자들에게 건네는 응원과 에너지를 주는 인사말과 명언이 모두 포함된 전체 나레이션 대본",
@@ -36,7 +36,7 @@ EDITION_CONFIG = {
     "evening": {
         "data_dir": os.path.join(BASE_DIR, "data", "evening"),
         "voice_name": "ko-KR-Wavenet-A",
-        "top_title": "1분 퇴근길 뉴스",
+        "top_title": "1분 퇴근길",
         "video_suffix": "_퇴근길_뉴스브리핑.mp4",
         "hook_prompt": "오늘 하루의 피로를 날려줄 이슈 브리핑 시작 알림",
         "closing_prompt": "오늘 하루도 치열하게 살아낸 2040 직장인 시청자들에게 건네는 인사말과 명언이 모두 포함된 전체 나레이션 대본",
@@ -45,7 +45,7 @@ EDITION_CONFIG = {
     "lunch": {
         "data_dir": os.path.join(BASE_DIR, "data", "lunch"),
         "voice_name": "ko-KR-Wavenet-B",
-        "top_title": "1분 점심시간 뉴스",
+        "top_title": "1분 점심시간",
         "video_suffix": "_점심시간_뉴스브리핑.mp4",
         "hook_prompt": "오전 업무의 피로를 풀어줄 편안하고 재밌는 점심시간 이슈 브리핑 시작 알림",
         "closing_prompt": "오후 업무를 준비하는 2040 직장인 시청자들에게 건네는 응원과 편안함을 주는 인사말과 명언이 포함된 전체 나레이션 대본",
