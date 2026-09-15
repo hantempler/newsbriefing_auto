@@ -265,8 +265,23 @@ def create_pil_text_clip(text, font_path, fontsize, temp_dir, text_type="title",
     return clip
 
 def make_bg_clip(img_path, source_text, title_text, font_path, temp_dir, part_name=None, center_text=None, date_str="", top_title=""):
-    bg = ColorClip(size=(1080, 1920), color=(25, 25, 25))
+    from config import ASSETS_DIR
+    news_bg_path = os.path.join(ASSETS_DIR, "news_bg.jpg")
+    
+    if os.path.exists(news_bg_path):
+        bg_pil = Image.open(news_bg_path).convert('RGB')
+        bg_np = np.array(bg_pil)
+        bg = ImageClip(bg_np)
+        bg = bg.resize(width=1080)
+        if bg.h < 1920:
+            bg = bg.resize(height=1920)
+        bg = bg.crop(x_center=bg.w/2, y_center=bg.h/2, width=1080, height=1920)
+    else:
+        bg = ColorClip(size=(1080, 1920), color=(25, 25, 25))
+        
     layers = [bg]
+    if os.path.exists(news_bg_path):
+        layers.append(ColorClip(size=(1080, 1920), color=(0, 0, 0)).set_opacity(0.65))
     
     if img_path and os.path.exists(img_path):
         clip = ImageClip(img_path)
