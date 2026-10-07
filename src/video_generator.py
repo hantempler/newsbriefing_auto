@@ -219,7 +219,7 @@ class YouTubeShortsGenerator:
         row_width = canvas_w - (row_x * 2)
         row_height = 160
         row_gap = 20
-        first_row_y = 350
+        first_row_y = 270
 
         for index, summary_line in enumerate(summary_lines[:5], start=1):
             summary_line = summary_line.lstrip('0123456789. ') 
@@ -263,8 +263,12 @@ class YouTubeShortsGenerator:
 
             body_text = "\n".join(wrapped_lines[:2])
             text_x = bx + bw + 30
-            body_bbox = draw.multiline_textbbox((0, 0), body_text, font=body_font, spacing=10)
-            body_y = row_y + (row_height - (body_bbox[3] - body_bbox[1])) / 2 - 4
+            lines_count = len(wrapped_lines[:2])
+            char_bbox = draw.textbbox((0,0), "A", font=body_font)
+            line_height = char_bbox[3] - char_bbox[1]
+            total_text_height = (line_height * lines_count) + (10 * (lines_count - 1)) if lines_count > 0 else 0
+            body_y = row_y + (row_height - total_text_height) / 2
+            
             self.draw_multiline_text_fallback(draw, text_x, body_y, body_text, body_font, self.get_fallback_font(43), 'white', 10, 1, 'black', 'left')
         
         out_path = os.path.join(self.temp_dir, "summary_final.png")

@@ -34,7 +34,7 @@ def generate_script(news_data: list, daily_dir: str = None):
     - 첫 번째 객체(오프닝): `narration`에 "시청자 여러분 안녕하십니까, 오늘 하루 반드시 알아야 할 핵심 뉴스 브리핑입니다." 등 신뢰감 있는 오프닝. `image_url`은 "".
     - 본문 객체들: 정치, 경제, 사회, 세계, IT, 과학 등 가장 중요한 뉴스를 **반드시 정확히 5개 또는 6개 선별**하여 다룹니다 (본문 뉴스의 개수가 4개 이하여도 절대 안 되며, 6개를 초과해도 절대 안 됩니다). 각 뉴스당 반드시 **정확히 3개의 문장(팩트 -> 배경 -> 평가)**으로 작성하세요. 첫 문장은 핵심 팩트, 두 번째 문장은 그 사안이 발생한 배경이나 파급효과, 세 번째 문장은 사안에 대한 평가입니다. 단, 평가는 어느 한쪽으로 치우치지 않는 **완벽하게 중립적이고 냉철한 평론가**의 시각을 유지해야 합니다. `image_url`, `source_publisher`, `source_url`은 제공된 기사의 데이터를 찾아 그대로 넣으세요.
     - 마지막 객체(클로징): 단순 사실 나열이나 요약, "오늘의 뉴스, 한 줄 요약입니다" 같은 식상한 도입부는 절대 쓰지 마세요. 오늘 다룬 전체 뉴스들을 하나로 꿰뚫는 **'촌철살인의 날카롭고 뼈 있는 비평 한마디(한 문장)'**를 작성하세요. 이 문장이 전체 콘텐츠의 핵심입니다. (예: "기득권의 밥그릇 챙기기와 소모적인 정쟁 속에서도, 우주를 향한 누리호 발사처럼 묵묵히 내일을 준비해야 하는 하루였습니다.") 날씨 멘트는 이곳에 포함하지 마세요. `image_url`, `source_publisher`, `source_url`은 "".
-    - `caption`: 화면에 표시할 핵심 자막 (한 줄)
+    - `caption`: 화면에 표시할 핵심 자막 (마지막 클로징 객체의 자막은 무조건 "오늘의 주요뉴스"로 고정하세요)
     - `source_publisher`: 이 기사를 쓴 원문 언론사명 (제공된 데이터의 publisher)
     - `source_url`: 이 기사의 원문 링크 (제공된 데이터의 url)
     - `bg_keyword`: Pexels 검색용 영어 장면 키워드 (예: news studio, stock 일자, clear sky 등. 사진이 없는 경우 대비)
@@ -48,7 +48,7 @@ JSON 포맷 예시:
     "script_sections": [
         {{"narration": "안녕하십니까, 종합 뉴스입니다.", "caption": "오늘의 종합 뉴스", "image_url": "", "source_publisher": "", "source_url": "", "bg_keyword": "news studio"}},
         {{"narration": "여당이 영화제 개막작 취소를 요구했습니다. 해당 작품이 특정 정치적 시각을 담고 있다는 이유에서 비롯된 갈등입니다. 예술의 자유 보장과 공공지원금의 중립성이라는 가치가 팽팽하게 맞서고 있습니다.", "caption": "[정치] 여당, 영화제 개막작 취소 요구", "image_url": "https://...", "source_publisher": "KBS", "source_url": "https://news.naver.com/...", "bg_keyword": "parliament"}},
-        {{"narration": "기득권의 밥그릇 챙기기와 소모적인 정쟁 속에서도, 우주를 향한 누리호 발사처럼 묵묵히 내일을 준비해야 하는 하루였습니다.", "caption": "오늘의 촌철살인", "image_url": "", "source_publisher": "", "source_url": "", "bg_keyword": "clear sky"}}
+        {{"narration": "기득권의 밥그릇 챙기기와 소모적인 정쟁 속에서도, 우주를 향한 누리호 발사처럼 묵묵히 내일을 준비해야 하는 하루였습니다.", "caption": "오늘의 주요뉴스", "image_url": "", "source_publisher": "", "source_url": "", "bg_keyword": "clear sky"}}
     ],
     "news_summary_list": [
         "[정치] 여당 영화제 개막작 취소 요구",
