@@ -33,17 +33,11 @@ jobs:
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-      - name: Setup Google Cloud Credentials
-        env:
-          GCP_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS_JSON }}
+      - name: Setup Pexels & Jamendo API keys
         run: |
           mkdir -p config
-          echo "$GCP_CREDENTIALS" > config/application_default_credentials.json
-
-      - name: Setup Naver API keys
-        run: |
-          echo "NAVER_CLIENT_ID=${{ secrets.NAVER_CLIENT_ID }}" > config/.env
-          echo "NAVER_CLIENT_SECRET=${{ secrets.NAVER_CLIENT_SECRET }}" >> config/.env
+          echo "PEXELS_API_KEY=${{ secrets.PEXELS_API_KEY }}" > config/.env
+          echo "JAMENDO_CLIENT_ID=${{ secrets.JAMENDO_CLIENT_ID }}" >> config/.env
 
       - name: Setup YouTube Token
         env:
