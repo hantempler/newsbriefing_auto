@@ -51,8 +51,16 @@ class YouTubeShortsGenerator:
         except: return ImageFont.load_default()
 
     def get_fallback_font(self, size):
-        try: return ImageFont.truetype("C:/Windows/Fonts/malgun.ttf", size)
-        except: return self.get_font(size)
+        if os.path.exists("C:/Windows/Fonts/malgun.ttf"):
+            try: return ImageFont.truetype("C:/Windows/Fonts/malgun.ttf", size)
+            except: pass
+            
+        for path in ["/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc", "/usr/share/fonts/opentype/noto/NotoSansCJK-Bold.ttc"]:
+            if os.path.exists(path):
+                try: return ImageFont.truetype(path, size)
+                except: pass
+                
+        return self.get_font(size)
 
     def draw_text_fallback(self, draw, x, y, text, primary_font, fallback_font, fill, stroke_width=0, stroke_fill='black'):
         current_x = x
@@ -62,16 +70,21 @@ class YouTubeShortsGenerator:
             current_x += draw.textlength(char, font=font)
         return current_x
 
-    def draw_multiline_text_fallback(self, draw, center_x, start_y, text, primary_font, fallback_font, fill, spacing, stroke_width=0, stroke_fill='black'):
+    def draw_multiline_text_fallback(self, draw, x, start_y, text, primary_font, fallback_font, fill, spacing, stroke_width=0, stroke_fill='black', align='center'):
         lines = text.split('\n')
         y = start_y
         for line in lines:
             line_width = sum(draw.textlength(c, fallback_font if ('\u4e00' <= c <= '\u9fff' or c == '☒') else primary_font) for c in line)
-            x = center_x - (line_width / 2)
+            
+            if align == 'center':
+                current_x = x - (line_width / 2)
+            else:
+                current_x = x
+                
             for char in line:
                 font = fallback_font if ('\u4e00' <= char <= '\u9fff' or char == '☒') else primary_font
-                draw.text((x, y), char, font=font, fill=fill, stroke_width=stroke_width, stroke_fill=stroke_fill)
-                x += draw.textlength(char, font=font)
+                draw.text((current_x, y), char, font=font, fill=fill, stroke_width=stroke_width, stroke_fill=stroke_fill)
+                current_x += draw.textlength(char, font=font)
             bbox = draw.textbbox((0,0), "A", font=primary_font)
             y += (bbox[3] - bbox[1]) + spacing
 
@@ -252,7 +265,7 @@ class YouTubeShortsGenerator:
             text_x = bx + bw + 30
             body_bbox = draw.multiline_textbbox((0, 0), body_text, font=body_font, spacing=10)
             body_y = row_y + (row_height - (body_bbox[3] - body_bbox[1])) / 2 - 4
-            draw.multiline_text((text_x, body_y), body_text, font=body_font, fill='white', spacing=10, stroke_width=1, stroke_fill='black')
+            self.draw_multiline_text_fallback(draw, text_x, body_y, body_text, body_font, self.get_fallback_font(43), 'white', 10, 1, 'black', 'left')
         
         out_path = os.path.join(self.temp_dir, "summary_final.png")
         img.save(out_path)
