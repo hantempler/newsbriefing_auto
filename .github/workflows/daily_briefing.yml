@@ -1,8 +1,6 @@
 name: Daily News Briefing Pipeline (V3)
 
 on:
-  schedule:
-    - cron: '0 10 * * *'  # 19:00 KST
   workflow_dispatch:
   repository_dispatch:
     types: [trigger-news-briefing]
