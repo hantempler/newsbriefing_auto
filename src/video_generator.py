@@ -262,14 +262,17 @@ class YouTubeShortsGenerator:
             draw.text((bx + (bw - text_w) / 2, by + (bh - text_h) / 2 - 8), cat_text, font=badge_font, fill='#111323')
 
             body_text = "\n".join(wrapped_lines[:2])
-            text_x = bx + bw + 30
+            text_area_left = bx + bw + 30
+            text_area_right = row_x + row_width - 30
+            center_x = (text_area_left + text_area_right) / 2
+            
             lines_count = len(wrapped_lines[:2])
             char_bbox = draw.textbbox((0,0), "A", font=body_font)
             line_height = char_bbox[3] - char_bbox[1]
             total_text_height = (line_height * lines_count) + (10 * (lines_count - 1)) if lines_count > 0 else 0
             body_y = row_y + (row_height - total_text_height) / 2
             
-            self.draw_multiline_text_fallback(draw, text_x, body_y, body_text, body_font, self.get_fallback_font(43), 'white', 10, 1, 'black', 'left')
+            self.draw_multiline_text_fallback(draw, center_x, body_y, body_text, body_font, self.get_fallback_font(43), 'white', 10, 1, 'black', 'center')
         
         out_path = os.path.join(self.temp_dir, "summary_final.png")
         img.save(out_path)
