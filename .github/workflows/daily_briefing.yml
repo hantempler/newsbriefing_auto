@@ -51,6 +51,9 @@ jobs:
         run: |
           echo "$YOUTUBE_TOKEN" > config/youtube_token.json
 
+      - name: Install FFmpeg
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg
+
       - name: Run V3 Pipeline with retry
         uses: nick-fields/retry@v3
         with:
