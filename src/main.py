@@ -57,36 +57,36 @@ def main():
         print("영상 렌더링 실패. 파이프라인을 종료합니다.")
         return
         
-    # 5. 유튜브 업로드 (OAuth 연동) - 현재 테스트를 위해 주석 처리됨
-    # print("\n[5/5] 유튜브 쇼츠 자동 업로드 중 (비공개 상태로 업로드)...")
-    # cover_title = script_data.get("cover_title", topic_str)
-    # title = f"📺 {cover_title} #쇼츠 #뉴스브리핑"
+    # 5. 유튜브 업로드 (OAuth 연동)
+    print("\n[5/5] 유튜브 쇼츠 자동 업로드 중 (비공개 상태로 업로드)...")
+    cover_title = script_data.get("cover_title", topic_str)
+    title = f"📺 {cover_title} #쇼츠 #뉴스브리핑"
     
-    # useful_title = script_data.get("useful_source_title", "네이버 뉴스")
-    # useful_url = script_data.get("useful_source_url", "https://news.naver.com")
+    useful_title = script_data.get("useful_source_title", "네이버 뉴스")
+    useful_url = script_data.get("useful_source_url", "https://news.naver.com")
     
-    # description = f"오늘 하루 반드시 알아야 할 핵심 뉴스 브리핑입니다!\n\n"
-    # description += f"💡 출처:\n👉 {useful_title}\n🔗 {useful_url}\n\n"
+    description = f"오늘 하루 반드시 알아야 할 핵심 뉴스 브리핑입니다!\n\n"
+    description += f"💡 출처:\n👉 {useful_title}\n🔗 {useful_url}\n\n"
     
-    # license_path = os.path.join(daily_dir, "bgm_license.json")
-    # if bgm_path and os.path.exists(license_path):
-    #     with open(license_path, encoding="utf-8") as file:
-    #         bgm_license = json.load(file)
-    #     description += (
-    #         "🎵 BGM: {title} - {artist}\n"
-    #         "🔗 {url}\n"
-    #         "📄 License: {license}\n\n"
-    #     ).format(**bgm_license)
-    # description += "#쇼츠 #뉴스 #정치 #경제 #사회 #세계 #IT #1분요약"
+    license_path = os.path.join(daily_dir, "bgm_license.json")
+    if bgm_path and os.path.exists(license_path):
+        with open(license_path, encoding="utf-8") as file:
+            bgm_license = json.load(file)
+        description += (
+            "🎵 BGM: {title} - {artist}\n"
+            "🔗 {url}\n"
+            "📄 License: {license}\n\n"
+        ).format(**bgm_license)
+    description += "#쇼츠 #뉴스 #정치 #경제 #사회 #세계 #IT #1분요약"
     
-    # upload_url = upload_video(video_path, title, description)
+    upload_url = upload_video(video_path, title, description)
     
     print("\n=== 파이프라인 완료 ===")
     print(f"생성된 영상 경로: {video_path}")
-    # if upload_url:
-    #     print(f"업로드 주소: {upload_url}")
-    # else:
-    #     print("업로드 실패 또는 주소를 받아오지 못했습니다.")
+    if upload_url:
+        print(f"업로드 주소: {upload_url}")
+    else:
+        print("업로드 실패 또는 주소를 받아오지 못했습니다.")
 
 if __name__ == "__main__":
     main()
