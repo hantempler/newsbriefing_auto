@@ -33,6 +33,13 @@ jobs:
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
+      - name: Setup Google Cloud Credentials
+        env:
+          GCP_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS_JSON }}
+        run: |
+          mkdir -p config
+          echo "$GCP_CREDENTIALS" > config/application_default_credentials.json
+
       - name: Setup Pexels & Jamendo API keys
         run: |
           mkdir -p config
