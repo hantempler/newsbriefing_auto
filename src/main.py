@@ -62,11 +62,12 @@ def main():
     cover_title = script_data.get("cover_title", topic_str)
     title = f"📺 {cover_title} #쇼츠 #뉴스브리핑"
     
-    useful_title = script_data.get("useful_source_title", "네이버 뉴스")
-    useful_url = script_data.get("useful_source_url", "https://news.naver.com")
-    
     description = f"오늘 하루 반드시 알아야 할 핵심 뉴스 브리핑입니다!\n\n"
-    description += f"💡 출처:\n👉 {useful_title}\n🔗 {useful_url}\n\n"
+    description += "💡 기사 출처:\n"
+    for sec in script_data.get("script_sections", []):
+        if sec.get("source_publisher") and sec.get("source_url"):
+            description += f"👉 [{sec.get('source_publisher')}] {sec.get('caption', '뉴스')}\n🔗 {sec.get('source_url')}\n"
+    description += "\n"
     
     license_path = os.path.join(daily_dir, "bgm_license.json")
     if bgm_path and os.path.exists(license_path):

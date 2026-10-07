@@ -55,9 +55,16 @@ def get_naver_headlines():
                 og_image = art_soup.select_one('meta[property="og:image"]')
                 image_url = og_image['content'] if og_image else ""
                 
+                # 언론사
+                og_author = art_soup.select_one('meta[property="og:article:author"]')
+                publisher = og_author['content'].split('|')[0].strip() if og_author else "네이버 뉴스"
+                if "네이버" in publisher and len(publisher.split()) > 1:
+                    publisher = publisher.replace("네이버 뉴스", "").strip()
+                
                 if title_text and content_text:
                     news_data.append({
                         "category": "종합",
+                        "publisher": publisher,
                         "title": title_text,
                         "content": content_text,
                         "image_url": image_url,
