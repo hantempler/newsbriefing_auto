@@ -239,7 +239,7 @@ def render_scene_clip_dynamic(img_file, wav_file, out_mp4, duration, scene_idx, 
             "-i", str(sfx_file),
             "-filter_complex", filter_complex,
             "-map", "[v]", "-map", "[a]",
-            "-c:v", "libx264", "-preset", "fast", "-crf", "18",
+            "-c:v", "libx264", "-preset", "veryfast", "-threads", "0", "-crf", "18",
             "-c:a", "aac", "-b:a", "192k", "-ar", "44100", "-ac", "2",
             "-t", str(duration), "-pix_fmt", "yuv420p",
             str(out_mp4)
@@ -250,7 +250,7 @@ def render_scene_clip_dynamic(img_file, wav_file, out_mp4, duration, scene_idx, 
             "-loop", "1", "-i", str(img_file),
             "-i", str(wav_file),
             "-vf", vf,
-            "-c:v", "libx264", "-preset", "fast", "-crf", "18",
+            "-c:v", "libx264", "-preset", "veryfast", "-threads", "0", "-crf", "18",
             "-c:a", "aac", "-b:a", "192k", "-ar", "44100", "-ac", "2",
             "-t", str(duration), "-pix_fmt", "yuv420p",
             str(out_mp4)
@@ -356,7 +356,7 @@ def assemble_shorts(script_path):
                 "-i", str(impact_sfx),
                 "-t", "0.5",
                 "-vf", "scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,fps=30",
-                "-c:v", "libx264", "-preset", "fast", "-crf", "18",
+                "-c:v", "libx264", "-preset", "veryfast", "-threads", "0", "-crf", "18",
                 "-c:a", "aac", "-b:a", "192k", "-ar", "44100", "-ac", "2",
                 "-af", "volume=0.85",
                 "-pix_fmt", "yuv420p",
@@ -369,7 +369,7 @@ def assemble_shorts(script_path):
                 "-f", "lavfi", "-i", "anullsrc=r=44100:cl=stereo",
                 "-t", "0.5",
                 "-vf", "scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,fps=30",
-                "-c:v", "libx264", "-preset", "fast", "-crf", "18",
+                "-c:v", "libx264", "-preset", "veryfast", "-threads", "0", "-crf", "18",
                 "-c:a", "aac", "-b:a", "192k", "-pix_fmt", "yuv420p",
                 str(thumb_clip)
             ]
@@ -433,7 +433,7 @@ def assemble_shorts(script_path):
             "-stream_loop", "-1", "-i", "bgm.wav",
             "-filter_complex", ducking_filter_complex,
             "-map", "[v]", "-map", "[aout]",
-            "-c:v", "libx264", "-preset", "fast", "-crf", "18",
+            "-c:v", "libx264", "-preset", "veryfast", "-threads", "0", "-crf", "18",
             "-c:a", "aac", "-b:a", "192k",
             "-movflags", "+faststart",
             str(final_shorts)
@@ -454,7 +454,7 @@ def assemble_shorts(script_path):
             "-stream_loop", "-1", "-i", "bgm.wav",
             "-filter_complex", fallback_filter,
             "-map", "[v]", "-map", "[aout]",
-            "-c:v", "libx264", "-preset", "fast", "-crf", "18",
+            "-c:v", "libx264", "-preset", "veryfast", "-threads", "0", "-crf", "18",
             "-c:a", "aac", "-b:a", "192k",
             "-movflags", "+faststart",
             str(final_shorts)

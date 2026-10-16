@@ -43,6 +43,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -50,28 +52,22 @@ jobs:
           python-version: '3.11'
           cache: 'pip'
 
-      - name: Install dependencies
+      - name: Install dependencies (Fast via uv)
         run: |
-          python -m pip install --upgrade pip
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          python -m pip install --upgrade pip uv
+          if [ -f requirements.txt ]; then uv pip install --system -r requirements.txt; fi
 
-      - name: Install FFmpeg and Fonts
+      - name: Verify FFmpeg
         run: |
-          sudo apt-get update
-          sudo apt-get install -y ffmpeg fonts-noto-cjk
+          ffmpeg -version || (sudo apt-get update && sudo apt-get install -y ffmpeg)
 
-      - name: Setup Google Cloud Credentials
+      - name: Setup Credentials & Tokens
         env:
           GCP_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS_JSON }}
-        run: |
-          mkdir -p config
-          echo "$GCP_CREDENTIALS" > config/application_default_credentials.json
-
-      - name: Setup YouTube Token
-        env:
           YOUTUBE_TOKEN: ${{ secrets.YOUTUBE_TOKEN_JSON }}
         run: |
           mkdir -p config
+          echo "$GCP_CREDENTIALS" > config/application_default_credentials.json
           echo "$YOUTUBE_TOKEN" > config/youtube_token.json
 
       - name: Run Star is Born Pipeline
