@@ -6,6 +6,7 @@ import contextlib
 import os
 import re
 import sys
+import time
 import wave
 from pathlib import Path
 
@@ -70,9 +71,9 @@ def normalize_tts_text(text: str) -> str:
         (r"ㅠㅠ+", "흑흑"),
         (r"ㅜㅜ+", "흑흑"),
         (r"ㄹㅇ", "진짜"),
-        (r"쌉(\w+)", r"완전 \1"),
-        (r"개(\w+)", r"완전 \1"),
-        (r"존(\w+)", r"완전 \1"),
+        # (r"쌉(\w+)", r"완전 \1"),
+        # (r"개(\w+)", r"완전 \1"),
+        # (r"존(\w+)", r"완전 \1"),
         (r"@태그", "태그"),
         (r"#shorts", ""),
     ]
@@ -95,18 +96,29 @@ def run_tts_test(text, voice=VOICE, out_path="star_tts.wav"):
     client = genai.Client(vertexai=True, project=GCP_PROJECT_ID, location=GCP_LOCATION)
     print(f"[TTS] 요청: voice={voice}, {len(clean_text)}자 ('{clean_text[:25]}...')")
 
-    resp = client.models.generate_content(
-        model=MODEL_TTS,
-        contents=clean_text,
-        config=types.GenerateContentConfig(
-            response_modalities=["AUDIO"],
-            speech_config=types.SpeechConfig(
-                voice_config=types.VoiceConfig(
-                    prebuilt_voice_config=types.PrebuiltVoiceConfig(voice_name=voice)
-                )
-            ),
-        ),
-    )
+    resp = None
+    for attempt in range(1, 5):
+        try:
+            resp = client.models.generate_content(
+                model=MODEL_TTS,
+                contents=clean_text,
+                config=types.GenerateContentConfig(
+                    response_modalities=["AUDIO"],
+                    speech_config=types.SpeechConfig(
+                        voice_config=types.VoiceConfig(
+                            prebuilt_voice_config=types.PrebuiltVoiceConfig(voice_name=voice)
+                        )
+                    ),
+                ),
+            )
+            break
+        except Exception as e:
+            if ("429" in str(e) or "RESOURCE_EXHAUSTED" in str(e)) and attempt < 4:
+                wait_sec = attempt * 5
+                print(f"[TTS] 429 쿼터 한도 감지, {wait_sec}초 대기 후 재시도 ({attempt}/4)...")
+                time.sleep(wait_sec)
+                continue
+            raise e
 
     audio = None
     for part in resp.candidates[0].content.parts:

@@ -11,6 +11,7 @@ import json
 import os
 import subprocess
 import sys
+import time
 from pathlib import Path
 
 ROOT_DIR = Path(__file__).resolve().parent
@@ -25,16 +26,20 @@ if sys.platform == "win32":
         pass
 
 
-def run_pipeline(mode="am", date_str=None, person=None, upload=False, privacy="private", publish_at=None):
+def get_today_kst_str():
+    """GitHub Actions(UTC) 등 어떤 서버 환경에서도 한국 표준시(KST, UTC+9) 당일(MM-DD)을 정확히 산출."""
+    kst = datetime.timezone(datetime.timedelta(hours=9))
+    return datetime.datetime.now(kst).strftime("%m-%d")
+
+
+def run_pipeline(mode="am", date_str=None, person=None, upload=True, privacy="private", publish_at=None):
     if not date_str:
-        # 기본값: 오늘 날짜 (MM-DD)
-        today = datetime.datetime.now()
-        date_str = today.strftime("%m-%d")
+        date_str = get_today_kst_str()
 
     mode_label = "🌅 [A Star is Born - 탄생 편]" if mode.lower() == "am" else "🌃 [The Legend Falls - 기일 편]"
     print(f"\n{'='*65}")
     print(f"  [스타이즈본 파이프라인 가동] {mode_label}")
-    print(f"  날짜: {date_str} / 인물: {person if person else '(캘린더 DB 자동 매칭)'}")
+    print(f"  날짜: {date_str} (KST) / 인물: {person if person else '(캘린더 DB 자동 매칭)'}")
     if upload:
         print(f"  유튜브 업로드: 활성화 (공개상태: {privacy.upper()})")
     print(f"{'='*65}\n")
@@ -86,19 +91,22 @@ def run_pipeline(mode="am", date_str=None, person=None, upload=False, privacy="p
 def run_full_daily(date_str=None, upload=True, privacy="private"):
     """자정 자동화용: 하루 2편(AM 탄생 + PM 기일) 연속 일괄 생성 및 업로드."""
     if not date_str:
-        today = datetime.datetime.now()
-        date_str = today.strftime("%m-%d")
+        date_str = get_today_kst_str()
 
     print(f"\n#################################################################")
     print(f"  [스타이즈본 일일 2편(AM + PM) 무인 전자동 파이프라인 가동]")
-    print(f"  기준 일자: {date_str} (자정 자동 배치)")
+    print(f"  기준 일자: {date_str} (KST 한국 표준시 기준)")
     print(f"#################################################################\n")
 
     # 1. AM 편 생성 및 업로드
     print("\n>>> [1/2] AM 탄생 편 가동 시작 <<<")
     run_pipeline(mode="am", date_str=date_str, upload=upload, privacy=privacy)
 
-    # 2. PM 편 생성 및 업로드
+    # 2. API 쿼터 안전 대기 (Rate Limit 429 방지)
+    print("\n[Launcher] AM 편 완료. Google Cloud API 쿼터 안전 쿨다운 대기 (15초)...")
+    time.sleep(15)
+
+    # 3. PM 편 생성 및 업로드
     print("\n>>> [2/2] PM 기일 편 가동 시작 <<<")
     run_pipeline(mode="pm", date_str=date_str, upload=upload, privacy=privacy)
 
@@ -112,7 +120,8 @@ if __name__ == "__main__":
     p.add_argument("--mode", default="am", choices=["am", "pm", "both"], help="제작 모드: am (아침), pm (저녁), both (자정 일괄 2편)")
     p.add_argument("--date", default=None, help="대상 날짜 (MM-DD, 미지정 시 오늘 날짜)")
     p.add_argument("--person", default=None, help="특정 인물 강제 지정")
-    p.add_argument("--upload", action="store_true", help="제작 완료 후 유튜브 자동 업로드 수행")
+    p.add_argument("--upload", dest="upload", action="store_true", default=True, help="유튜브 자동 업로드 수행 (기본 활성화)")
+    p.add_argument("--no-upload", dest="upload", action="store_false", help="유튜브 업로드 건너뛰기 (로컬 파일만 생성)")
     p.add_argument("--privacy", default="private", choices=["private", "unlisted", "public"], help="유튜브 공개 상태")
     p.add_argument("--publish-at", default=None, help="예약 공개 일시 (ISO 8601 포맷)")
     args = p.parse_args()

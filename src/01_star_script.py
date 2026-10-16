@@ -7,6 +7,7 @@ import json
 import os
 import re
 import sys
+import time
 from pathlib import Path
 
 # Windows cp949 콘솔 인코딩 대응
@@ -51,6 +52,36 @@ def get_client():
     return genai.Client(vertexai=True, project=GCP_PROJECT_ID, location=GCP_LOCATION)
 
 
+def generate_content_with_retry(client, model, contents, config=None, max_retries=4, base_sleep=5):
+    """429 RESOURCE_EXHAUSTED 및 일시적 서버 오류 대응:
+    - 지수 백오프 (5s, 10s, 20s, ...) 재시도
+    - Pro 모델에서 429 또는 2회 연속 실패 시 자동으로 Flash(gemini-2.5-flash)로 다운그레이드 폴백
+    """
+    current_model = model
+    last_err = None
+
+    for attempt in range(1, max_retries + 1):
+        try:
+            return client.models.generate_content(model=current_model, contents=contents, config=config)
+        except Exception as e:
+            last_err = e
+            err_msg = str(e)
+            is_rate_limit = "429" in err_msg or "RESOURCE_EXHAUSTED" in err_msg or "Quota exceeded" in err_msg
+            print(f"[Script Warning] 모델 '{current_model}' 호출 실패 (시도 {attempt}/{max_retries}): {err_msg[:120]}")
+
+            if current_model == MODEL_PRO and (attempt >= 2 or is_rate_limit):
+                print(f"[Script Fallback] Quota 절약 및 파이프라인 무중단을 위해 '{MODEL_FLASH}' 모델로 즉시 전환합니다.")
+                current_model = MODEL_FLASH
+
+            if attempt < max_retries:
+                sleep_sec = base_sleep * (2 ** (attempt - 1))
+                print(f"[Script Retry] {sleep_sec}초 대기 후 재시도합니다...")
+                time.sleep(sleep_sec)
+            else:
+                print(f"[Script Error] 최대 재시도 횟수({max_retries}회) 초과.")
+                raise last_err
+
+
 def run_fact_check(client, types, model, person_name, mode, date_str):
     event_kr = "태어난 날(생일)" if mode.lower() == "am" else "사망한 날(기일)"
     print(f"[FactCheck] '{person_name}'의 {date_str} {event_kr} 팩트체크 수행 중 (Google Search Grounding)...")
@@ -73,11 +104,14 @@ def run_fact_check(client, types, model, person_name, mode, date_str):
             temperature=0.2,
             tools=[types.Tool(google_search=types.GoogleSearch())]
         )
-        resp = client.models.generate_content(model=model, contents=search_prompt, config=cfg)
+        resp = generate_content_with_retry(client, model, contents=search_prompt, config=cfg)
         search_context = resp.text
         print(f"[FactCheck] Search Grounding 성공 ({len(search_context)}자 확보)")
     except Exception as e:
         print(f"[FactCheck] Search tool 폴백: {e}")
+
+    # Grounding 호출 후 API 부하 완화
+    time.sleep(2)
 
     structure_prompt = f"""다음 검색된 역사적 사실들을 바탕으로 검증 체크리스트 JSON을 작성하세요:
 인물: {person_name}
@@ -105,7 +139,7 @@ def run_fact_check(client, types, model, person_name, mode, date_str):
         temperature=0.2,
         response_mime_type="application/json"
     )
-    resp_json = client.models.generate_content(model=model, contents=structure_prompt, config=cfg_json)
+    resp_json = generate_content_with_retry(client, model, contents=structure_prompt, config=cfg_json)
     try:
         return json.loads(resp_json.text)
     except Exception:
@@ -225,7 +259,7 @@ def generate_shorts_script(client, types, model, person_name, person_name_en, mo
         temperature=0.7,
         response_mime_type="application/json"
     )
-    resp = client.models.generate_content(model=model, contents=prompt, config=cfg)
+    resp = generate_content_with_retry(client, model, contents=prompt, config=cfg)
     try:
         return json.loads(resp.text)
     except Exception:
@@ -234,9 +268,13 @@ def generate_shorts_script(client, types, model, person_name, person_name_en, mo
         return json.loads(clean_text)
 
 
-def run_pipeline(mode="am", date_str="10-16", person=None):
+def run_pipeline(mode="am", date_str=None, person=None):
     from google import genai
     from google.genai import types
+
+    if not date_str:
+        kst = datetime.timezone(datetime.timedelta(hours=9))
+        date_str = datetime.datetime.now(kst).strftime("%m-%d")
 
     entry = load_calendar_entry(date_str, mode)
     person_en = "Oscar Wilde"
@@ -269,6 +307,9 @@ def run_pipeline(mode="am", date_str="10-16", person=None):
     fact_data = run_fact_check(client, types, model, person, mode, date_str)
     print(f"[FactCheck] 결과: 날짜일치={fact_data.get('target_date_match')}, 확인일자={fact_data.get('verified_date')}")
 
+    # 팩트체크와 대본 생성 사이 쿨다운 (API 429 방지)
+    time.sleep(3)
+
     # 2. 대본 생성 (7개 씬 확장)
     script_data = generate_shorts_script(client, types, model, person, person_en, mode, date_str, fact_data)
 
@@ -298,7 +339,7 @@ def run_pipeline(mode="am", date_str="10-16", person=None):
 if __name__ == "__main__":
     p = argparse.ArgumentParser(description="스타이즈본 7씬 쇼츠 대본 생성기")
     p.add_argument("--mode", default="am", choices=["am", "pm"])
-    p.add_argument("--date", default="10-16")
+    p.add_argument("--date", default=None)
     p.add_argument("--person", default=None)
     args = p.parse_args()
 

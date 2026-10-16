@@ -27,8 +27,6 @@ on:
           - public
   repository_dispatch:
     types: [trigger-starisborn, trigger-news-briefing]
-  schedule:
-    - cron: '0 15 * * *' # 매일 15:00 UTC = 한국 시간(KST) 자정 00:00
 
 concurrency:
   group: starisborn-pipeline
@@ -91,6 +89,8 @@ jobs:
           fi
 
           echo "============================================================"
+          echo "서버 시각 (UTC): $(date -u '+%Y-%m-%d %H:%M:%S')"
+          echo "한국 시각 (KST): $(TZ='Asia/Seoul' date '+%Y-%m-%d %H:%M:%S')"
           echo "가동 모드: $MODE | 공개 설정: $PRIVACY | 추가 일자: $DATE_ARG"
           echo "============================================================"
           python run_daily.py --mode "$MODE" --upload --privacy "$PRIVACY" $DATE_ARG

@@ -410,10 +410,10 @@ def assemble_shorts(script_path):
     ducking_filter_complex = (
         f"[0:v]{sub_filter}[v];"
         f"[0:a]asplit=2[nar][sc];"
-        f"[1:a]volume=0.30[bgm];"
-        f"[bgm][sc]sidechaincompress=threshold=0.035:ratio=4:attack=50:release=350[ducked_bgm];"
+        f"[1:a]volume=0.45[bgm];"
+        f"[bgm][sc]sidechaincompress=threshold=0.035:ratio=3:attack=50:release=350[ducked_bgm];"
         f"[nar]volume=1.0[v_nar];"
-        f"[ducked_bgm]volume=0.30[v_bgm];"
+        f"[ducked_bgm]volume=0.90[v_bgm];"
         f"[v_nar][v_bgm]amix=inputs=2:duration=first:normalize=0[aout]"
     )
 
@@ -436,7 +436,7 @@ def assemble_shorts(script_path):
         print(f"[Assemble] 오디오 덕킹 필터 예외 발생, 기본 믹싱으로 폴백: {e}")
         fallback_filter = (
             f"[0:v]{sub_filter}[v];"
-            f"[1:a]volume={BGM_VOL * 0.25}[bgm];"
+            f"[1:a]volume=0.35[bgm];"
             f"[0:a]volume=1.0[nar];"
             f"[nar][bgm]amix=inputs=2:duration=first:normalize=0[aout]"
         )

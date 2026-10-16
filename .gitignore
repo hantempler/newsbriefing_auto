@@ -23,6 +23,7 @@ config/*
 *.json.token
 
 # IDE & OS
+.agents/
 .vscode/
 .idea/
 .DS_Store
