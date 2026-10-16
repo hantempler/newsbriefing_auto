@@ -244,7 +244,7 @@ def render_scene_clip_dynamic(img_file, wav_file, out_mp4, duration, scene_idx, 
             "-vf", vf,
             "-c:v", "libx264", "-preset", "fast", "-crf", "18",
             "-c:a", "aac", "-b:a", "192k", "-ar", "44100", "-ac", "2",
-            "-shortest", "-pix_fmt", "yuv420p",
+            "-t", str(duration), "-pix_fmt", "yuv420p",
             str(out_mp4)
         ]
     run_cmd(cmd)
