@@ -10,10 +10,19 @@ import argparse
 import os
 import re
 import sys
+import unicodedata
 import urllib.parse
 from pathlib import Path
 import requests
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
+
+# Windows cp949 콘솔 인코딩 대응 (유럽 인물 악센트 문자 등 출력 방어)
+if sys.platform == "win32":
+    try:
+        sys.stdout.reconfigure(encoding="utf-8")
+        sys.stderr.reconfigure(encoding="utf-8")
+    except Exception:
+        pass
 
 SRC_DIR = Path(__file__).resolve().parent
 ROOT_DIR = SRC_DIR.parent
@@ -216,10 +225,11 @@ def generate_shorts_thumbnail(person_name, person_name_en, hook_title, out_path=
 
     # 7. 하단 정갈한 인물 시그니처 바
     draw.text((W // 2, 1680), person_name, fill=(255, 255, 255), font=font_name, anchor="mm", stroke_width=3, stroke_fill=(0, 0, 0))
+    clean_en = unicodedata.normalize('NFKD', person_name_en).encode('ASCII', 'ignore').decode('utf-8') if person_name_en else ""
     if years:
-        en_display = f"{person_name_en} ({years})" if person_name_en else f"({years})"
+        en_display = f"{clean_en} ({years})" if clean_en else f"({years})"
     else:
-        en_display = person_name_en if person_name_en else "Star is Born Original"
+        en_display = clean_en if clean_en else "Star is Born Original"
     draw.text((W // 2, 1755), en_display, fill=(200, 205, 225), font=font_sub, anchor="mm", stroke_width=2, stroke_fill=(0, 0, 0))
 
     final_rgb = final_img.convert("RGB")

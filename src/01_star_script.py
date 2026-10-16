@@ -153,6 +153,13 @@ def generate_shorts_script(client, types, model, person_name, person_name_en, mo
     mode_title = "[A Star is Born] 오늘 태어난 스타" if mode.lower() == "am" else "[The Legend Falls] 오늘 별이 된 레전드"
     print(f"[Script] {mode_title} - 7개 씬 서사 확장 대본 집필 중...")
 
+    if mode.lower() == "am":
+        visual_style_instruction = """- 스타일 (AM 탄생 축하 모드 - 생생하고 컬러풀한 레트로 팝아트):
+     * 'hyper-realistic retro pop-art caricature, vivid vibrant colorful dramatic cinematic lighting, vertical 9:16 poster style, dynamic energetic facial expression, 8k, no text'"""
+    else:
+        visual_style_instruction = """- 스타일 (PM 기일 추모 모드 - 대안 A: 시네마틱 누아르 흑백 + 골드 앰비언트 헌정):
+     * 'cinematic noir monochromatic portrait caricature, striking high-contrast black and white subject, subtle warm golden rim lighting around silhouette, dark moody atmospheric background with faint golden dust embers, vertical 9:16 poster style, solemn reverent legendary expression, masterpiece, 8k, no text'"""
+
     prompt = f"""당신은 100만 유튜브 쇼츠 채널 '스타이즈본'의 메인 작가입니다.
 인물 한글명: {person_name}
 인물 영문명: {person_name_en}
@@ -177,7 +184,7 @@ def generate_shorts_script(client, types, model, person_name, person_name_en, mo
    - PM(추모): "여러분의 가슴속에 남은 {person_name}의 최고의 명곡은 무엇인가요? 영원히 기억될 그를 기리며, 구독과 좋아요로 함께해 주세요."
 6. [비주얼 프롬프트 앵커 룰 - 중요]:
    - 씬 1부터 씬 7까지 모든 bg_prompt 첫머리에 반드시 '{person_name_en} with his/her iconic features' 실명과 대표 외형 시그니처를 포함해야 합니다.
-   - 스타일: 'hyper-realistic retro pop-art caricature, vivid dramatic cinematic lighting, vertical 9:16 poster style, dynamic facial expression, 8k, no text'
+   {visual_style_instruction}
 
 [서사 다변화 가이드 - 매일 다른 플롯 선택]
 인물의 특성과 팩트에 가장 잘 어울리는 아래 5가지 서사 플롯 중 하나를 자동 선택하여 7개 씬을 유기적으로 전개하세요:

@@ -8,6 +8,14 @@ import os
 import sys
 from pathlib import Path
 
+# Windows cp949 콘솔 인코딩 대응 (유럽 인물 악센트 문자 등 출력 방어)
+if sys.platform == "win32":
+    try:
+        sys.stdout.reconfigure(encoding="utf-8")
+        sys.stderr.reconfigure(encoding="utf-8")
+    except Exception:
+        pass
+
 SRC_DIR = Path(__file__).resolve().parent
 ROOT_DIR = SRC_DIR.parent
 OUTPUT_DIR = ROOT_DIR / "output"
