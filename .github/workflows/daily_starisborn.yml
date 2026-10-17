@@ -57,8 +57,11 @@ jobs:
           python -m pip install --upgrade pip uv
           if [ -f requirements.txt ]; then uv pip install --system -r requirements.txt; fi
 
-      - name: Verify FFmpeg
+      - name: Setup Korean Fonts & FFmpeg
         run: |
+          sudo mkdir -p /usr/share/fonts/truetype/starisborn
+          sudo cp assets/fonts/*.ttf /usr/share/fonts/truetype/starisborn/
+          sudo fc-cache -f -v
           ffmpeg -version || (sudo apt-get update && sudo apt-get install -y ffmpeg)
 
       - name: Setup Credentials & Tokens
