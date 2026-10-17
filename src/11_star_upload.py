@@ -66,6 +66,15 @@ def get_youtube_service():
     return build("youtube", "v3", credentials=creds)
 
 
+def sanitize_youtube_text(text: str) -> str:
+    """유튜브 API 금지 문자(<, >)를 안전한 전각 꺾쇠(《, 》)로 치환.
+    내용을 일절 자르지 않고 원문 전체를 100% 온전히 보존합니다.
+    """
+    if not text:
+        return ""
+    return str(text).replace("<", "《").replace(">", "》")
+
+
 def upload_shorts_package(package_dir, privacy_status="private", publish_at=None, dry_run=False):
     """지정된 패키지 디렉토리의 영상, 메타데이터, 썸네일, 고정 댓글을 유튜브에 자동 등록."""
     from googleapiclient.http import MediaFileUpload
@@ -114,22 +123,27 @@ def upload_shorts_package(package_dir, privacy_status="private", publish_at=None
     if not title:
         title = f"오늘의 스타 이야기 #shorts"
 
+    # 유튜브 API 금지 문자(<, >) 치환 (내용을 일절 자르지 않고 100% 보존)
+    clean_title = sanitize_youtube_text(title)
+    clean_description = sanitize_youtube_text(description)
+    clean_tags = [sanitize_youtube_text(t) for t in tags]
+
     print(f"============================================================")
     print(f"[YouTube Upload] 스타이즈본 쇼츠 자동 업로드 파이프라인")
     print(f"                 패키지: {pkg.name}")
     print(f"                 영상: {video_path.name} ({video_path.stat().st_size / 1e6:.1f} MB)")
-    print(f"                 제목: {title}")
+    print(f"                 제목: {clean_title}")
     print(f"                 공개 상태: {privacy_status.upper()}")
     if publish_at:
         print(f"                 예약 공개 일시: {publish_at}")
-    print(f"                 태그 수: {len(tags)}개")
+    print(f"                 태그 수: {len(clean_tags)}개")
     print(f"============================================================")
 
     if dry_run:
         print("[DryRun] 테스트 모드: 실제 API 호출을 건너뜁니다.")
         return {
             "status": "dry_run_success",
-            "title": title,
+            "title": clean_title,
             "video_path": str(video_path),
             "privacy": privacy_status
         }
@@ -140,12 +154,12 @@ def upload_shorts_package(package_dir, privacy_status="private", publish_at=None
         print("[Error] YouTube API 인증 실패")
         return None
 
-    # 3. 비디오 업로드 본문 구성
+    # 3. 비디오 업로드 본문 구성 (원문 내용 100% 보존)
     body = {
         "snippet": {
-            "title": title,
-            "description": description,
-            "tags": tags[:30],  # 유튜브 최대 태그 제한 보호
+            "title": clean_title,
+            "description": clean_description,
+            "tags": clean_tags[:30],  # 유튜브 최대 태그 제한 보호
             "categoryId": category_id
         },
         "status": {
@@ -187,7 +201,7 @@ def upload_shorts_package(package_dir, privacy_status="private", publish_at=None
     upload_result = {
         "video_id": video_id,
         "video_url": f"https://youtu.be/{video_id}",
-        "title": title,
+        "title": clean_title,
         "privacy": privacy_status,
         "publish_at": publish_at,
         "uploaded_at": datetime.datetime.now().isoformat(),
