@@ -267,6 +267,46 @@
         "brief": "피카소와 마티스가 '우리 모두의 아버지'라 부르며 현대 미술의 문을 활짝 열어젖힌 후기 인상주의의 위대한 거장 (1906년 10월 22일 별세).",
         "verified": true
       }
+    },
+    "10-23": {
+      "am": {
+        "person_name": "라이언 레이놀즈",
+        "person_name_en": "Ryan Reynolds",
+        "category": "Hollywood Actor",
+        "event_date": "2026-10-23",
+        "keywords": [
+          "데드풀",
+          "프리 가이",
+          "유머",
+          "할리우드",
+          "친한파"
+        ],
+        "brief": "재치 넘치는 유머와 압도적인 존재감으로 전 세계를 사로잡은 할리우드 대표 친한파 배우, 라이언 레이놀즈! 그의 50번째 생일을 축하하며, 스크린 안팎에서 펼쳐질 그의 다음 행보를 기대합니다.",
+        "is_deceased": false,
+        "trend_score": 100,
+        "trend_reason": "2026년 50세가 되는 기념비적인 해이며, 최근작 '데드풀 & 울버린'의 폭발적인 흥행과 지속적인 화제성, 한국 팬들의 높은 호감도와 클릭률을 바탕으로 압도적인 1위를 차지했습니다. 2026년 Apple TV+ 영화 '메이데이' 개봉 및 '어벤져스: 둠즈데이' 출연 등 활발한 활동이 예정되어 있어 화제성이 더욱 높습니다.",
+        "wikidata_id": "Q192682",
+        "verified": true,
+        "scouted_trending": true
+      },
+      "pm": {
+        "person_name": "피트 번즈",
+        "person_name_en": "Pete Burns",
+        "wikidata_id": "Q2082089",
+        "category": "Global Pop / Synth-Pop",
+        "event_date": "2016-10-23",
+        "keywords": [
+          "Dead or Alive",
+          "You Spin Me Round",
+          "80년대 신스팝",
+          "레전드"
+        ],
+        "brief": "명곡 'You Spin Me Round'로 시대를 풍미한 전설적 보컬 (2016년 10월 23일 별세).",
+        "is_deceased": true,
+        "trend_score": 95,
+        "trend_reason": "전 세계를 뒤흔든 불멸의 댄스 팝 명곡으로 80년대 신스팝 황금기를 이끈 레전드",
+        "verified": true
+      }
     }
   }
 }
