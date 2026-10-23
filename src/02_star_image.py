@@ -36,6 +36,19 @@ def _gen(client, types, model, prompt):
     )
 
 
+def _save_fitted_image(raw_bytes, out_path, target_size=(1080, 1920)):
+    """Pillow를 사용하여 무조건 9:16 (1080x1920) 세로 비율로 스마트 크롭/피팅 후 고화질 JPEG 저장."""
+    import io
+    from PIL import Image, ImageOps
+    try:
+        img = Image.open(io.BytesIO(raw_bytes))
+        fitted = ImageOps.fit(img, target_size, method=Image.Resampling.LANCZOS, centering=(0.5, 0.5))
+        fitted.save(out_path, format="JPEG", quality=95)
+    except Exception as e:
+        print(f"[Image Warning] Pillow 9:16 피팅 실패({e}), 원본 바이트 직접 저장...")
+        Path(out_path).write_bytes(raw_bytes)
+
+
 def run_image_test(prompt=PROMPT_DEFAULT, out_path="star_image.jpg"):
     from google import genai
     from google.genai import types
@@ -77,7 +90,7 @@ def run_image_test(prompt=PROMPT_DEFAULT, out_path="star_image.jpg"):
         parts_list = getattr(content, "parts", None) if content else []
         for part in (parts_list or []):
             if getattr(part, "inline_data", None) and part.inline_data:
-                out.write_bytes(part.inline_data.data)
+                _save_fitted_image(part.inline_data.data, out)
                 saved = True
                 break
             elif getattr(part, "text", None):
@@ -94,7 +107,7 @@ def run_image_test(prompt=PROMPT_DEFAULT, out_path="star_image.jpg"):
                 cnt2 = getattr(c2, "content", None)
                 for part in (getattr(cnt2, "parts", None) or []):
                     if getattr(part, "inline_data", None) and part.inline_data:
-                        out.write_bytes(part.inline_data.data)
+                        _save_fitted_image(part.inline_data.data, out)
                         saved = True
                         break
         except Exception as e_fb:

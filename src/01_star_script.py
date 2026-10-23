@@ -151,11 +151,33 @@ def generate_shorts_script(client, types, model, person_name, person_name_en, mo
     print(f"[Script] {mode_title} - 7개 씬 서사 확장 대본 집필 중...")
 
     if mode.lower() == "am":
-        visual_style_instruction = """- 스타일 (AM 탄생 축하 모드 - 생생하고 컬러풀한 레트로 팝아트):
-     * 'hyper-realistic retro pop-art caricature, vivid vibrant colorful dramatic cinematic lighting, vertical 9:16 poster style, dynamic energetic facial expression, 8k, no text'"""
+        tone_instruction = """- [AM 탄생 축하 모드 컬러/조명 철학 - 생생한 원색 풀컬러 (Vivid Full Color)]:
+     * 컬러 톤: 'vivid vibrant full color, ultra-rich saturated palette, lively energetic cinematic lighting, celebratory atmosphere'
+     * 절대 규칙: 생일 축하이므로 칙칙한 흑백이나 어두운 톤을 배제하고, 눈길을 확 사로잡는 생생한 원색과 역동적인 조명을 사용할 것."""
     else:
-        visual_style_instruction = """- 스타일 (PM 기일 추모 모드 - 대안 A: 시네마틱 누아르 흑백 + 골드 앰비언트 헌정):
-     * 'cinematic noir monochromatic portrait caricature, striking high-contrast black and white subject, subtle warm golden rim lighting around silhouette, dark moody atmospheric background with faint golden dust embers, vertical 9:16 poster style, solemn reverent legendary expression, masterpiece, 8k, no text'"""
+        tone_instruction = """- [PM 기일 추모 모드 컬러/조명 철학 - 헌정 흑백 + 골드 앰비언트 (In Memoriam Tribute)]:
+     * 컬러 톤: 'striking high-contrast black and white monochrome subject, subtle warm golden rim lighting around silhouette, dark moody atmospheric background with faint warm golden dust embers, solemn reverent legendary legacy mood, strictly no bright cheerful colors'
+     * 절대 규칙: 고인을 기리는 엄숙하고 품격 있는 헌정이므로, 배경과 인물은 고대비 흑백(Monochrome)을 기반으로 하되 실루엣 주위에 은은하게 타오르는 황금빛 역광(Warm Golden Rim Lighting)과 금빛 불씨(Golden Embers)만으로 영원한 유산(Legacy)을 기릴 것."""
+
+    visual_style_instruction = f"""[AI 아트 디렉터 모드: 인물/장르별 6대 화풍 매핑 & 서사별 진화]
+1. 인물/장르 특성에 맞는 최적의 화풍을 자동 매칭하여 프롬프트에 반영하세요:
+   - 코믹/블록버스터/예능 스타: 'American Comic / Graphic Novel pop-art style with bold ink outlines'
+   - 정통 연기파 배우/카리스마 거장: 'Dramatic Cinematic 35mm Film Still with anamorphic lens depth'
+   - 화가/문학가/클래식 거장/19세기 이전 위인: 'Classical Impasto Oil Painting with rich textured canvas brushwork'
+   - 일렉트로닉/글램록/SF 미래 혁신가: 'Cyberpunk Retro Synthwave with neon glow and high-tech flair'
+   - 뮤지컬/디바/쇼맨십 엔터테이너: 'Vintage Broadway Theatrical Stage with dramatic spotlight framing'
+   - 애니/스포츠/격투 스타: 'Dynamic Manga / Anime Graphic illustration with high-speed lines'
+
+2. {tone_instruction}
+
+3. [7개 씬 서사별 비주얼 진화 (Visual Progression)]:
+   - 씬 1 (오프닝 훅): 극적인 인물 페이스 클로즈업 (Intense Hook Portrait Close-up)
+   - 씬 2~3 (무명/시련/도전): 거칠고 치열한 초기 배경과 땀방울, 고난 (Gritty Early Struggle)
+   - 씬 4~5 (결정적 순간/절정): 전설적인 무대/경기장/작품 탄생의 와이드 임팩트 (Climax Breakthrough Stage)
+   - 씬 6~7 (원숙한 레거시/헌정): 시대의 상징으로 완성된 마스터피스 포스터 (Iconic Masterpiece Poster)
+
+4. [공통 규격 강제]:
+   - 모든 bg_prompt 끝에는 반드시 'vertical 9:16 portrait orientation, strictly tall phone screen framing, masterpiece, 8k, no text'를 명시하세요."""
 
     prompt = f"""당신은 100만 유튜브 쇼츠 채널 '스타이즈본'의 메인 작가입니다.
 인물 한글명: {person_name}
