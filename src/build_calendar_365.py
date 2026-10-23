@@ -204,13 +204,13 @@ KOREAN_CALENDAR_OCT = {
             "verified": True
         },
         "pm": {
-            "person_name": "서인국",
-            "person_name_en": "Seo In-guk",
-            "wikidata_id": "Q491648",
-            "category": "K-Culture / Star",
-            "event_date": "1987-10-23",
-            "keywords": ["슈퍼스타K 1대 우승자", "응답하라 1997 윤윤제", "흥행 배우"],
-            "brief": "대한민국 오디션 열풍을 연 '슈퍼스타K' 시즌1 초대 우승자에서 '응답하라 1997'로 신드롬을 일으킨 만능 스타.",
+            "person_name": "피트 번즈",
+            "person_name_en": "Pete Burns",
+            "wikidata_id": "Q312061",
+            "category": "Global Pop / Synth-Pop",
+            "event_date": "2016-10-23",
+            "keywords": ["Dead or Alive", "You Spin Me Round", "80년대 신스팝 제왕", "불멸의 댄스 명곡"],
+            "brief": "전 세계를 뒤흔든 불멸의 댄스 팝 명곡 'You Spin Me Round'로 80년대 신스팝의 황금기를 이끈 독보적인 카리스마의 레전드 보컬 (2016년 10월 23일 별세).",
             "verified": True
         }
     },
@@ -226,13 +226,13 @@ KOREAN_CALENDAR_OCT = {
             "verified": True
         },
         "pm": {
-            "person_name": "드레이크",
-            "person_name_en": "Drake",
-            "wikidata_id": "Q33247",
-            "category": "Music / Hip-Hop",
-            "event_date": "1986-10-24",
-            "keywords": ["빌보드 1위 힙합스타", "Hotline Bling", "글로벌 스트리밍 제왕"],
-            "brief": "한국 힙합 래퍼들의 롤모델이자 21세기 전 세계 스트리밍 음원 시장의 모든 기록을 갈아치운 글로벌 힙합 제왕.",
+            "person_name": "크리스티앙 디올",
+            "person_name_en": "Christian Dior",
+            "wikidata_id": "Q159694",
+            "category": "Fashion & Art / Design",
+            "event_date": "1957-10-24",
+            "keywords": ["디올 Dior 창립자", "뉴 룩 New Look", "프랑스 패션 제국", "오트 쿠튀르 거장"],
+            "brief": "'뉴 룩(New Look)'으로 전 세계 여성 패션의 역사를 영원히 바꾸고 오늘날 세계 최고의 럭셔리 제국을 탄생시킨 불멸의 패션 거장 (1957년 10월 24일 별세).",
             "verified": True
         }
     },
@@ -276,7 +276,7 @@ KOREAN_CALENDAR_OCT = {
             "category": "Korean History / Hero",
             "event_date": "1909-10-26",
             "keywords": ["하얼빈 의거", "단지동맹", "대한독립만세", "민족의 영웅"],
-            "brief": "1909년 10월 26일 하얼빈역에서 침략의 원흉 이토 히로부미를 저격하고 당당히 대한독립만세를 외친 대한민국 영원한 독립 영웅의 날.",
+            "brief": "1909년 10월 26일 하얼빈 의거로 침략의 원흉 이토 히로부미를 처단하고 당당히 대한독립만세를 외친 대한민국 영원한 독립 영웅의 날.",
             "verified": True
         }
     },
@@ -298,7 +298,7 @@ KOREAN_CALENDAR_OCT = {
             "category": "K-Culture / Legend Musician",
             "event_date": "2014-10-27",
             "keywords": ["마왕", "그대에게", "고스트스테이션", "민물장어의 꿈", "영원한 마왕"],
-            "brief": "'그대에게'로 대학가요제 대상을 받으며 혜성처럼 등장해 한국 록과 대중음악의 판도를 바꾼 영원한 '마왕'. 2014년 10월 27일 의료사고로 홀연히 떠나 전 국민을 오열하게 만든 시대의 아이콘.",
+            "brief": "'그대에게'로 대학가요제 대상을 받으며 혜성처럼 등장해 한국 록과 대중음악의 판도를 바꾼 영원한 '마왕' (2014년 10월 27일 의료사고로 홀연히 떠나 별세).",
             "verified": True
         }
     },
@@ -336,13 +336,13 @@ KOREAN_CALENDAR_OCT = {
             "verified": True
         },
         "pm": {
-            "person_name": "위노나 라이더",
-            "person_name_en": "Winona Ryder",
-            "wikidata_id": "Q101798",
-            "category": "Hollywood / Cinema",
-            "event_date": "1971-10-29",
-            "keywords": ["기묘한 이야기 엄마", "가위손", "90년대 청춘 아이콘", "Y2K 스타일"],
-            "brief": "영화 '가위손'의 순수한 여주인공부터 넷플릭스 메가히트작 '기묘한 이야기'의 조이스 바이어스로 돌아온 세기의 여배우.",
+            "person_name": "조셉 퓰리처",
+            "person_name_en": "Joseph Pulitzer",
+            "wikidata_id": "Q173426",
+            "category": "Modern History / Journalism",
+            "event_date": "1911-10-29",
+            "keywords": ["퓰리처상 설립", "현대 저널리즘의 아버지", "뉴욕 월드", "진실 보도"],
+            "brief": "\"국가가 위태로울 때 언론은 어둠 속의 등대여야 한다\"는 신념으로 언론계 최고 권위 '퓰리처상'을 남긴 현대 저널리즘의 아버지 (1911년 10월 29일 별세).",
             "verified": True
         }
     },

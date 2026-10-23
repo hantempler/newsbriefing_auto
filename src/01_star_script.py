@@ -34,17 +34,6 @@ MODEL_PRO = "gemini-2.5-pro"
 MODEL_FLASH = "gemini-2.5-flash"
 
 
-def load_calendar_entry(date_str, mode):
-    cal_file = DATA_DIR / "calendar_db.json"
-    if cal_file.exists():
-        try:
-            db = json.loads(cal_file.read_text(encoding="utf-8"))
-            cal = db.get("calendar", {})
-            if date_str in cal and mode.lower() in cal[date_str]:
-                return cal[date_str][mode.lower()]
-        except Exception as e:
-            print(f"[Warn] calendar_db.json 읽기 실패: {e}")
-    return None
 
 
 def get_client():
@@ -96,6 +85,7 @@ def run_fact_check(client, types, model, person_name, mode, date_str):
 2. 이 인물의 출생, 데뷔, 또는 사망 순간의 결정적이고 극적인 사실은 무엇입니까?
 3. 전설적인 작품/경기/프로젝트 탄생 비화, 대기록, 무명 시절의 치열한 노력 일화 2~3가지는?
 4. [주의]: 사생활 가십, 세금/탈세, 가짜뉴스/사망설, 성형 의혹 등 불필요한 분쟁을 유발하는 부정적 논란은 조사 대상에서 완전히 제외하고, 공인된 공식 기록과 긍정적인 미담 위주로 기술하세요.
+5. [사망 팩트 가드레일]: 이 인물은 실제로 세상을 떠난 고인(Deceased)입니까, 아니면 현재 살아있는 생존 인물입니까? PM 기일 모드인 경우 생존 여부를 엄격히 밝히세요.
 출처와 함께 사실 위주로 상세히 기술하세요."""
 
     search_context = ""
@@ -123,6 +113,7 @@ def run_fact_check(client, types, model, person_name, mode, date_str):
 [출력 JSON 규격 - 출처는 '언론 보도' 같은 모호한 표현 절대 금지! 공인 기관/협회/매체명/고유ID를 명확히 기재할 것]
 {{
   "target_date_match": true/false,
+  "is_deceased": true/false,
   "verified_date": "YYYY-MM-DD",
   "primary_sources": ["위키데이터 고유ID 또는 브리태니커", "공인 통계/기관(영진위, KMDb 등)", "지상파 방송/주요 언론 공식 인터뷰"],
   "verified_facts": [
@@ -141,11 +132,17 @@ def run_fact_check(client, types, model, person_name, mode, date_str):
     )
     resp_json = generate_content_with_retry(client, model, contents=structure_prompt, config=cfg_json)
     try:
-        return json.loads(resp_json.text)
+        parsed = json.loads(resp_json.text)
     except Exception:
         clean_text = re.sub(r"^```json\s*", "", resp_json.text.strip())
         clean_text = re.sub(r"\s*```$", "", clean_text)
-        return json.loads(clean_text)
+        parsed = json.loads(clean_text)
+
+    # PM 모드 사망 여부 하드 가드레일 인터록
+    if mode.lower() == "pm" and not parsed.get("is_deceased", True):
+        raise ValueError(f"[🚨 FactCheck 차단] '{person_name}'은(는) 현재 살아있는 생존 인물입니다! PM(사망 기일 추모) 모드로 가짜뉴스 대본을 쓸 수 없습니다.")
+
+    return parsed
 
 
 def generate_shorts_script(client, types, model, person_name, person_name_en, mode, date_str, fact_data):
@@ -283,16 +280,26 @@ def run_pipeline(mode="am", date_str=None, person=None):
         kst = datetime.timezone(datetime.timedelta(hours=9))
         date_str = datetime.datetime.now(kst).strftime("%m-%d")
 
-    entry = load_calendar_entry(date_str, mode)
     person_en = "Oscar Wilde"
+    scouted_meta = {}
     if not person:
-        if entry:
-            person = entry["person_name"]
-            person_en = entry.get("person_name_en", "Oscar Wilde")
-            print(f"[Calendar] DB 자동 매칭: {person} ({person_en})")
-        else:
-            person = "오스카 와일드"
-            person_en = "Oscar Wilde"
+        # 실시간 트렌드 스타 스카우터 가동 (당일 실시간 웹 검색 + 사망 팩트 가드레일 + Wikidata Q-ID 취득)
+        try:
+            from star_trend_scout import scout_trending_star
+            scouted = scout_trending_star(date_str=date_str, mode=mode)
+            if scouted:
+                person = scouted["person_name"]
+                person_en = scouted.get("person_name_en", "Oscar Wilde")
+                scouted_meta = scouted
+                print(f"[TrendScout] 오늘({date_str})의 트렌드 1위 스타 낙점: {person} ({person_en}) [Wikidata: {scouted.get('wikidata_id')}]")
+        except Exception as e:
+            print(f"[TrendScout Error] 실시간 스카우터 실패: {e}")
+            if mode.lower() == "am":
+                person = "라이언 레이놀즈"
+                person_en = "Ryan Reynolds"
+            else:
+                person = "피트 번즈"
+                person_en = "Pete Burns"
 
     # 일자별/인물별 패키지 디렉토리 설정
     slug = re.sub(r"[^\w]", "_", person_en.lower())

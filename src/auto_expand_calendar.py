@@ -82,8 +82,10 @@ def generate_day_entry(client, date_str):
    - 톤앤매너: 축하, 찬사, 독보적 성취.
 
 2. PM (오늘 우리 곁을 떠난 스타):
-   - 사망일(기일)이 정확히 {month_name}(월-일이 {date_str})인 인물이어야 합니다.
+   - [🚨 절대 금기]: 현재 살아있는 생존 인물은 절대 등록하지 마세요! (생존자 가짜뉴스 엄벌)
+   - 반드시 공식 사망일자(Date of Death)가 정확히 {month_name}(월-일이 {date_str})인 실제 고인만 선정하세요.
    - 한국 대중에게 큰 울림을 주었거나 전 세계를 뒤흔든 전설적인 인물.
+   - brief 문구에 반드시 "YYYY년 MM월 DD일 별세"를 명시하세요.
    - 톤앤매너: 따뜻한 추모, 그리움, 헌정(In Memoriam).
 
 3. 날짜 무결점 팩트체크:
@@ -102,16 +104,18 @@ def generate_day_entry(client, date_str):
     "event_date": "YYYY-{date_str}",
     "keywords": ["대표작/키워드1", "키워드2", "키워드3", "키워드4"],
     "brief": "인물의 삶과 매력을 압축한 1~2문장의 강렬한 찬사 문구.",
+    "is_deceased": false,
     "verified": true
   }},
   "pm": {{
-    "person_name": "한국어 실명",
+    "person_name": "한국어 고인 실명",
     "person_name_en": "영어 이름",
     "wikidata_id": "위키데이터 QID",
     "category": "카테고리",
     "event_date": "YYYY-{date_str}",
     "keywords": ["대표작/키워드1", "키워드2", "키워드3", "키워드4"],
     "brief": "인물의 별세를 기리는 1~2문장의 따뜻한 추모 및 헌정 문구 (YYYY년 MM월 DD일 별세 표기 포함).",
+    "is_deceased": true,
     "verified": true
   }}
 }}
@@ -135,12 +139,14 @@ def generate_day_entry(client, date_str):
         raw_json = match.group(1) if match else text.strip()
         data = json.loads(raw_json)
 
-        # 유효성 검증
+        # 유효성 검증 (날짜 일치 + PM 사망 키워드 확인)
         am_date = data.get("am", {}).get("event_date", "")
         pm_date = data.get("pm", {}).get("event_date", "")
+        pm_brief = data.get("pm", {}).get("brief", "")
+        has_death_kw = any(k in pm_brief for k in ["별세", "사망", "타계", "서거", "산화", "순국", "잠들다", "떠난"])
 
-        if not am_date.endswith(date_str) or not pm_date.endswith(date_str):
-            print(f"  [Mismatch Warning] {date_str}: AM={am_date}, PM={pm_date}")
+        if not am_date.endswith(date_str) or not pm_date.endswith(date_str) or not has_death_kw:
+            print(f"  [Mismatch Warning] {date_str}: AM={am_date}, PM={pm_date}, death_kw={has_death_kw}")
             return None
 
         return data

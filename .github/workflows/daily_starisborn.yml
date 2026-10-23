@@ -93,3 +93,11 @@ jobs:
           echo "가동 모드: $MODE | 공개 설정: $PRIVACY | 추가 일자: $DATE_ARG"
           echo "============================================================"
           python run_daily.py --mode "$MODE" --upload --privacy "$PRIVACY" $DATE_ARG
+
+      - name: Commit and push updated calendar_db.json
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/calendar_db.json
+          git commit -m "auto: update calendar_db.json with daily scouted star [skip ci]" || exit 0
+          git push origin main
