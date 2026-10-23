@@ -304,8 +304,24 @@ def run_pipeline(mode="am", date_str=None, person=None):
 
     person_en = "Oscar Wilde"
     scouted_meta = {}
+
+    # 1. calendar_db.json에 이미 저장된 인물이 있는지 우선 확인
+    cal_path = DATA_DIR / "calendar_db.json"
+    if cal_path.exists():
+        try:
+            cal_data = json.loads(cal_path.read_text(encoding="utf-8"))
+            entry = cal_data.get("calendar", {}).get(date_str, {}).get(mode.lower())
+            if entry and entry.get("person_name"):
+                if not person or person == entry.get("person_name"):
+                    person = entry["person_name"]
+                    person_en = entry.get("person_name_en", "Oscar Wilde")
+                    scouted_meta = entry
+                    print(f"[CalendarDB] 당일({date_str}) 검증 인물 로드: {person} ({person_en}) [Wikidata: {entry.get('wikidata_id')}]")
+        except Exception as e:
+            print(f"[CalendarDB Warn] 로드 실패: {e}")
+
+    # 2. 없으면 실시간 트렌드 스타 스카우터 가동
     if not person:
-        # 실시간 트렌드 스타 스카우터 가동 (당일 실시간 웹 검색 + 사망 팩트 가드레일 + Wikidata Q-ID 취득)
         try:
             from star_trend_scout import scout_trending_star
             scouted = scout_trending_star(date_str=date_str, mode=mode)
@@ -317,11 +333,11 @@ def run_pipeline(mode="am", date_str=None, person=None):
         except Exception as e:
             print(f"[TrendScout Error] 실시간 스카우터 실패: {e}")
             if mode.lower() == "am":
-                person = "라이언 레이놀즈"
-                person_en = "Ryan Reynolds"
+                person = "퓨디파이"
+                person_en = "PewDiePie"
             else:
-                person = "피트 번즈"
-                person_en = "Pete Burns"
+                person = "로사 파크스"
+                person_en = "Rosa Parks"
 
     # 일자별/인물별 패키지 디렉토리 설정
     slug = re.sub(r"[^\w]", "_", person_en.lower())
