@@ -307,6 +307,49 @@
         "trend_reason": "전 세계를 뒤흔든 불멸의 댄스 팝 명곡으로 80년대 신스팝 황금기를 이끈 레전드",
         "verified": true
       }
+    },
+    "10-24": {
+      "am": {
+        "person_name": "이진혁",
+        "person_name_en": "Lee Jin-hyuk",
+        "category": "K-POP 아이돌 / 배우",
+        "event_date": "2026-10-24",
+        "keywords": [
+          "UP10TION",
+          "프로듀스 X 101",
+          "솔로 가수",
+          "배우",
+          "예능",
+          "틱톡 드라마"
+        ],
+        "brief": "다재다능한 매력으로 무대와 브라운관을 종횡무진하는 만능 엔터테이너, 그의 30번째 생일을 축하하며 빛나는 미래를 응원합니다!",
+        "is_deceased": false,
+        "trend_score": 98,
+        "trend_reason": "2026년 브라질 팝컬처 페스티벌 초청 및 신곡 발표로 글로벌 팬들과 소통하며 활동 영역을 넓혔습니다. 틱톡 드라마의 5억 뷰 돌파와 새로운 드라마 출연으로 화제성을 이어가고 있으며, 특히 30번째 생일을 맞아 팬들의 뜨거운 축하와 관심이 집중되고 있습니다.",
+        "wikidata_id": "Q64796810",
+        "verified": true,
+        "scouted_trending": true
+      },
+      "pm": {
+        "person_name": "제임스 마이클 타일러",
+        "person_name_en": "James Michael Tyler",
+        "category": "Hollywood / Television",
+        "event_date": "2021-10-24",
+        "keywords": [
+          "프렌즈",
+          "건터",
+          "시트콤",
+          "배우",
+          "5주기"
+        ],
+        "brief": "2021년 10월 24일 별세한 배우 제임스 마이클 타일러는 전 세계적인 사랑을 받은 시트콤 '프렌즈'의 '건터' 역으로 영원히 기억될 것입니다. 그의 5주기를 맞아 많은 팬들이 그를 추모하고 있습니다.",
+        "is_deceased": true,
+        "trend_score": 100,
+        "trend_reason": "2026년은 제임스 마이클 타일러의 5주기이며, 그가 출연한 시트콤 '프렌즈'는 전 세계적으로 여전히 큰 사랑을 받고 있습니다. 최근 '프렌즈'의 재조명과 함께 그의 연기 또한 꾸준히 회자되며 높은 화제성을 유지하고 있습니다.",
+        "wikidata_id": "Q471801",
+        "verified": true,
+        "scouted_trending": true
+      }
     }
   }
 }
