@@ -27,46 +27,9 @@ if sys.platform == "win32":
 SRC_DIR = Path(__file__).resolve().parent
 ROOT_DIR = SRC_DIR.parent
 DATA_DIR = ROOT_DIR / "data"
-PORTRAITS_DIR = DATA_DIR / "portraits"
-PORTRAITS_DIR.mkdir(parents=True, exist_ok=True)
 FONTS_DIR = ROOT_DIR / "assets" / "fonts"
 FONT_BLACK = FONTS_DIR / "BlackHanSans-Regular.ttf"
 FONT_GMARKET = FONTS_DIR / "GmarketSansTTFBold.ttf"
-
-
-def download_portrait(person_name, person_name_en=None):
-    """위키피디아 REST API를 통해 실사 초상화/사진 고화질 다운로드."""
-    names_to_try = [person_name_en, person_name] if person_name_en else [person_name]
-    headers = {"User-Agent": "StarIsBornBot/1.0 (contact@starisborn.com)"}
-
-    slug = re.sub(r"[^\w]", "_", (person_name_en or person_name).lower())
-    saved_file = PORTRAITS_DIR / f"{slug}.jpg"
-    if saved_file.exists() and saved_file.stat().st_size > 5000:
-        return saved_file
-
-    for name in names_to_try:
-        if not name:
-            continue
-        try:
-            api_url = f"https://en.wikipedia.org/api/rest_v1/page/summary/{urllib.parse.quote(name.replace(' ', '_'))}"
-            r = requests.get(api_url, headers=headers, timeout=15)
-            if r.status_code == 200:
-                d = r.json()
-                thumb_url = d.get("thumbnail", {}).get("source")
-                if thumb_url:
-                    # 더 큰 고해상도(800px) 요청
-                    high_url = re.sub(r"/\d+px-", "/800px-", thumb_url)
-                    r_img = requests.get(high_url, headers=headers, timeout=20)
-                    if r_img.status_code != 200:
-                        r_img = requests.get(thumb_url, headers=headers, timeout=20)
-                    if r_img.status_code == 200 and len(r_img.content) > 3000:
-                        saved_file.write_bytes(r_img.content)
-                        print(f"[Thumbnail] 고화질 실사 사진 수집 성공: {saved_file.name}")
-                        return saved_file
-        except Exception as e:
-            print(f"[Thumbnail] 수집 실패({name}): {e}")
-
-    return None
 
 
 def generate_shorts_thumbnail(person_name, person_name_en, hook_title, out_path="thumbnail.jpg", target_date="10.16", mode="AM", years="", base_image_path=None):
