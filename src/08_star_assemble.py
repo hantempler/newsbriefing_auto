@@ -303,27 +303,8 @@ def assemble_shorts(script_path):
         sfx_assets = sfx_mod.ensure_sfx_assets()
         print(f"[Assemble] SFX 사운드 라이브러리 탑재 완료: {list(sfx_assets.keys())}")
 
-    # 2. 다이내믹 자막 생성 (06_star_subtitle 모듈 호출)
-    print(f"[Assemble] 1. 다이내믹 자막(호흡별 분할 + 키워드 옐로우 하이라이트) 생성 중...")
-    sub_py = SRC_DIR / "06_star_subtitle.py"
-    spec = importlib.util.spec_from_file_location("star_subtitle", str(sub_py))
-    sub_mod = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(sub_mod)
-    ass_path = assets_dir / "subtitles.ass"
-    sub_mod.generate_subtitles(p, output_ass=ass_path)
-
-    # 3. 각 씬 음성 길이 측정
-    durations = []
-    for i in range(1, n_scenes + 1):
-        wav_file = assets_dir / f"scene_{i}.wav"
-        dur = get_audio_duration(wav_file)
-        durations.append(dur)
-        print(f"[Assemble] Scene {i} 음성 길이: {dur:.2f}초")
-
-    total_narr_dur = sum(durations)
-    print(f"[Assemble] 총 내레이션 길이: {total_narr_dur:.2f}초")
-
-    # 4. 실사 썸네일 동기화 및 오프닝 0.5초 클립 생성 (0초 서브 베이스 Impact SFX 포함)
+    # 2. 실사 썸네일 동기화 (자막 오프셋 계산 전에 먼저 동기화)
+    thumb_duration = 3.0
     thumb_file = pkg_dir / "thumbnail.jpg"
     thumb_py = SRC_DIR / "09_star_thumbnail.py"
     if thumb_py.exists():
@@ -344,21 +325,42 @@ def assemble_shorts(script_path):
         except Exception as e:
             print(f"[Assemble] 썸네일 동기화 경고: {e}")
 
+    # 3. 다이내믹 자막 생성 (06_star_subtitle 모듈 호출)
+    print(f"[Assemble] 1. 다이내믹 자막(호흡별 분할 + 키워드 옐로우 하이라이트) 생성 중...")
+    sub_py = SRC_DIR / "06_star_subtitle.py"
+    spec = importlib.util.spec_from_file_location("star_subtitle", str(sub_py))
+    sub_mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(sub_mod)
+    ass_path = assets_dir / "subtitles.ass"
+    sub_mod.generate_subtitles(p, output_ass=ass_path, thumb_offset=thumb_duration)
+
+    # 4. 각 씬 음성 길이 측정
+    durations = []
+    for i in range(1, n_scenes + 1):
+        wav_file = assets_dir / f"scene_{i}.wav"
+        dur = get_audio_duration(wav_file)
+        durations.append(dur)
+        print(f"[Assemble] Scene {i} 음성 길이: {dur:.2f}초")
+
+    total_narr_dur = sum(durations)
+    print(f"[Assemble] 총 내레이션 길이: {total_narr_dur:.2f}초")
+
+    # 5. 오프닝 3.0초 실사 썸네일 클립 생성 (0초 서브 베이스 Impact SFX 포함)
     part_clips = []
     thumb_clip = assets_dir / "part_0_thumb.mp4"
     if thumb_file.exists():
-        print(f"[Assemble] 2. 오프닝 0.5초 실사 썸네일 + 서브 베이스 Impact 클립 생성 중...")
+        print(f"[Assemble] 2. 오프닝 {thumb_duration}초 실사 썸네일 + 서브 베이스 Impact 클립 생성 중...")
         impact_sfx = sfx_assets.get("impact")
         if impact_sfx and Path(impact_sfx).exists():
             cmd_thumb = [
                 "ffmpeg", "-y",
                 "-loop", "1", "-i", str(thumb_file),
                 "-i", str(impact_sfx),
-                "-t", "0.5",
+                "-t", str(thumb_duration),
                 "-vf", "scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,fps=30",
                 "-c:v", "libx264", "-preset", "veryfast", "-threads", "0", "-crf", "18",
                 "-c:a", "aac", "-b:a", "192k", "-ar", "44100", "-ac", "2",
-                "-af", "volume=0.85",
+                "-af", "volume=0.85,apad",
                 "-pix_fmt", "yuv420p",
                 str(thumb_clip)
             ]
@@ -367,7 +369,7 @@ def assemble_shorts(script_path):
                 "ffmpeg", "-y",
                 "-loop", "1", "-i", str(thumb_file),
                 "-f", "lavfi", "-i", "anullsrc=r=44100:cl=stereo",
-                "-t", "0.5",
+                "-t", str(thumb_duration),
                 "-vf", "scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,fps=30",
                 "-c:v", "libx264", "-preset", "veryfast", "-threads", "0", "-crf", "18",
                 "-c:a", "aac", "-b:a", "192k", "-pix_fmt", "yuv420p",

@@ -187,7 +187,7 @@ ScaledBorderAndShadow: yes
 
 [V4+ Styles]
 Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
-Style: TopChapter, Gmarket Sans TTF, 62, &H00FFFFFF, &H00000000, &H00000000, &H00000000, 1, 0, 0, 0, 100, 100, 0, 0, 1, 6.0, 3.5, 8, 40, 40, 160, 1
+Style: TopChapter, Gmarket Sans TTF, 56, &H00FFFFFF, &H00000000, &H00000000, &H00000000, 1, 0, 0, 0, 100, 100, 0, 0, 1, 5.5, 3.0, 8, 40, 40, 150, 1
 Style: DynamicSub, Gmarket Sans TTF, 74, &H00FFFFFF, &H00000000, &H00000000, &H00000000, 1, 0, 0, 0, 100, 100, 0, 0, 1, 7.0, 4.0, 2, 50, 50, 480, 1
 
 [Events]
@@ -203,12 +203,12 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
         scene_start = current_time
         scene_end = current_time + duration
 
-        # 1. 상단 모던 챕터 태그 (글씨 크기 62pt)
+        # 1. 상단 모던 챕터 태그 (번호와 제목 2단 분리 줄바꿈)
         caption = sc.get("caption", "").strip()
         if caption:
             start_str = format_ass_time(scene_start)
             end_str = format_ass_time(scene_end)
-            chapter_text = rf"{{\c&H0000E6FF&}}0{s_no}{{\c&H00FFFFFF&}}  {caption}"
+            chapter_text = rf"{{\c&H0000E6FF&\fs44}}0{s_no}\N{{\c&H00FFFFFF&\fs56}}{caption}"
             events.append(f"Dialogue: 1,{start_str},{end_str},TopChapter,,0,0,0,,{chapter_text}")
 
         # 2. 하단 다이내믹 내레이션 자막
@@ -264,7 +264,7 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
     return ass_path
 
 
-def generate_subtitles(script_path, output_ass=None):
+def generate_subtitles(script_path, output_ass=None, thumb_offset=3.0):
     """script.json을 읽고 다이내믹 ASS 자막 파일 생성."""
     p = Path(script_path)
     if not p.is_absolute():
@@ -297,8 +297,8 @@ def generate_subtitles(script_path, output_ass=None):
     else:
         output_ass = Path(output_ass)
 
-    # 오프닝 0.5초 썸네일 인서트 오프셋 반영
-    offset = 0.5 if (pkg_dir / "thumbnail.jpg").exists() else 0.0
+    # 오프닝 3.0초 썸네일 인서트 오프셋 반영
+    offset = float(thumb_offset) if (pkg_dir / "thumbnail.jpg").exists() else 0.0
     build_pro_ass_file(scenes, analyzed_scenes, durations, output_ass, offset=offset, wav_paths=wav_paths)
 
     # 분석 JSON도 함께 보관
