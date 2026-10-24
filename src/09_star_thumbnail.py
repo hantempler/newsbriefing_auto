@@ -158,8 +158,18 @@ def generate_shorts_thumbnail(person_name, person_name_en, hook_title, out_path=
     draw.ellipse([70, brand_y - 10, 88, brand_y + 8], fill=dot_color)
     draw.text((105, brand_y), f"{brand_label}   |   {target_date}", fill=(240, 240, 250), font=font_brand, anchor="lm")
 
-    # 6. 메인 헤드라인 분할 (2행 밸런스 유지)
+    # 6. 메인 헤드라인 정제 및 분할 (콜론/부제 및 중복 인물명 제거 후 2행 밸런스 유지)
     clean_hook = hook_title.strip()
+    if ":" in clean_hook:
+        clean_hook = clean_hook.split(":", 1)[0].strip()
+    elif " - " in clean_hook:
+        clean_hook = clean_hook.split(" - ", 1)[0].strip()
+
+    if person_name:
+        clean_hook = re.sub(rf"\s*[-–:]?\s*{re.escape(person_name)}\s*$", "", clean_hook).strip()
+    if person_name_en:
+        clean_hook = re.sub(rf"\s*[-–:]?\s*{re.escape(person_name_en)}\s*$", "", clean_hook, flags=re.IGNORECASE).strip()
+
     if "\n" in clean_hook:
         parts = clean_hook.split("\n", 1)
         line1, line2 = parts[0].strip(), parts[1].strip()

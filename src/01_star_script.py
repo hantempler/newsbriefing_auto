@@ -266,7 +266,7 @@ def generate_shorts_script(client, types, model, person_name, person_name_en, mo
 
 [출력 JSON 규격]
 {{
-  "title": "쇼츠 어그로 썸네일 제목 (20자 내외)",
+  "title": "쇼츠 썸네일 훅 제목 (10~14자 내외, 콜론(:)이나 인물 실명 반복 금지, 예: '버스 한 칸이 바꾼 세상')",
   "hook_quote": "오프닝 5초 핵심 훅 문구",
   "scenes": [
     {{
