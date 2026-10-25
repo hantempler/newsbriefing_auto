@@ -327,7 +327,20 @@ def run_pipeline(mode="am", date_str=None, person=None):
         except Exception as e:
             print(f"[CalendarDB Warn] 로드 실패: {e}")
 
-    # 2. 없으면 실시간 트렌드 스타 스카우터 가동
+    # 2. calendar_db.json에 없으면 build_calendar_365 검증 정적 캘린더 확인
+    if not person:
+        try:
+            import build_calendar_365 as b
+            static_entry = b.KOREAN_CALENDAR_ALL.get(date_str, {}).get(mode.lower())
+            if static_entry and static_entry.get("person_name"):
+                person = static_entry["person_name"]
+                person_en = static_entry.get("person_name_en", "Oscar Wilde")
+                scouted_meta = static_entry
+                print(f"[BuildCalendar] 당일({date_str}) 검증 정적 인물 로드: {person} ({person_en}) [Wikidata: {static_entry.get('wikidata_id')}]")
+        except Exception as e:
+            print(f"[BuildCalendar Warn] 정적 캘린더 로드 실패: {e}")
+
+    # 3. 정적 캘린더에도 완전히 없을 때만 실시간 트렌드 스타 스카우터 가동
     if not person:
         try:
             from star_trend_scout import scout_trending_star
@@ -340,11 +353,11 @@ def run_pipeline(mode="am", date_str=None, person=None):
         except Exception as e:
             print(f"[TrendScout Error] 실시간 스카우터 실패: {e}")
             if mode.lower() == "am":
-                person = "퓨디파이"
-                person_en = "PewDiePie"
+                person = "케이티 페리"
+                person_en = "Katy Perry"
             else:
-                person = "로사 파크스"
-                person_en = "Rosa Parks"
+                person = "이건희"
+                person_en = "Lee Kun-hee"
 
     # 일자별/인물별 패키지 디렉토리 설정
     slug = re.sub(r"[^\w]", "_", person_en.lower())

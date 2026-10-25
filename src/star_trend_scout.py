@@ -83,6 +83,20 @@ def load_calendar_db():
     return {"version": "4.1", "description": "스타이즈본 마스터 캘린더", "calendar": {}}
 
 
+def get_existing_persons():
+    """캘린더 DB 전체에서 이미 등록된 인물들의 이름을 수집하여 중복 방지 블랙리스트 생성."""
+    db = load_calendar_db()
+    names = set()
+    for d, slots in db.get("calendar", {}).items():
+        for m in ["am", "pm"]:
+            entry = slots.get(m, {})
+            if entry.get("person_name"):
+                names.add(entry["person_name"])
+            if entry.get("person_name_en"):
+                names.add(entry["person_name_en"])
+    return sorted(list(names))
+
+
 def update_calendar_db(date_str, mode, entry_data):
     """선정된 트렌드 스타를 calendar_db.json에 기존 표준 양식 그대로 누적 저장."""
     try:
@@ -114,6 +128,9 @@ def scout_trending_star(date_str=None, mode="am"):
     from google.genai import types
     client = get_genai_client()
 
+    existing_names = get_existing_persons()
+    blacklist_str = ", ".join(existing_names[:50]) if existing_names else "없음"
+
     if mode_lower == "am":
         search_prompt = f"""당신은 100만 유튜브 쇼츠 채널 '스타이즈본'의 수석 트래픽 그로스(Growth) 디렉터입니다.
 목표 날짜: {target_date_kr} ({date_str})
@@ -123,10 +140,20 @@ def scout_trending_star(date_str=None, mode="am"):
 오늘 태어난 전 세계 인물 중, 한국 대중에게 가장 친숙하고 정서적 연결고리가 깊은
 '최상위 후보 2~3인(Top Contenders)'을 엄선하고, 그중 알고리즘을 터뜨릴 '최종 1위 스타(Winner)'를 확정하세요.
 
-[🚨 인물 선별 3대 절대 원칙 🚨]:
+[🚨 절대 금기 1: AM(생일) 슬롯은 현재 살아있는 생존 스타(Living Person) 필수! 🚨]:
+- AM 슬롯은 오늘 생일을 맞은 생존 인물을 축하하는 코너입니다.
+- 이미 세상을 떠난 고인(Deceased)은 PM(기일)에서만 다루므로, AM 후보에서 100% 영구 제외하세요!
+- (예: 피카소, 찰리 채플린, 모차르트 등 이미 사망한 인물은 생년월일이 오늘이라도 AM 등록 절대 불가!)
+- 반드시 2026년 현재 살아있는 생존 스타만 선별하고, "is_deceased": false를 엄격히 보장하세요.
+
+[🚨 절대 금기 2: 최근 기등록 인물 중복 등록 절대 금지 블랙리스트 🚨]:
+다음 인물들은 채널 캘린더에 이미 등록되어 있으므로 절대로 후보나 1위로 선정하지 마세요:
+[{blacklist_str}]
+
+[🚨 인물 선별 3대 원칙 🚨]:
 1. [국적 및 분야 완전 오픈 (Universal Open-World)]:
    - 한국인이든 외국인이든 국적은 전혀 상관없습니다.
-   - 스포츠, 음악, 영화, 예술, 테크, 역사 등 전 세계 모든 영역에서 거물들을 탐색하세요.
+   - 스포츠, 음악, 영화, 예술, 테크, 대중문화 등 전 세계 모든 영역에서 거물들을 탐색하세요.
 
 2. [핵심 평가 기준: 한국 대중 체감 인지도 및 '정서적 추억' 연결고리]:
    - 단순히 외국 차트 순위나 해외 스트리밍 수치가 높은 것보다, **한국인의 일상과 추억 속에 깊숙이 자리 잡은 인물**을 최우선시하세요.
@@ -191,6 +218,9 @@ def scout_trending_star(date_str=None, mode="am"):
    - 절대 금기 예시: 10월 26일 안중근 의사에게 처단된 '이토 히로부미'처럼, 역사적으로 처단/단죄받은 침략자를 추모 대상으로 올리는 것은 채널 폐쇄급 대형 사고이므로 절대 금지합니다.
 3. [사망 팩트 하드 가드레일]: 현재 살아있는 생존자는 절대 후보에 넣지 마세요! (생존자는 즉각 실격)
    - 반드시 공식 사망일자 끝자리가 정확히 '{date_str}'인 실제 고인(Deceased)만 선별하세요.
+4. [기등록 인물 중복 등록 절대 금지 블랙리스트]:
+   - 다음 인물들은 최근 채널에 이미 등록되어 있으므로 절대로 후보나 1위로 선정하지 마세요:
+   - [{blacklist_str}]
 
 [인물 선별 핵심 기준 - 국적 불문, '한국 대중 친숙도' 최우선]:
 1. [국적 및 분야 완전 오픈 (Universal Open-World)]:
@@ -294,37 +324,19 @@ def scout_trending_star(date_str=None, mode="am"):
 
     except Exception as e:
         print(f"[Scout Fallback Warning] 실시간 스카우터 오류 발생: {e}")
-        # 안전한 기본값 (사망/생존 팩트 보장)
-        if mode_lower == "am":
-            fallback = {
-                "person_name": "라이언 레이놀즈",
-                "person_name_en": "Ryan Reynolds",
-                "wikidata_id": "Q192682",
-                "category": "Hollywood / Cinema",
-                "event_date": f"1976-{date_str}",
-                "keywords": ["데드풀", "한국 사랑", "복면가왕", "런닝맨"],
-                "brief": "한국인이 가장 사랑하는 유쾌한 할리우드 스타 데드풀.",
-                "is_deceased": False,
-                "trend_score": 90,
-                "trend_reason": "한국인이 사랑하는 대표적인 친한파 할리우드 톱스타",
-                "verified": True
-            }
-        else:
-            fallback = {
-                "person_name": "피트 번즈",
-                "person_name_en": "Pete Burns",
-                "wikidata_id": "Q2082089",
-                "category": "Global Pop / Synth-Pop",
-                "event_date": f"2016-{date_str}",
-                "keywords": ["Dead or Alive", "You Spin Me Round", "80년대 신스팝", "레전드"],
-                "brief": "명곡 'You Spin Me Round'로 시대를 풍미한 전설적 보컬 (2016년 10월 23일 별세).",
-                "is_deceased": True,
-                "trend_score": 95,
-                "trend_reason": "전 세계를 뒤흔든 불멸의 댄스 팝 명곡으로 80년대 신스팝 황금기를 이끈 레전드",
-                "verified": True
-            }
-        update_calendar_db(date_str, mode, fallback)
-        return fallback
+        # 안전한 2단계 폴백: build_calendar_365.py의 정적 검증 데이터 우선 조회
+        try:
+            import build_calendar_365 as b
+            static_entry = b.KOREAN_CALENDAR_ALL.get(date_str, {}).get(mode_lower)
+            if static_entry:
+                print(f"[Scout Fallback] build_calendar_365 검증 정적 인물로 안전 복구: {static_entry['person_name']} ({static_entry.get('event_date')})")
+                update_calendar_db(date_str, mode, static_entry)
+                return static_entry
+        except Exception as be:
+            print(f"[Scout Fallback Warn] 정적 캘린더 로드 실패: {be}")
+
+        # 정적 캘린더에도 없을 경우의 최후 안전 기본값 (날짜 날조 엄금!)
+        raise RuntimeError(f"실시간 스카우터 및 정적 캘린더 모두에서 {date_str} {mode.upper()} 인물을 찾을 수 없습니다: {e}")
 
 
 if __name__ == "__main__":
