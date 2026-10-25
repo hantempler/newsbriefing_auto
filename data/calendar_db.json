@@ -7,7 +7,7 @@
     "min_year": 1960,
     "period": "10-15 ~ 10-26 (Live Accumulated)",
     "total_dates": 12,
-    "total_stars": 23,
+    "total_stars": 24,
     "categories": [
       "K-Culture (드라마/예능/아이돌/가요 레전드)",
       "Global Pop (내한 떼창/손하트)",
@@ -561,6 +561,48 @@
           }
         ],
         "wikidata_id": "Q22773776",
+        "verified": true,
+        "scouted_trending": true
+      },
+      "pm": {
+        "person_name": "니코스 카잔차키스",
+        "person_name_en": "Nikos Kazantzakis",
+        "category": "문학 (소설가)",
+        "event_date": "1957-10-26",
+        "keywords": [
+          "그리스인 조르바",
+          "자유로운 영혼",
+          "실존주의",
+          "문학 거장",
+          "인생의 의미"
+        ],
+        "brief": "1957년 10월 26일 별세한 니코스 카잔차키스는 '그리스인 조르바'를 통해 인간의 자유와 삶의 본질을 탐구하며 전 세계인의 가슴에 영원한 영감을 새긴 불멸의 문학 거장입니다.",
+        "is_deceased": true,
+        "trend_score": 99,
+        "trend_reason": "'그리스인 조르바'는 한국 대중에게 깊은 철학적 메시지와 감동을 선사하며 꾸준히 사랑받는 고전으로, 그의 기일은 작품이 주는 울림을 다시금 되새기고 삶의 의미를 성찰하는 계기가 될 것입니다.",
+        "top_candidates": [
+          {
+            "rank": 1,
+            "person_name": "니코스 카잔차키스",
+            "person_name_en": "Nikos Kazantzakis",
+            "category": "문학 (소설가)",
+            "death_date": "1957-10-26",
+            "korean_resonance": "'그리스인 조르바'는 한국에서 오랫동안 사랑받아온 고전 소설이자 영화로, 자유로운 영혼과 삶의 본질에 대한 깊은 통찰을 제공하며 많은 독자들에게 영감을 주었습니다. 그의 이름은 곧 '그리스인 조르바'와 연결되어 한국 대중에게 강렬한 인상을 남깁니다.",
+            "legacy_point": "인간의 자유, 영혼의 탐구, 그리고 삶의 의미에 대한 끊임없는 질문을 던진 20세기 문학의 거장. 그의 작품들은 시대를 초월하여 전 세계 독자들에게 깊은 감동과 사유를 선사합니다.",
+            "traffic_score": 98
+          },
+          {
+            "rank": 2,
+            "person_name": "이고르 시코르스키",
+            "person_name_en": "Igor Sikorsky",
+            "category": "항공 공학 (발명가)",
+            "death_date": "1972-10-26",
+            "korean_resonance": "현대 헬리콥터의 아버지로 불리며, 그의 혁신적인 발명은 전 세계 항공 산업과 인류의 삶에 지대한 영향을 미쳤습니다. 재난 구조, 의료 수송, 군사 작전 등 다양한 분야에서 헬리콥터가 활용되는 것을 통해 그의 업적은 한국 대중에게도 친숙하게 다가옵니다.",
+            "legacy_point": "수직 이착륙 항공기인 헬리콥터를 상용화하여 항공 역사를 새로 쓴 선구적인 공학자이자 발명가. 그의 기술적 성취는 인류의 이동 수단을 혁신하고 수많은 생명을 구하는 데 기여했습니다.",
+            "traffic_score": 95
+          }
+        ],
+        "wikidata_id": "Q214622",
         "verified": true,
         "scouted_trending": true
       }
