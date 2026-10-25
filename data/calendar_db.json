@@ -419,7 +419,6 @@
       "am": {
         "person_name": "케이티 페리",
         "person_name_en": "Katy Perry",
-        "wikidata_id": "Q42449",
         "category": "Music / Pop",
         "event_date": "1984-10-25",
         "keywords": [
@@ -429,12 +428,48 @@
           "팝의 여왕"
         ],
         "brief": "한국 내한 공연 당시 무대에서 대형 태극기를 두르고 'Firework'를 열창해 한국 팬들을 열광시켰던 글로벌 팝 디바.",
-        "verified": true
+        "is_deceased": false,
+        "trend_score": 97,
+        "trend_reason": "한국 대중에게 'Firework'와 친한파 내한 태극기 퍼포먼스로 가장 친숙하고 쇼츠 클릭률이 높은 글로벌 팝 디바.",
+        "top_candidates": [
+          {
+            "rank": 1,
+            "person_name": "케이티 페리",
+            "person_name_en": "Katy Perry",
+            "category": "Music / Pop",
+            "birth_date": "1984-10-25",
+            "korean_resonance": "내한 공연 당시 무대에서 대형 태극기를 직접 두르고 명곡 'Firework'를 열창하여 한국 팬들에게 깊은 감동을 안겨줌.",
+            "viral_story_point": "가스펠 가수로 시작해 전 세계를 뒤흔든 팝의 여왕으로 성장한 드라마틱한 성공 서사와 파격적인 퍼포먼스.",
+            "traffic_score": 97
+          },
+          {
+            "rank": 2,
+            "person_name": "시아라",
+            "person_name_en": "Ciara",
+            "category": "Music / R&B",
+            "birth_date": "1985-10-25",
+            "korean_resonance": "2000년대 중반 '1, 2 Step'으로 한국 클럽과 댄스계를 휩쓸었던 R&B 팝스타.",
+            "viral_story_point": "파워풀한 안무와 독보적인 댄스 실력으로 밀레니엄 세대의 음악적 향수를 자극.",
+            "traffic_score": 85
+          },
+          {
+            "rank": 3,
+            "person_name": "조르주 비제",
+            "person_name_en": "Georges Bizet",
+            "category": "Classical Music / Composer",
+            "birth_date": "1838-10-25",
+            "korean_resonance": "오페라 '카르멘'의 작곡가로 한국 대중에게 클래식 멜로디의 친숙함을 제공.",
+            "viral_story_point": "카르멘 초연 실패 후 요절했으나 사후 전 세계 최고의 명작으로 추앙받은 비운의 음악 천재.",
+            "traffic_score": 80
+          }
+        ],
+        "wikidata_id": "Q42449",
+        "verified": true,
+        "scouted_trending": true
       },
       "pm": {
         "person_name": "이건희",
         "person_name_en": "Lee Kun-hee",
-        "wikidata_id": "Q319985",
         "category": "Tech / Business",
         "event_date": "2020-10-25",
         "keywords": [
@@ -444,7 +479,44 @@
           "반도체 1위 신화"
         ],
         "brief": "\"마누라와 자식 빼고 다 바꿔라\"는 프랑크푸르트 선언과 500억 불량 애니콜 화형식으로 삼성을 세계 1위 반도체 제국으로 만든 신화적 경영자 (2020년 10월 25일 별세).",
-        "verified": true
+        "is_deceased": true,
+        "trend_score": 99,
+        "trend_reason": "대한민국 경제사를 바꾼 반도체 초격차 신화와 500억 애니콜 화형식 등 전 국민이 기억하는 불멸의 기업가 서사.",
+        "top_candidates": [
+          {
+            "rank": 1,
+            "person_name": "이건희",
+            "person_name_en": "Lee Kun-hee",
+            "category": "Tech / Business",
+            "death_date": "2020-10-25",
+            "korean_resonance": "삼성전자를 글로벌 초일류 기업으로 도약시키며 한국 경제 발전을 이끈 상징적 인물. 2020년 10월 25일 별세 당시 전 국민적 추모 물결.",
+            "legacy_point": "프랑크푸르트 신경영 선언과 불량 애니콜 화형식 등 품질 경영으로 반도체 세계 1위를 달성한 위대한 리더십.",
+            "traffic_score": 99
+          },
+          {
+            "rank": 2,
+            "person_name": "파블로 피카소",
+            "person_name_en": "Pablo Picasso",
+            "category": "Fine Art / Painter",
+            "death_date": "1973-04-08",
+            "korean_resonance": "입체파의 거장이지만 10월 25일은 생일(사망일 아님)이므로 PM 사망 가드레일에 의해 배제.",
+            "legacy_point": "현대 미술의 패러다임을 바꾼 세기의 화가.",
+            "traffic_score": 88
+          },
+          {
+            "rank": 3,
+            "person_name": "피트 번즈",
+            "person_name_en": "Pete Burns",
+            "category": "Global Pop / Synth-Pop",
+            "death_date": "2016-10-23",
+            "korean_resonance": "이미 10월 23일에 소개된 레전드 팝스타로 중복 방지 규칙에 따라 배제.",
+            "legacy_point": "80년대 신스팝의 황금기를 이끈 불멸의 댄스 명곡 보컬.",
+            "traffic_score": 80
+          }
+        ],
+        "wikidata_id": "Q319985",
+        "verified": true,
+        "scouted_trending": true
       }
     }
   },

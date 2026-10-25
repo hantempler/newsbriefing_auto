@@ -98,16 +98,27 @@ def get_existing_persons():
 
 
 def update_calendar_db(date_str, mode, entry_data):
-    """선정된 트렌드 스타를 calendar_db.json에 기존 표준 양식 그대로 누적 저장."""
+    """선정된 트렌드 스타를 calendar_db.json에 10-24 정식 표준 양식 그대로 누적 저장."""
     try:
         db = load_calendar_db()
         cal = db.setdefault("calendar", {})
         day_slot = cal.setdefault(date_str, {})
         day_slot[mode.lower()] = entry_data
+
+        # 메타데이터 자동 동기화
+        all_dates = sorted(cal.keys())
+        if all_dates:
+            db.setdefault("policy", {})["period"] = f"10-15 ~ {all_dates[-1]} (Live Accumulated)"
+            db["total_dates"] = len(cal)
+            total_stars = sum(len(slots) for slots in cal.values())
+            db["policy"]["total_stars"] = total_stars
+            db["policy"]["total_dates"] = len(cal)
+
         CALENDAR_FILE.write_text(json.dumps(db, ensure_ascii=False, indent=2), encoding="utf-8")
-        print(f"[Scout DB] calendar_db.json [{date_str}][{mode.upper()}] ➔ '{entry_data['person_name']}' ({entry_data.get('wikidata_id')}) 저장 완료!")
+        print(f"[Scout DB] calendar_db.json [{date_str}][{mode.upper()}] ➔ '{entry_data['person_name']}' ({entry_data.get('wikidata_id')}) 10-24 표준 저장 완료!")
     except Exception as e:
         print(f"[Scout DB Error] calendar_db.json 저장 실패: {e}")
+        raise e
 
 
 def scout_trending_star(date_str=None, mode="am"):
@@ -323,20 +334,8 @@ def scout_trending_star(date_str=None, mode="am"):
         return winner
 
     except Exception as e:
-        print(f"[Scout Fallback Warning] 실시간 스카우터 오류 발생: {e}")
-        # 안전한 2단계 폴백: build_calendar_365.py의 정적 검증 데이터 우선 조회
-        try:
-            import build_calendar_365 as b
-            static_entry = b.KOREAN_CALENDAR_ALL.get(date_str, {}).get(mode_lower)
-            if static_entry:
-                print(f"[Scout Fallback] build_calendar_365 검증 정적 인물로 안전 복구: {static_entry['person_name']} ({static_entry.get('event_date')})")
-                update_calendar_db(date_str, mode, static_entry)
-                return static_entry
-        except Exception as be:
-            print(f"[Scout Fallback Warn] 정적 캘린더 로드 실패: {be}")
-
-        # 정적 캘린더에도 없을 경우의 최후 안전 기본값 (날짜 날조 엄금!)
-        raise RuntimeError(f"실시간 스카우터 및 정적 캘린더 모두에서 {date_str} {mode.upper()} 인물을 찾을 수 없습니다: {e}")
+        print(f"[Scout Fatal Error] {date_str} {mode.upper()} 실시간 3인 후보 발굴/검증 실패: {e}")
+        raise RuntimeError(f"실시간 3인 후보 스카우트 실패: {e}")
 
 
 if __name__ == "__main__":

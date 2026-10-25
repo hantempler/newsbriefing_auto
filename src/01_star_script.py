@@ -327,37 +327,22 @@ def run_pipeline(mode="am", date_str=None, person=None):
         except Exception as e:
             print(f"[CalendarDB Warn] 로드 실패: {e}")
 
-    # 2. calendar_db.json에 없으면 build_calendar_365 검증 정적 캘린더 확인
-    if not person:
-        try:
-            import build_calendar_365 as b
-            static_entry = b.KOREAN_CALENDAR_ALL.get(date_str, {}).get(mode.lower())
-            if static_entry and static_entry.get("person_name"):
-                person = static_entry["person_name"]
-                person_en = static_entry.get("person_name_en", "Oscar Wilde")
-                scouted_meta = static_entry
-                print(f"[BuildCalendar] 당일({date_str}) 검증 정적 인물 로드: {person} ({person_en}) [Wikidata: {static_entry.get('wikidata_id')}]")
-        except Exception as e:
-            print(f"[BuildCalendar Warn] 정적 캘린더 로드 실패: {e}")
-
-    # 3. 정적 캘린더에도 완전히 없을 때만 실시간 트렌드 스타 스카우터 가동
+    # 2. calendar_db.json에 미등록된 경우 실시간 3인 후보 AI 스카우터 단일 가동 (10-24 정식 표준)
     if not person:
         try:
             from star_trend_scout import scout_trending_star
+            print(f"[Launcher] {date_str} {mode.upper()} 캘린더 미등록 감지 ➔ 실시간 3인 후보 AI 스카우터 가동...")
             scouted = scout_trending_star(date_str=date_str, mode=mode)
-            if scouted:
+            if scouted and scouted.get("person_name"):
                 person = scouted["person_name"]
                 person_en = scouted.get("person_name_en", "Oscar Wilde")
                 scouted_meta = scouted
-                print(f"[TrendScout] 오늘({date_str})의 트렌드 1위 스타 낙점: {person} ({person_en}) [Wikidata: {scouted.get('wikidata_id')}]")
-        except Exception as e:
-            print(f"[TrendScout Error] 실시간 스카우터 실패: {e}")
-            if mode.lower() == "am":
-                person = "케이티 페리"
-                person_en = "Katy Perry"
+                print(f"[TrendScout] 3인 경합 1위 스타 낙점 및 DB 반영 완료: {person} ({person_en}) [Wikidata: {scouted.get('wikidata_id')}]")
             else:
-                person = "이건희"
-                person_en = "Lee Kun-hee"
+                raise ValueError("스카우터 반환 인물 데이터 무효")
+        except Exception as e:
+            print(f"[TrendScout Fatal Error] 실시간 3인 후보 스카우터 실행 실패: {e}")
+            raise RuntimeError(f"[{date_str} {mode.upper()}] 인물 스카우트 실패로 파이프라인을 중단합니다: {e}")
 
     # 일자별/인물별 패키지 디렉토리 설정
     slug = re.sub(r"[^\w]", "_", person_en.lower())
