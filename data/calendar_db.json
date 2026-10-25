@@ -5,9 +5,9 @@
     "target_audience": "Korean YouTube Shorts Viewers (1030세대 & 대중)",
     "korean_familiarity_priority": true,
     "min_year": 1960,
-    "period": "10-15 ~ 10-25 (Live Accumulated)",
-    "total_dates": 11,
-    "total_stars": 22,
+    "period": "10-15 ~ 10-26 (Live Accumulated)",
+    "total_dates": 12,
+    "total_stars": 23,
     "categories": [
       "K-Culture (드라마/예능/아이돌/가요 레전드)",
       "Global Pop (내한 떼창/손하트)",
@@ -518,7 +518,53 @@
         "verified": true,
         "scouted_trending": true
       }
+    },
+    "10-26": {
+      "am": {
+        "person_name": "나카모토 유타",
+        "person_name_en": "Yuta Nakamoto",
+        "category": "K-Pop 아이돌",
+        "event_date": "1995-10-26",
+        "keywords": [
+          "NCT",
+          "유타",
+          "K-POP",
+          "일본인 아이돌",
+          "성장 서사",
+          "글로벌 스타",
+          "한류"
+        ],
+        "brief": "일본에서 한국으로 건너와 K-POP의 중심에서 빛나는 독보적인 존재감. 언어와 문화의 장벽을 넘어선 그의 열정과 노력은 수많은 팬들에게 깊은 감동과 영감을 선사합니다.",
+        "is_deceased": false,
+        "trend_score": 98,
+        "trend_reason": "한국 대중, 특히 젊은 세대에게 가장 친숙하고 정서적 연결고리가 깊은 K-POP 아이돌이라는 점이 결정적입니다. 그의 성장 스토리와 NCT 활동은 '스타이즈본' 채널의 도파민 서사 원칙에 완벽하게 부합하며, 높은 조회수와 팬 참여를 유도할 것입니다.",
+        "top_candidates": [
+          {
+            "rank": 1,
+            "person_name": "나카모토 유타",
+            "person_name_en": "Yuta Nakamoto",
+            "category": "K-Pop 아이돌",
+            "birth_date": "1995-10-26",
+            "korean_resonance": "일본인 멤버로서 K-POP 아이돌 그룹 NCT에서 활동하며 한국 팬들에게 큰 사랑을 받고 있습니다. 이국적인 매력과 뛰어난 퍼포먼스로 한국 대중에게 친숙하며, K-POP 한류의 다양성을 보여주는 상징적인 인물입니다. 그의 성장 서사는 많은 팬들에게 감동과 자부심을 줍니다.",
+            "viral_story_point": "일본에서 건너와 K-POP 본고장에서 성공한 아이돌의 드라마틱한 성장 스토리. 언어와 문화의 장벽을 넘어선 노력과 열정, 그리고 NCT 내에서의 독보적인 존재감과 퍼포먼스가 핵심 도파민 포인트입니다.",
+            "traffic_score": 98
+          },
+          {
+            "rank": 2,
+            "person_name": "세스 맥팔레인",
+            "person_name_en": "Seth MacFarlane",
+            "category": "애니메이션 제작자, 성우, 감독",
+            "birth_date": "1973-10-26",
+            "korean_resonance": "'패밀리 가이', '아메리칸 대드' 등 독특하고 풍자적인 애니메이션으로 한국의 젊은 세대와 서브컬처 팬들에게 높은 인지도를 가지고 있습니다. 그의 작품들은 한국 인터넷 밈과 유머 코드에 영향을 주기도 했습니다.",
+            "viral_story_point": "B급 감성과 블랙 유머로 주류 애니메이션 시장을 뒤흔든 천재적인 크리에이터. 수많은 논란 속에서도 자신만의 세계를 구축하며 성공한 스토리가 쇼츠에서 터질 핵심 썰입니다.",
+            "traffic_score": 95
+          }
+        ],
+        "wikidata_id": "Q22773776",
+        "verified": true,
+        "scouted_trending": true
+      }
     }
   },
-  "total_dates": 11
+  "total_dates": 12
 }
