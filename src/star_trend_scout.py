@@ -293,9 +293,15 @@ def scout_trending_star(date_str=None, mode="am"):
             config=cfg
         )
         text = resp.text or ""
-        match = re.search(r"```(?:json)?\s*(\{.*?\})\s*```", text, re.DOTALL)
-        raw_json = match.group(1) if match else text.strip()
-        data = json.loads(raw_json)
+        match = re.search(r"```(?:json)?\s*([\s\S]*?)\s*```", text)
+        clean_text = match.group(1).strip() if match else text.strip()
+        brace_match = re.search(r"(\{[\s\S]*\})", clean_text)
+        raw_json = brace_match.group(1) if brace_match else clean_text
+        try:
+            data = json.loads(raw_json)
+        except Exception as je:
+            print(f"[Scout Parse Error] JSON 파싱 실패! 원문:\n{text[:500]}")
+            raise je
 
         winner = data.get("winner")
         if not winner:
@@ -314,9 +320,15 @@ def scout_trending_star(date_str=None, mode="am"):
         if mode_lower == "pm":
             is_deceased = winner.get("is_deceased", False)
             brief = winner.get("brief", "")
-            has_death_kw = any(k in brief for k in ["별세", "사망", "타계", "서거", "산화", "순국", "잠들다", "떠난"])
+            reason = winner.get("trend_reason", "")
+            combined_text = f"{brief} {reason}"
+            death_keywords = ["별세", "사망", "타계", "서거", "산화", "순국", "잠들다", "떠난", "추모", "영면", "세상을 떠", "안식"]
+            has_death_kw = any(k in combined_text for k in death_keywords)
             if not is_deceased or not has_death_kw:
                 raise ValueError(f"[치명적 가드레일 위반] PM 인물 '{winner.get('person_name')}' 사망 팩트 미확인! 생존자 배제.")
+            # brief에 사망 연도/별세 표기가 누락되었을 경우 가독성을 위해 자동 보강
+            if "별세" not in brief and "사망" not in brief and "타계" not in brief:
+                winner["brief"] = brief.rstrip(".") + f" ({ev_date[:4]}년 {date_str.split('-')[0]}월 {date_str.split('-')[1]}일 별세)."
 
         # 3. Wikidata 공식 Q-ID 취득 및 기입
         qid = fetch_wikidata_id(winner.get("person_name"), winner.get("person_name_en"))
