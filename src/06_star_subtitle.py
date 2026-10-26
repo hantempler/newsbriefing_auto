@@ -19,9 +19,23 @@ ROOT_DIR = SRC_DIR.parent
 CONFIG_DIR = ROOT_DIR / "config"
 FONT_DIR = ROOT_DIR / "assets" / "fonts"
 
-os.environ.setdefault("GOOGLE_APPLICATION_CREDENTIALS",
-                      str(CONFIG_DIR / "application_default_credentials.json"))
-GCP_PROJECT_ID = "project-beba2bf6-d235-4031-ba5"
+CRED_PATH = CONFIG_DIR / "application_default_credentials.json"
+os.environ.setdefault("GOOGLE_APPLICATION_CREDENTIALS", str(CRED_PATH))
+
+def _resolve_project_id():
+    if CRED_PATH.exists():
+        try:
+            with open(CRED_PATH, "r", encoding="utf-8") as f:
+                data = json.load(f)
+                if "quota_project_id" in data:
+                    return data["quota_project_id"]
+                if "project_id" in data:
+                    return data["project_id"]
+        except Exception:
+            pass
+    return os.environ.get("GCP_PROJECT_ID", "project-092cc259-a7f0-4540-ab3")
+
+GCP_PROJECT_ID = _resolve_project_id()
 GCP_LOCATION = "us-central1"
 MODEL_NAME = "gemini-2.5-flash"
 
