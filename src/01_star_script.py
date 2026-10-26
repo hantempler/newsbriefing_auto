@@ -33,13 +33,15 @@ def _resolve_project_id():
         try:
             with open(CRED_PATH, "r", encoding="utf-8") as f:
                 data = json.load(f)
-                if "quota_project_id" in data:
-                    return data["quota_project_id"]
-                if "project_id" in data:
-                    return data["project_id"]
+                project_id = data.get("quota_project_id") or data.get("project_id")
+                if project_id:
+                    return project_id
         except Exception:
             pass
-    return os.environ.get("GCP_PROJECT_ID", "project-092cc259-a7f0-4540-ab3")
+    env_project = os.environ.get("GCP_PROJECT_ID")
+    if env_project:
+        return env_project
+    raise ValueError(f"GCP 프로젝트 ID를 찾을 수 없습니다. {CRED_PATH} 파일 또는 GCP_PROJECT_ID 환경변수를 설정하세요.")
 
 GCP_PROJECT_ID = _resolve_project_id()
 GCP_LOCATION = "us-central1"
