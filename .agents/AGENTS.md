@@ -27,16 +27,16 @@
 
 ```text
 PRJ_starisborn/
-├── AGENTS.md                  # [본 문서] 에이전트 인수인계 및 작업 히스토리 SSOT
-├── PLANNING_PROPOSAL.md       # 숏폼 파이프라인 실행 계획서
-├── .agents/
+├── .agents/                   # [일원화] 에이전트 지침, 룰, 히스토리, 스킬 통합 관리
+│   ├── AGENTS.md              # [본 문서] 에이전트 인수인계 및 작업 히스토리 SSOT
+│   ├── PLANNING_PROPOSAL.md   # 숏폼 파이프라인 실행 계획서
 │   ├── rules/
 │   │   ├── calendar_rules.md  # 캘린더 인물 선정 및 10-24 스키마 5대 원칙
 │   │   └── mermaid_artifacts.md
 │   └── skills/
 │       └── starisborn-calendar/SKILL.md # 캘린더 스카우트/검증 워크플로우
 ├── .github/workflows/
-│   ├── daily_starisborn.yml   # 매일 AM/PM 숏폼 자동 생성 & 유튜브 업로드 액션
+│   └── daily_starisborn.yml   # 매일 AM/PM 숏폼 자동 생성 & 유튜브 업로드 액션
 │   └── weekly_longform.yml    # 주말 롱폼 다큐멘터리 수동/예약 실행 액션
 ├── data/
 │   ├── calendar_db.json       # 누적 인물 데이터베이스 (현재 라이브 기준 운용)
@@ -109,6 +109,7 @@ PRJ_starisborn/
 | **2026-10-27** | 하드코딩 잔재 전면제거 | • 코드 내 임의의 폴백 프로젝트 ID(`project-092c...`) 전수 제거<br>• 인증 파일/환경변수 부재 시 침묵하지 않고 명시적 `ValueError` 발생하도록 가드레일 정밀화<br>• GitHub 원격(`origin/main`) 푸시 완료 (커밋: `e043330`) | 완전 무결 검증 완료 |
 | **2026-10-27** | 3.5-Flash 모델 전면 전환 & 듀얼 키 호환 | • 신규 GCP 프로젝트(`project-092cc...`)와 기존 7월 키(`project-beba...`) 모두에서 100% 작동하도록 모델을 `gemini-3.5-flash` 및 `location="global"`로 전환<br>• `src/` (스카우트, 대본, 자막, 캘린더) 전수 반영 및 `02`, `03`, `05` `import json` 보강<br>• 11-30 AM 풀 파이프라인 로컬 완주 검증 성공<br>• GitHub 원격(`origin/main`) 커밋 & 푸시 완료 (커밋: `aca3982`) | 로컬 E2E 검증 & 푸시 완료 |
 | **2026-10-27** | 원격 롱폼 디렉터리 분리/제거 | • 사용자 지시 없이 푸시되었던 `longform/` 및 `weekly_longform.yml`을 GitHub 원격 저장소에서 즉시 untrack/제거 (`git rm --cached`)<br>• 로컬 파일은 100% 안전 보존하고, 원격에는 숏폼 파이프라인만 격리 유지하도록 복구 완료 (커밋: `318f081`) | 원격 제거 및 로컬 보존 완료 |
+| **2026-10-27** | 에이전트 문서 일원화 | • 프로젝트 루트에 산재해 있던 `AGENTS.md` 및 `PLANNING_PROPOSAL.md`를 `.agents/` 디렉터리로 이동 및 일원화<br>• `calendar_rules.md` 등 참조 경로 정정 및 에이전트 통합 관리 체계 확립 | 정상 완료 |
 
 ---
 
