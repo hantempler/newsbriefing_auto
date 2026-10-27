@@ -110,6 +110,7 @@ PRJ_starisborn/
 | **2026-10-27** | 3.5-Flash 모델 전면 전환 & 듀얼 키 호환 | • 신규 GCP 프로젝트(`project-092cc...`)와 기존 7월 키(`project-beba...`) 모두에서 100% 작동하도록 모델을 `gemini-3.5-flash` 및 `location="global"`로 전환<br>• `src/` (스카우트, 대본, 자막, 캘린더) 전수 반영 및 `02`, `03`, `05` `import json` 보강<br>• 11-30 AM 풀 파이프라인 로컬 완주 검증 성공<br>• GitHub 원격(`origin/main`) 커밋 & 푸시 완료 (커밋: `aca3982`) | 로컬 E2E 검증 & 푸시 완료 |
 | **2026-10-27** | 원격 롱폼 디렉터리 분리/제거 | • 사용자 지시 없이 푸시되었던 `longform/` 및 `weekly_longform.yml`을 GitHub 원격 저장소에서 즉시 untrack/제거 (`git rm --cached`)<br>• 로컬 파일은 100% 안전 보존하고, 원격에는 숏폼 파이프라인만 격리 유지하도록 복구 완료 (커밋: `318f081`) | 원격 제거 및 로컬 보존 완료 |
 | **2026-10-27** | 에이전트 문서 일원화 | • 프로젝트 루트에 산재해 있던 `AGENTS.md` 및 `PLANNING_PROPOSAL.md`를 `.agents/` 디렉터리로 이동 및 일원화<br>• `calendar_rules.md` 등 참조 경로 정정 및 에이전트 통합 관리 체계 확립 | 정상 완료 |
+| **2026-10-27** | YouTube API 권한 확장 | • `@starisborn_101` 채널 대상 전체 권한 토큰 발급 완료 (`config/youtube_token.json`)<br>• 동영상 업로드 외 채널 정보/통계(`youtube.readonly`), 영상 관리/수정(`youtube`), 애널리틱스(`yt-analytics.readonly`) 권한 확보 및 API 호출 검증 완료 | 실시간 검증 완료 |
 
 ---
 
