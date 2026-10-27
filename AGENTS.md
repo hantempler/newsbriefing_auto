@@ -107,13 +107,17 @@ PRJ_starisborn/
 | **2026-10-27** | 인수인계 규격화 | • 다중 작업환경 인수인계를 위한 통합 `AGENTS.md` 신설<br>• 프로젝트 정체성, 가드레일, 실행 치트시트, 히스토리 테이블 규격화 | 운영 체계 확립 |
 | **2026-10-27** | GCP 인증 동적화 | • `GCP_PROJECT_ID` 하드코딩 제거 및 `application_default_credentials.json` 자동 감지 로직 적용 (`src/` 7개 파일 전수 개조)<br>• GitHub 원격(`origin/main`) 푸시 완료 (커밋: `56d3cc2`) | 단위 테스트 & 푸시 완료 |
 | **2026-10-27** | 하드코딩 잔재 전면제거 | • 코드 내 임의의 폴백 프로젝트 ID(`project-092c...`) 전수 제거<br>• 인증 파일/환경변수 부재 시 침묵하지 않고 명시적 `ValueError` 발생하도록 가드레일 정밀화<br>• GitHub 원격(`origin/main`) 푸시 완료 (커밋: `e043330`) | 완전 무결 검증 완료 |
+| **2026-10-27** | 3.5-Flash 모델 전면 전환 & 듀얼 키 호환 | • 신규 GCP 프로젝트(`project-092cc...`)와 기존 7월 키(`project-beba...`) 모두에서 100% 작동하도록 모델을 `gemini-3.5-flash` 및 `location="global"`로 전환<br>• `src/` (스카우트, 대본, 자막, 캘린더) 및 `longform/src/` (리서치, 각본) 전수 반영<br>• `02`, `03`, `05`에 누락된 `import json` 보강<br>• 11-30 AM 풀 파이프라인(스카우트→대본→이미지7장→TTS7개→BGM→최종 쇼츠MP4 115초) 로컬 완주 검증 성공<br>• GitHub 원격(`origin/main`) 커밋 & 푸시 완료 (커밋: `aca3982`) | 로컬 E2E 검증 & 푸시 완료 |
 
 ---
 
 ## 5. 다음 교대 에이전트를 위한 인수인계 사항 (To-Do & Handover)
-1. **GitHub 미추적 파일 처리**:
-   - 현재 신설된 `longform/` 디렉터리와 `.github/workflows/weekly_longform.yml`이 Git Untracked 상태에 있습니다. 필요 시 커밋 여부를 사용자와 상의할 것.
+1. **GitHub Actions 검증**:
+   - `gemini-3.5-flash` 및 `global` 엔드포인트 코드가 `origin/main`에 푸시되었습니다.
+   - GitHub Secret (`GCP_CREDENTIALS_JSON`)에 어떤 키(신규 키 또는 기존 7월 키)가 들어가 있어도 모두 100% 양방향 호환되어 정상 작동합니다.
+   - 필요 시 GitHub Actions `Daily Star is Born Shorts Pipeline`을 트리거하여 원격 러너 실행을 검증할 것.
 2. **캘린더 현황**:
-   - `data/calendar_db.json`은 10-15 ~ 10-26까지의 라이브 누적 상태이며, 당일(`10-27`) 숏폼 작업 시 `star_trend_scout.py`를 통해 신규 등록 가능.
-3. **롱폼 파이프라인 확장**:
-   - 1호 파일럿 '웨인 루니'의 성공적인 빌드 이후, 다음 후보(예: 로자 파크스, 신해철, 스티브 잡스 등)에 대한 대본 생성 검증 가능.
+   - `data/calendar_db.json`은 10-15 ~ 10-26까지의 정규 라이브 누적 상태를 안전하게 유지 중입니다. (11-30 테스트 데이터는 롤백 완료)
+3. **인증 파일 안전**:
+   - `.gitignore`에 `test/`가 추가되어 임시 테스트 키가 원격에 절대 커밋되지 않도록 보호 조치 완료.
+
