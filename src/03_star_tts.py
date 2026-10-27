@@ -3,6 +3,7 @@ PRJ_standard의 03_tts.py 계승 + 텍스트 정규화(자음 약어 치환) 필
 """
 import argparse
 import contextlib
+import json
 import os
 import re
 import sys

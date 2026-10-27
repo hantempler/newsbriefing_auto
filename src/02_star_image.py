@@ -3,6 +3,7 @@ PRJ_standard의 02_image.py 계승 + 절대/상대 경로 지원.
 표준: gemini-nano-banana-2.1 (폴백: gemini-2.5-flash-image), location=global.
 """
 import argparse
+import json
 import os
 import re
 import sys

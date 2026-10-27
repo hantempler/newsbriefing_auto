@@ -38,8 +38,8 @@ def _resolve_project_id():
     raise ValueError(f"GCP 프로젝트 ID를 찾을 수 없습니다. {CRED_PATH} 파일 또는 GCP_PROJECT_ID 환경변수를 설정하세요.")
 
 GCP_PROJECT_ID = _resolve_project_id()
-GCP_LOCATION = "us-central1"
-MODEL_NAME = "gemini-2.5-flash"
+GCP_LOCATION = "global"
+MODEL_NAME = "gemini-3.5-flash"
 
 
 def get_audio_duration(path):
