@@ -5,9 +5,9 @@
     "target_audience": "Korean YouTube Shorts Viewers (1030세대 & 대중)",
     "korean_familiarity_priority": true,
     "min_year": 1960,
-    "period": "10-15 ~ 10-27 (Live Accumulated)",
-    "total_dates": 13,
-    "total_stars": 26,
+    "period": "10-15 ~ 10-28 (Live Accumulated)",
+    "total_dates": 14,
+    "total_stars": 28,
     "categories": [
       "K-Culture (드라마/예능/아이돌/가요 레전드)",
       "Global Pop (내한 떼창/손하트)",
@@ -710,7 +710,111 @@
         "verified": true,
         "scouted_trending": true
       }
+    },
+    "10-28": {
+      "am": {
+        "person_name": "호아킨 피닉스",
+        "person_name_en": "Joaquin Phoenix",
+        "category": "영화 배우",
+        "event_date": "1974-10-28",
+        "keywords": [
+          "조커",
+          "글래디에이터",
+          "메소드 연기",
+          "리버 피닉스"
+        ],
+        "brief": "비극적인 삶의 심연을 딛고 일어나, 광기와 예술의 경계를 허문 우리 시대 최고의 메소드 연기 천재.",
+        "is_deceased": false,
+        "trend_score": 98,
+        "trend_reason": "영화 '조커'의 압도적인 흥행으로 한국 대중에게 '광기의 대명사'로 각인되어 있으며, 사이비 종교 탈출과 친형의 죽음 등 숏폼 알고리즘을 단숨에 장악할 수 있는 극적이고 도파민 넘치는 서사를 완벽히 갖추고 있어 최종 1위로 선정했습니다.",
+        "top_candidates": [
+          {
+            "rank": 1,
+            "person_name": "호아킨 피닉스",
+            "person_name_en": "Joaquin Phoenix",
+            "category": "영화 배우",
+            "birth_date": "1974-10-28",
+            "korean_resonance": "영화 '조커'로 한국 관객 520만 명을 돌파하며 신드롬을 일으켰고, 계단 춤 장면은 한국 예능과 숏폼에서 수없이 패러디된 레전드 캐릭터입니다.",
+            "viral_story_point": "사이비 종교 단체에서 보낸 유년 시절, 친형 리버 피닉스의 비극적인 죽음을 눈앞에서 목격한 아픔을 딛고, 23kg을 감량하는 극한의 메소드 연기로 아카데미 남우주연상을 거머쥔 인간 승리의 드라마.",
+            "traffic_score": 98
+          },
+          {
+            "rank": 2,
+            "person_name": "김서형",
+            "person_name_en": "Kim Seo-hyung",
+            "category": "배우",
+            "birth_date": "1973-10-28",
+            "korean_resonance": "\"어머님, 저를 전적으로 믿으셔야 합니다\"라는 전국민적 유행어를 남긴 'SKY 캐슬'의 김주영 역, 그리고 막장 드라마의 시초 '아내의 유혹' 신애리 역으로 한국인들의 뇌리에 강렬하게 박힌 독보적 카리스마의 배우입니다.",
+            "viral_story_point": "10년이 넘는 긴 무명 시절 동안 월세를 걱정하며 단역을 전전하다가, 악역 연기 하나로 안방극장을 지배하고 마침내 대체 불가능한 주연 배우로 우뚝 선 눈물겨운 대기만성 스토리.",
+            "traffic_score": 96
+          },
+          {
+            "rank": 3,
+            "person_name": "신현준",
+            "person_name_en": "Shin Hyun-joon",
+            "category": "배우",
+            "birth_date": "1968-10-28",
+            "korean_resonance": "'천국의 계단'에서 카메라를 향해 달려오는 '한태화 짤'은 20년이 지난 지금까지도 한국 인터넷에서 가장 사랑받는 레전드 밈이며, '맨발의 기봉이'의 순수한 연기로 전 국민을 울고 웃겼습니다. 축구선수 즐라탄 이브라히모비치 닮은꼴로도 유명합니다.",
+            "viral_story_point": "'장군의 아들' 하야시 역으로 화려하게 데뷔해 카리스마 배우로 활약하다가, 코믹 연기와 예능 캐릭터로 완벽 변신하며 대중에게 친근한 '밈의 제왕'이 된 반전 매력의 소유자.",
+            "traffic_score": 94
+          }
+        ],
+        "wikidata_id": "Q185140",
+        "verified": true,
+        "scouted_trending": true
+      },
+      "pm": {
+        "person_name": "매튜 페리",
+        "person_name_en": "Matthew Perry",
+        "category": "배우",
+        "event_date": "2023-10-28",
+        "keywords": [
+          "프렌즈",
+          "챈들러빙",
+          "인생시트콤",
+          "영원한친구"
+        ],
+        "brief": "우리의 영원한 친구이자 독보적인 위트로 전 세계에 무한한 웃음과 위로를 선물했던 배우 매튜 페리가 2023년 10월 28일 별세했습니다. 비록 그는 떠났지만, 우리가 외롭고 힘들 때마다 곁을 지켜준 그의 따뜻한 미소는 영원히 우리 마음속에 살아 숨 쉴 것입니다.",
+        "is_deceased": true,
+        "trend_score": 99,
+        "trend_reason": "시트콤 '프렌즈'는 한국 대중에게 단순한 해외 드라마를 넘어 청춘의 한 페이지이자 위로의 상징입니다. 그 중심에서 가장 유쾌하고 사랑스러운 캐릭터 '챈들러 빙'을 연기한 매튜 페리의 갑작스러운 사망은 한국 팬들에게도 엄청난 충격과 슬픔을 안겼습니다. 매년 그의 기일이 돌아올 때마다 SNS와 온라인 커뮤니티에는 그를 추모하고 그리워하는 헌정 글이 폭발적으로 업로드되며, 다른 후보들에 비해 압도적인 대중적 인지도와 정서적 파급력을 지니고 있어 최종 1위 레전드로 선정했습니다.",
+        "top_candidates": [
+          {
+            "rank": 1,
+            "person_name": "매튜 페리",
+            "person_name_en": "Matthew Perry",
+            "category": "배우",
+            "death_date": "2023-10-28",
+            "korean_resonance": "전 세계적인 메가 히트 시트콤 '프렌즈'의 '챈들러 빙' 역으로 한국 대중에게도 엄청난 친숙함과 웃음을 주었던 배우입니다. 한국에서 '프렌즈'는 영어 공부의 바이블이자 수많은 이들의 인생 시트콤으로 꼽히기에, 그의 갑작스러운 비보는 국내 팬들의 가슴을 먹먹하게 만들었으며 여전히 깊은 그리움으로 남아있습니다.",
+            "legacy_point": "특유의 위트 넘치는 냉소적 유머와 따뜻한 인간미로 캐릭터를 완성하며 시트콤 역사상 가장 사랑받는 인물을 남겼고, 생전 중독으로 고통받는 이들을 돕기 위해 헌신했습니다.",
+            "traffic_score": 99
+          },
+          {
+            "rank": 2,
+            "person_name": "제리 리 루이스",
+            "person_name_en": "Jerry Lee Lewis",
+            "category": "음악가",
+            "death_date": "2022-10-28",
+            "korean_resonance": "로큰롤의 개척자이자 'Great Balls of Fire' 등의 명곡으로 한국의 올드팝 팬들과 대중음악 마니아들에게 강렬한 전율을 선사했던 전설적인 뮤지션입니다. 엘비스 프레슬리 등과 함께 초기 로큰롤 시대를 이끌었던 마지막 거장의 별세는 음악계에 큰 슬픔을 안겼습니다.",
+            "legacy_point": "피아노를 부술 듯한 정열적인 연주와 폭발적인 무대 매너로 'The Killer'라는 별명을 얻으며 로큰롤 역사에 불멸의 족적을 남겼습니다.",
+            "traffic_score": 95
+          },
+          {
+            "rank": 3,
+            "person_name": "임충",
+            "person_name_en": "Lim Choong",
+            "category": "드라마 작가",
+            "death_date": "2017-10-28",
+            "korean_resonance": "'장희빈', '대왕의 길', '홍국영' 등 한국 사극 역사에 한 획을 그은 전설적인 각본가이자 배우 임호의 부친입니다. 한국인이라면 누구나 안방극장에서 한 번쯤 몰입해 보았을 명작 사극들을 집필하여 대중에게 깊은 감동을 선사했습니다.",
+            "legacy_point": "철저한 역사적 고증과 깊이 있는 인간 군상의 묘사로 한국 정통 사극의 전성기를 이끌었으며, 그 공로를 인정받아 문화훈장을 수훈한 거장입니다.",
+            "traffic_score": 92
+          }
+        ],
+        "wikidata_id": "Q171758",
+        "verified": true,
+        "scouted_trending": true
+      }
     }
   },
-  "total_dates": 13
+  "total_dates": 14
 }
