@@ -5,9 +5,9 @@
     "target_audience": "Korean YouTube Shorts Viewers (1030세대 & 대중)",
     "korean_familiarity_priority": true,
     "min_year": 1960,
-    "period": "10-15 ~ 10-26 (Live Accumulated)",
-    "total_dates": 12,
-    "total_stars": 24,
+    "period": "10-15 ~ 10-27 (Live Accumulated)",
+    "total_dates": 13,
+    "total_stars": 26,
     "categories": [
       "K-Culture (드라마/예능/아이돌/가요 레전드)",
       "Global Pop (내한 떼창/손하트)",
@@ -606,7 +606,111 @@
         "verified": true,
         "scouted_trending": true
       }
+    },
+    "10-27": {
+      "am": {
+        "person_name": "서인국",
+        "person_name_en": "Seo In-guk",
+        "category": "가수, 배우",
+        "event_date": "1987-10-27",
+        "keywords": [
+          "슈퍼스타K",
+          "응답하라1997",
+          "흙수저신화",
+          "키스장인"
+        ],
+        "brief": "72만 대 1의 기적을 쓴 오디션의 전설이자, 안방극장을 뒤흔든 독보적 연기력의 소유자.",
+        "is_deceased": false,
+        "trend_score": 98,
+        "trend_reason": "서인국은 한국 오디션 프로그램 역사상 가장 극적인 '흙수저 성공 신화'의 주인공이자, '응답하라 1997'을 통해 신드롬을 일으킨 주역입니다. 1040 세대에게는 오디션의 향수를, 글로벌 K-드라마 팬들에게는 매력적인 배우로서의 도파민을 동시에 선사할 수 있어 쇼츠 알고리즘을 터뜨릴 최적의 치트키 카드로 낙점되었습니다.",
+        "top_candidates": [
+          {
+            "rank": 1,
+            "person_name": "서인국",
+            "person_name_en": "Seo In-guk",
+            "category": "가수, 배우",
+            "birth_date": "1987-10-27",
+            "korean_resonance": "대한민국 오디션 신드롬의 시초인 '슈퍼스타K 시즌 1'의 초대 우승자이자, 레전드 드라마 '응답하라 1997'의 주연으로서 한국 대중에게 깊은 향수와 정서적 연결고리를 가진 인물입니다.",
+            "viral_story_point": "울산에서 폐지를 줍던 어머니 밑에서 자란 가난한 청년이 72만 대 1의 경쟁률을 뚫고 우승한 기적의 서사, 그리고 '가수 출신 배우'라는 편견을 깨부수고 독보적인 연기력과 '키스 장인' 타이틀을 거머쥔 반전 매력입니다.",
+            "traffic_score": 98
+          },
+          {
+            "rank": 2,
+            "person_name": "한혜진",
+            "person_name_en": "Han Hye-jin",
+            "category": "배우",
+            "birth_date": "1981-10-27",
+            "korean_resonance": "국민 드라마 '굳세어라 금순아'의 금순이, 시청률 50%에 육박한 '주몽'의 소서노 역으로 온 국민의 사랑을 받았으며, 예능 '힐링캠프'의 안방마님으로 대중에게 매우 친숙한 배우입니다.",
+            "viral_story_point": "고구려와 백제라는 두 나라를 건국한 역사적 여걸 '소서노' 캐릭터의 압도적 카리스마, 그리고 8살 연하의 대한민국 축구 레전드 기성용과의 영화 같은 러브스토리와 결혼 비하인드입니다.",
+            "traffic_score": 95
+          },
+          {
+            "rank": 3,
+            "person_name": "바네사 메이",
+            "person_name_en": "Vanessa-Mae",
+            "category": "바이올리니스트",
+            "birth_date": "1978-10-27",
+            "korean_resonance": "90년대 후반과 2000년대 초반 한국의 모든 방송, 광고, 길거리를 휩쓸었던 '테크노 바이올린'의 선구자로, 한국인들의 추억 속에 깊이 각인된 크로스오버 음악의 아이콘입니다.",
+            "viral_story_point": "세계적인 천재 바이올리니스트로 군림하며 수백만 장의 앨범을 팔던 그녀가, 35세의 나이에 돌연 태국 국가대표 알파인 스키 선수로 변신해 2014 소치 동계올림픽에 출전한 기적 같은 실화입니다.",
+            "traffic_score": 92
+          }
+        ],
+        "wikidata_id": "Q491648",
+        "verified": true,
+        "scouted_trending": true
+      },
+      "pm": {
+        "person_name": "신해철",
+        "person_name_en": "Shin Hae-chul",
+        "category": "대중음악 (록)",
+        "event_date": "2014-10-27",
+        "keywords": [
+          "마왕",
+          "그대에게",
+          "민물장어의꿈",
+          "신해철법"
+        ],
+        "brief": "2014년 10월 27일 별세. 우리 시대의 영원한 '마왕'이자 청춘의 아픔을 노래했던 거장, 고(故) 신해철의 뜨거웠던 음악과 철학은 여전히 우리의 가슴속에 살아 숨 쉬고 있습니다.",
+        "is_deceased": true,
+        "trend_score": 99,
+        "trend_reason": "대한민국 대중음악사에서 '마왕'이라는 독보적인 카리스마로 청춘들의 영혼을 위로했던 신해철은 한국 대중에게 가장 깊은 정서적 울림과 그리움을 남긴 인물입니다. 그의 갑작스러운 별세는 온 국민을 슬픔에 빠뜨렸을 뿐만 아니라 의료사고 피해자 구제를 위한 법적 변화까지 이끌어낸 거대한 유산이기에, 오늘 10월 27일 기일을 맞아 압도적인 추모 트래픽과 댓글 폭발을 유도할 최종 1위 레전드로 선정했습니다.",
+        "top_candidates": [
+          {
+            "rank": 1,
+            "person_name": "신해철",
+            "person_name_en": "Shin Hae-chul",
+            "category": "대중음악 (록)",
+            "death_date": "2014-10-27",
+            "korean_resonance": "대한민국 대중음악사의 위대한 거장이자 '마왕'. 대학가요제 '그대에게'부터 록 밴드 넥스트(N.EX.T) 활동까지 청춘들의 아픔과 사회적 메시지를 대변한 시대의 아이콘입니다. 그의 갑작스러운 의료사고 사망은 온 국민을 충격과 슬픔에 빠뜨렸으며, '신해철법' 제정의 계기가 되었습니다.",
+            "legacy_point": "실험적이고 독창적인 음악 세계 구축, 라디오 '고스트스테이션'을 통한 청년들과의 깊은 교감, 의료사고 피해자 구제를 위한 법적 유산 마련.",
+            "traffic_score": 99
+          },
+          {
+            "rank": 2,
+            "person_name": "루 리드",
+            "person_name_en": "Lou Reed",
+            "category": "대중음악 (록)",
+            "death_date": "2013-10-27",
+            "korean_resonance": "전설적인 밴드 '벨벳 언더그라운드(The Velvet Underground)'의 리더이자 솔로 아티스트. 한국인들에게는 영화 《접속》의 삽입곡으로 공전의 히트를 기록한 'Pale Blue Eyes'와 'Perfect Day'의 목소리로 매우 친숙하며, 시적이고 날카로운 가사로 현대 록 음악의 예술적 지평을 넓힌 거장입니다.",
+            "legacy_point": "록 음악에 문학적 깊이를 더한 선구자, 대안 음악(얼터너티브 록)의 시초이자 데이비드 보위 등 수많은 거장들에게 영감을 준 '뮤지션들의 뮤지션'.",
+            "traffic_score": 95
+          },
+          {
+            "rank": 3,
+            "person_name": "루돌프 다슬러",
+            "person_name_en": "Rudolf Dassler",
+            "category": "패션/비즈니스",
+            "death_date": "1974-10-27",
+            "korean_resonance": "글로벌 스포츠 브랜드 '푸마(Puma)'의 창업주. 동생 아돌프 다슬러(아디다스 창업주)와의 역사적인 형제 갈등과 경쟁 서사는 한국의 비즈니스 및 다큐멘터리 마니아들 사이에서 매우 유명한 흥미진진한 비하인드 스토리입니다.",
+            "legacy_point": "혁신적인 축구화 개발 및 스포츠 마케팅의 선구자로서 푸마를 세계적인 브랜드로 성장시킴.",
+            "traffic_score": 90
+          }
+        ],
+        "wikidata_id": "Q485059",
+        "verified": true,
+        "scouted_trending": true
+      }
     }
   },
-  "total_dates": 12
+  "total_dates": 13
 }
