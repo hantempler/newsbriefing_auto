@@ -365,6 +365,79 @@ def scout_trending_star(date_str=None, mode="am"):
         raise RuntimeError(f"실시간 3인 후보 스카우트 실패: {e}")
 
 
+def scout_daily_best_star(date_str=None):
+    """[1일 1영상 그랑프리] 당일의 AM(생일) 1위 스타와 PM(기일) 1위 스타를 동시 발굴하여
+    트래픽 점수(trend_score)와 서사성을 정면 맞대결(Head-to-Head)시켜 최종 1인(Champion)을 선별.
+    """
+    if not date_str:
+        date_str = get_today_kst_str()
+
+    print(f"\n{'#'*65}")
+    print(f" 🏆 [1일 1영상 트래픽 그랑프리] {date_str} 최고의 1인 단일 선별 맞대결")
+    print(f"{'#'*65}\n")
+
+    # 1. AM(생일) 1위 스타 확보
+    print("▶ [1/3] AM(생일) 슬롯 최고 트래픽 후보군 심사...")
+    am_star = scout_trending_star(date_str=date_str, mode="am")
+
+    # 2. PM(기일) 1위 스타 확보
+    print("\n▶ [2/3] PM(추모) 슬롯 최고 트래픽 후보군 심사...")
+    pm_star = scout_trending_star(date_str=date_str, mode="pm")
+
+    # 3. 트래픽 점수 비교 (동점 시 헌정/추모의 파급력을 고려하여 PM 우선)
+    am_score = am_star.get("trend_score", 90)
+    pm_score = pm_star.get("trend_score", 90)
+
+    print(f"\n▶ [3/3] 최종 맞대결 심사:")
+    print(f"   • AM(생일) [{am_star['person_name']}]: 트래픽 점수 {am_score}점 ({am_star.get('trend_reason', '')})")
+    print(f"   • PM(추모) [{pm_star['person_name']}]: 트래픽 점수 {pm_score}점 ({pm_star.get('trend_reason', '')})")
+
+    if am_score > pm_score:
+        winner = am_star
+        winner_mode = "am"
+        print(f"\n🥇 [그랑프리 최종 우승] AM(생일) '{winner['person_name']}' 낙점! ({am_score}점 > {pm_score}점)")
+    else:
+        winner = pm_star
+        winner_mode = "pm"
+        print(f"\n🥇 [그랑프리 최종 우승] PM(추모) '{winner['person_name']}' 낙점! ({pm_score}점 >= {am_score}점)")
+
+    winner["selected_mode"] = winner_mode
+    winner["vs_score"] = {"am": am_score, "pm": pm_score}
+
+    # calendar_db.json에 당일의 daily_champion 및 AM/PM 맞대결 선정 과정 상세 기록
+    try:
+        db = load_calendar_db()
+        cal = db.setdefault("calendar", {})
+        day_slot = cal.setdefault(date_str, {})
+        day_slot["daily_champion"] = {
+            "selected_mode": winner_mode,
+            "person_name": winner["person_name"],
+            "person_name_en": winner.get("person_name_en"),
+            "winning_score": max(am_score, pm_score),
+            "decision_reason": f"[{winner_mode.upper()} {winner['person_name']}]이(가) 트래픽 점수 {max(am_score, pm_score)}점으로 상대 슬롯을 제치고 오늘 당일 최고 화제성 단일 픽으로 확정됨.",
+            "head_to_head": {
+                "am_contender": {
+                    "person_name": am_star["person_name"],
+                    "person_name_en": am_star.get("person_name_en"),
+                    "trend_score": am_score,
+                    "trend_reason": am_star.get("trend_reason", "")
+                },
+                "pm_contender": {
+                    "person_name": pm_star["person_name"],
+                    "person_name_en": pm_star.get("person_name_en"),
+                    "trend_score": pm_score,
+                    "trend_reason": pm_star.get("trend_reason", "")
+                }
+            }
+        }
+        CALENDAR_FILE.write_text(json.dumps(db, ensure_ascii=False, indent=2), encoding="utf-8")
+        print(f"[Calendar DB] {date_str} daily_champion ➔ [{winner_mode.upper()}] '{winner['person_name']}' 및 맞대결 선정과정 기록 완료!")
+    except Exception as e:
+        print(f"[Calendar DB Warn] daily_champion 기록 실패: {e}")
+
+    return winner
+
+
 if __name__ == "__main__":
     p = argparse.ArgumentParser(description="스타이즈본 실시간 트렌드 스타 스카우터")
     p.add_argument("--date", default=None, help="대상 일자 (MM-DD, 기본값: 오늘)")

@@ -88,8 +88,43 @@ def run_pipeline(mode="am", date_str=None, person=None, upload=True, privacy="pr
     return pkg_dir
 
 
+def run_best_daily(date_str=None, upload=True, privacy="private", publish_at=None):
+    """[1일 1영상 황금률] 당일 AM(생일)과 PM(기일) 중 트래픽 점수가 더 높은 최종 1인만 선별하여 단 1편 집중 제작 및 업로드."""
+    if not date_str:
+        date_str = get_today_kst_str()
+
+    print(f"\n#################################################################")
+    print(f"  🏆 [스타이즈본 1일 1영상 최고 트래픽 단일 픽 파이프라인 가동]")
+    print(f"  기준 일자: {date_str} (KST 한국 표준시 기준)")
+    print(f"#################################################################\n")
+
+    # 1. AM vs PM 최고 트래픽 스타 선별 맞대결
+    from star_trend_scout import scout_daily_best_star
+    best_star = scout_daily_best_star(date_str=date_str)
+
+    winner_mode = best_star.get("selected_mode", "am")
+    winner_person = best_star.get("person_name")
+    winner_en = best_star.get("person_name_en")
+    print(f"\n🚀 [단일 제작 착수] 오늘의 원픽: [{winner_mode.upper()}] {winner_person} ({winner_en})")
+
+    # 2. 선별된 1인 단일 파이프라인 가동 (대본 + 이미지 + TTS + 자막 + 영상 + 유튜브 업로드)
+    pkg_dir = run_pipeline(
+        mode=winner_mode,
+        date_str=date_str,
+        person=winner_person,
+        upload=upload,
+        privacy=privacy,
+        publish_at=publish_at
+    )
+
+    print(f"\n#################################################################")
+    print(f"  🎉 [완료] 오늘({date_str}) 최고 트래픽 원픽 [{winner_person}] 1편 제작 및 업로드 완료!")
+    print(f"#################################################################\n")
+    return pkg_dir
+
+
 def run_full_daily(date_str=None, upload=True, privacy="private"):
-    """자정 자동화용: 하루 2편(AM 탄생 + PM 기일) 연속 일괄 생성 및 업로드."""
+    """하루 2편(AM 탄생 + PM 기일) 모두 제작 모드."""
     if not date_str:
         date_str = get_today_kst_str()
 
@@ -117,7 +152,7 @@ def run_full_daily(date_str=None, upload=True, privacy="private"):
 
 if __name__ == "__main__":
     p = argparse.ArgumentParser(description="스타이즈본 통합 쇼츠 런처")
-    p.add_argument("--mode", default="am", choices=["am", "pm", "both"], help="제작 모드: am (아침), pm (저녁), both (자정 일괄 2편)")
+    p.add_argument("--mode", default="best", choices=["best", "am", "pm", "both"], help="제작 모드: best (당일 최고 트래픽 1편), am (생일), pm (기일), both (2편 일괄)")
     p.add_argument("--date", default=None, help="대상 날짜 (MM-DD, 미지정 시 오늘 날짜)")
     p.add_argument("--person", default=None, help="특정 인물 강제 지정")
     p.add_argument("--upload", dest="upload", action="store_true", default=True, help="유튜브 자동 업로드 수행 (기본 활성화)")
@@ -126,7 +161,9 @@ if __name__ == "__main__":
     p.add_argument("--publish-at", default=None, help="예약 공개 일시 (ISO 8601 포맷)")
     args = p.parse_args()
 
-    if args.mode == "both":
+    if args.mode == "best":
+        run_best_daily(date_str=args.date, upload=args.upload, privacy=args.privacy, publish_at=args.publish_at)
+    elif args.mode == "both":
         run_full_daily(date_str=args.date, upload=args.upload, privacy=args.privacy)
     else:
         run_pipeline(

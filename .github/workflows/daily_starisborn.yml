@@ -4,11 +4,12 @@ on:
   workflow_dispatch:
     inputs:
       mode:
-        description: '제작 모드 (both: AM+PM 일괄, am: 탄생, pm: 기일)'
+        description: '제작 모드 (best: 최고 트래픽 1편 단일 제작, both: AM+PM 2편 일괄, am: 탄생, pm: 기일)'
         required: true
-        default: 'both'
+        default: 'best'
         type: choice
         options:
+          - best
           - both
           - am
           - pm
@@ -75,7 +76,7 @@ jobs:
 
       - name: Run Star is Born Pipeline
         run: |
-          MODE="both"
+          MODE="best"
           PRIVACY="private"
           DATE_ARG=""
 
