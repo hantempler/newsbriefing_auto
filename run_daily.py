@@ -18,6 +18,10 @@ ROOT_DIR = Path(__file__).resolve().parent
 SRC_DIR = ROOT_DIR / "src"
 OUTPUT_DIR = ROOT_DIR / "output"
 
+# src 모듈 임포트를 위해 sys.path 최상단에 추가 (GitHub Actions 및 외부 호출 환경 대응)
+if str(SRC_DIR) not in sys.path:
+    sys.path.insert(0, str(SRC_DIR))
+
 if sys.platform == "win32":
     try:
         sys.stdout.reconfigure(encoding="utf-8")
