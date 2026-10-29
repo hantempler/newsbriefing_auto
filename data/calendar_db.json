@@ -5,9 +5,9 @@
     "target_audience": "Korean YouTube Shorts Viewers (1030세대 & 대중)",
     "korean_familiarity_priority": true,
     "min_year": 1960,
-    "period": "10-15 ~ 10-29 (Live Accumulated)",
-    "total_dates": 15,
-    "total_stars": 30,
+    "period": "10-15 ~ 10-30 (Live Accumulated)",
+    "total_dates": 16,
+    "total_stars": 32,
     "categories": [
       "K-Culture (드라마/예능/아이돌/가요 레전드)",
       "Global Pop (내한 떼창/손하트)",
@@ -908,7 +908,132 @@
         "verified": true,
         "scouted_trending": true
       }
+    },
+    "10-30": {
+      "am": {
+        "person_name": "전지현",
+        "person_name_en": "Jun Ji-hyun",
+        "category": "배우",
+        "event_date": "1981-10-30",
+        "keywords": [
+          "엽기적인그녀",
+          "별에서온그대",
+          "테크노댄스",
+          "천송이"
+        ],
+        "brief": "데뷔 이래 단 한 순간도 트렌드의 중심에서 내려온 적 없는 대한민국 대중문화 역사상 가장 완벽하고 독보적인 아이콘입니다.",
+        "is_deceased": false,
+        "trend_score": 99,
+        "trend_reason": "전지현은 2000년대 초반 '엽기적인 그녀' 신드롬부터 2010년대 '별에서 온 그대' 천송이 열풍까지, 한국 대중문화의 패러다임을 바꾼 독보적인 스타입니다. 세대를 불문하고 전 국민이 그녀의 작품과 광고를 소비하며 자라왔기에 정서적 연결고리가 가장 깊으며, 테크노 댄스 CF부터 화려한 부활극까지 쇼츠 알고리즘을 터뜨릴 도파민 서사가 가장 풍부하여 최종 1위로 선정했습니다.",
+        "top_candidates": [
+          {
+            "rank": 1,
+            "person_name": "전지현",
+            "person_name_en": "Jun Ji-hyun",
+            "category": "배우",
+            "birth_date": "1981-10-30",
+            "korean_resonance": "영화 '엽기적인 그녀'로 2000년대 초반 신드롬을 일으키며 전 국민의 첫사랑이자 시대의 아이콘으로 등극했습니다. 이후 '도둑들'의 예니콜, '별에서 온 그대'의 천송이로 메가 히트를 기록하며 세대를 초월해 한국인들의 가슴속에 깊이 각인된 대체 불가능한 톱스타입니다.",
+            "viral_story_point": "데뷔 초 대한민국을 발칵 뒤집어놓은 전설의 테크노 댄스 CF 비하인드부터, 긴 슬럼프를 깨고 '예니콜'과 '천송이'로 화려하게 부활하며 20년 넘게 정상의 자리를 지켜낸 드라마틱한 커리어 반전 서사입니다.",
+            "traffic_score": 99
+          },
+          {
+            "rank": 2,
+            "person_name": "지젤",
+            "person_name_en": "Giselle",
+            "category": "가수 (aespa)",
+            "birth_date": "2000-10-30",
+            "korean_resonance": "글로벌 신드롬을 일으키고 있는 4세대 대표 걸그룹 에스파(aespa)의 멤버로, 'Next Level', 'Supernova', 'Whiplash' 등 발표하는 곡마다 음원 차트를 폭격하며 대중적인 사랑을 한 몸에 받고 있습니다.",
+            "viral_story_point": "SM엔터테인먼트 역사상 가장 짧은 연습생 기간(약 11개월)을 거쳐 초고속으로 데뷔한 천재적인 재능과, 3개 국어를 완벽하게 구사하는 뇌섹녀 모먼트, 그리고 독보적인 힙한 랩 스타일의 반전 매력입니다.",
+            "traffic_score": 96
+          },
+          {
+            "rank": 3,
+            "person_name": "최홍만",
+            "person_name_en": "Choi Hong-man",
+            "category": "스포츠 (씨름/격투기)",
+            "birth_date": "1980-10-30",
+            "korean_resonance": "'테크노 골리앗'이라는 전무후무한 캐릭터로 민속씨름 천하장사를 차지한 뒤, K-1 격투기 무대에서 효도르, 세미 슐트 등 세계적 강자들과 맞붙으며 2000년대 중후반 한국인들의 밤잠을 설치게 만든 스포츠 영웅입니다.",
+            "viral_story_point": "2m 18cm의 압도적인 거구에서 뿜어져 나오는 유쾌한 테크노 댄스 세레머니, 뇌수술과 거인증 극복이라는 인간 승리 서사, 그리고 링 위에서 보여준 뜨거운 투혼과 예능에서의 반전 매력입니다.",
+            "traffic_score": 94
+          }
+        ],
+        "wikidata_id": "Q253626",
+        "verified": true,
+        "scouted_trending": true
+      },
+      "pm": {
+        "person_name": "김주혁",
+        "person_name_en": "Kim Joo-hyuk",
+        "category": "배우",
+        "event_date": "2017-10-30",
+        "keywords": [
+          "구탱이형",
+          "1박2일",
+          "독전",
+          "프라하의연인"
+        ],
+        "brief": "예능에서는 한없이 따뜻하고 소탈한 '구탱이 형'으로, 작품에서는 강렬한 카리스마를 뿜어내던 명배우 故 김주혁이 2017년 10월 30일 별세했습니다. 그가 남긴 따뜻한 미소와 불멸의 연기는 여전히 우리의 가슴속에 살아 숨 쉬고 있습니다.",
+        "is_deceased": true,
+        "trend_score": 99,
+        "trend_reason": "배우 김주혁은 한국 대중에게 단순한 스타를 넘어 '1박 2일'을 통해 매주 안방극장에 웃음을 주던 가족 같은 존재였습니다. 그의 갑작스러운 교통사고 비보는 전 국민적인 슬픔을 자아냈으며, 매년 기일마다 수많은 추모 물결과 댓글이 폭발하는 독보적인 화제성과 정서적 파급력을 지니고 있어 최종 1위 레전드로 선정했습니다.",
+        "top_candidates": [
+          {
+            "rank": 1,
+            "person_name": "김주혁",
+            "person_name_en": "Kim Joo-hyuk",
+            "category": "배우",
+            "death_date": "2017-10-30",
+            "korean_resonance": "KBS 예능 '1박 2일'에서 '구탱이 형'이라는 친근한 별명으로 전 국민적인 사랑을 받았으며, 영화 '독전', '공조', 드라마 '프라하의 연인' 등에서 보여준 명품 연기로 대중의 가슴속에 깊이 각인되어 있습니다. 그의 갑작스러운 비보는 연예계와 대중 모두에게 큰 슬픔과 충격을 안겼습니다.",
+            "legacy_point": "친근한 예능인과 카리스마 넘치는 명배우의 경계를 자유롭게 넘나들며 대중에게 웃음과 감동을 동시에 선사한 불멸의 아티스트이자 영원한 '구탱이 형'.",
+            "traffic_score": 99
+          },
+          {
+            "rank": 2,
+            "person_name": "김용",
+            "person_name_en": "Jin Yong",
+            "category": "소설가",
+            "death_date": "2018-10-30",
+            "korean_resonance": "무협 소설의 절대적 거장으로, '사조영웅전', '신조협려', '의천도룡기', '소오강호' 등 그의 작품들은 한국의 수많은 독자들에게 꿈과 낭만을 심어주었으며, 한국 무협 및 판타지 장르 문학 전반에 지대한 영향을 미쳤습니다.",
+            "legacy_point": "전 세계 1억 부 이상의 판매고를 기록하며 동양적 영웅 서사와 의(義)의 가치를 현대 문학으로 승화시킨 무협 소설계의 영원한 태산북두.",
+            "traffic_score": 96
+          },
+          {
+            "rank": 3,
+            "person_name": "앙리 뒤낭",
+            "person_name_en": "Henry Dunant",
+            "category": "인도주의 활동가",
+            "death_date": "1910-10-30",
+            "korean_resonance": "국제적십자사 창립자이자 최초의 노벨 평화상 수상자로, 한국 교과서에도 필수로 등장하며 인류애와 생명 존중의 상징으로 한국인들에게 깊은 존경을 받고 있습니다.",
+            "legacy_point": "전쟁의 참상 속에서 아군과 적군을 가리지 않는 인도주의적 구호 정신을 제창하여 국제적십자 운동을 탄생시키고 인류 평화의 초석을 다진 위대한 선구자.",
+            "traffic_score": 93
+          }
+        ],
+        "wikidata_id": "Q491363",
+        "verified": true,
+        "scouted_trending": true
+      },
+      "daily_champion": {
+        "selected_mode": "pm",
+        "person_name": "김주혁",
+        "person_name_en": "Kim Joo-hyuk",
+        "winning_score": 99,
+        "decision_reason": "[PM 김주혁]이(가) 트래픽 점수 99점으로 상대 슬롯을 제치고 오늘 당일 최고 화제성 단일 픽으로 확정됨.",
+        "head_to_head": {
+          "am_contender": {
+            "person_name": "전지현",
+            "person_name_en": "Jun Ji-hyun",
+            "trend_score": 99,
+            "trend_reason": "전지현은 2000년대 초반 '엽기적인 그녀' 신드롬부터 2010년대 '별에서 온 그대' 천송이 열풍까지, 한국 대중문화의 패러다임을 바꾼 독보적인 스타입니다. 세대를 불문하고 전 국민이 그녀의 작품과 광고를 소비하며 자라왔기에 정서적 연결고리가 가장 깊으며, 테크노 댄스 CF부터 화려한 부활극까지 쇼츠 알고리즘을 터뜨릴 도파민 서사가 가장 풍부하여 최종 1위로 선정했습니다."
+          },
+          "pm_contender": {
+            "person_name": "김주혁",
+            "person_name_en": "Kim Joo-hyuk",
+            "trend_score": 99,
+            "trend_reason": "배우 김주혁은 한국 대중에게 단순한 스타를 넘어 '1박 2일'을 통해 매주 안방극장에 웃음을 주던 가족 같은 존재였습니다. 그의 갑작스러운 교통사고 비보는 전 국민적인 슬픔을 자아냈으며, 매년 기일마다 수많은 추모 물결과 댓글이 폭발하는 독보적인 화제성과 정서적 파급력을 지니고 있어 최종 1위 레전드로 선정했습니다."
+          }
+        }
+      }
     }
   },
-  "total_dates": 15
+  "total_dates": 16
 }
