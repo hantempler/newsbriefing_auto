@@ -5,9 +5,9 @@
     "target_audience": "Korean YouTube Shorts Viewers (1030세대 & 대중)",
     "korean_familiarity_priority": true,
     "min_year": 1960,
-    "period": "10-15 ~ 10-30 (Live Accumulated)",
-    "total_dates": 16,
-    "total_stars": 32,
+    "period": "10-15 ~ 10-31 (Live Accumulated)",
+    "total_dates": 17,
+    "total_stars": 35,
     "categories": [
       "K-Culture (드라마/예능/아이돌/가요 레전드)",
       "Global Pop (내한 떼창/손하트)",
@@ -1033,7 +1033,132 @@
           }
         }
       }
+    },
+    "10-31": {
+      "am": {
+        "person_name": "허광한",
+        "person_name_en": "Greg Han Hsu",
+        "category": "배우 / 가수",
+        "event_date": "1990-10-31",
+        "keywords": [
+          "상견니",
+          "상친자",
+          "노웨이아웃",
+          "청춘스타"
+        ],
+        "brief": "기획사 사기와 눈물겨운 무명을 견디고 '상견니'로 아시아를 뒤흔든, 한국이 가장 사랑하는 대체 불가의 청춘 아이콘!",
+        "is_deceased": false,
+        "trend_score": 98,
+        "trend_reason": "한국 대중, 특히 쇼츠의 핵심 소비층인 1030 세대에게 '첫사랑 기억조작 남'으로 불리며 막강한 팬덤('상친자')을 보유하고 있습니다. 최근 한국 드라마 '노 웨이 아웃'에 직접 출연하는 등 한국 시장과의 접점이 매우 강력하며, 그의 독보적인 비주얼과 극적인 무명 극복 서사는 쇼츠 알고리즘을 터뜨리기에 가장 완벽한 카드입니다.",
+        "top_candidates": [
+          {
+            "rank": 1,
+            "person_name": "허광한",
+            "person_name_en": "Greg Han Hsu",
+            "category": "배우 / 가수",
+            "birth_date": "1990-10-31",
+            "korean_resonance": "대만 드라마 '상견니'의 메가 히트로 한국에 '상친자(상견니에 미친 자들)' 신드롬을 일으킨 장본인입니다. 한국 팬들의 뜨거운 사랑에 보답하기 위해 수차례 내한했으며, 한국 드라마 '노 웨이 아웃: 더 룰렛'에 직접 출연하는 등 한국 대중과 가장 깊은 정서적 유대감을 공유하는 청춘 스타입니다.",
+            "viral_story_point": "13살 때 주걸륜 뮤직비디오에 탁구 신동 아역으로 출연했던 귀여운 과거부터, 가수가 되기 위해 연습생 생활을 거쳤으나 소속사 계약 문제로 데뷔가 무산되는 등 오랜 무명 시절을 겪은 반전 실화. 결국 연기로 전향해 '상견니' 한 편으로 아시아 전역을 뒤흔들고 한국인이 가장 사랑하는 대만 배우가 된 극적인 인생 역전 스토리입니다.",
+            "traffic_score": 98
+          },
+          {
+            "rank": 2,
+            "person_name": "구티",
+            "person_name_en": "Guti",
+            "category": "축구 선수 / 감독",
+            "birth_date": "1976-10-31",
+            "korean_resonance": "레알 마드리드의 갈락티코 전성기 시절, 독보적인 금발 비주얼과 천재적인 패스로 한국 축구팬들의 심장을 저격한 레전드입니다. 한국 스포츠 커뮤니티에서 기복은 심하지만 한 번 터지면 아무도 못 말리는 천재성을 뜻하는 유행어이자 밈(Meme)인 '구티의 그날'의 주인공으로 대중적 인지도가 매우 높습니다.",
+            "viral_story_point": "골키퍼와 1대1 찬스에서 직접 슛을 때리는 대신, 뒤따라오던 벤제마에게 보지도 않고 백힐로 패스를 건네 골을 어시스트한 전설적인 '무중력 백힐 패스' 사건. 전 세계 축구계를 충격에 빠뜨린 이 천재적인 플레이와 \"벤제마가 침투하는 게 보여서 그냥 가장 쉬운 걸 했을 뿐\"이라는 쿨한 비하인드 썰은 쇼츠 시청자들의 도파민을 자극하기에 완벽합니다.",
+            "traffic_score": 95
+          },
+          {
+            "rank": 3,
+            "person_name": "마커스 래시포드",
+            "person_name_en": "Marcus Rashford",
+            "category": "축구 선수",
+            "birth_date": "1997-10-31",
+            "korean_resonance": "박지성 시절부터 이어진 맨체스터 유나이티드의 두터운 한국 팬덤에게 '아픈 손가락'이자 '소년 가장'으로 불리며 오랜 시간 희로애락을 함께해 온 매우 친숙한 스타입니다.",
+            "viral_story_point": "18세의 나이에 갑작스럽게 치른 1군 데뷔전(유로파리그)에서 멀티골을 터뜨리고, 사흘 뒤 프리미어리그 데뷔전(아스날전)에서도 멀티골을 터뜨리며 혜성처럼 등장한 신데렐라 스토리, 그리고 코로나19 시기 결식아동들을 위해 영국 정부의 정책까지 바꾸며 대영제국 훈장(MBE)을 받은 감동적인 반전 서사입니다.",
+            "traffic_score": 91
+          }
+        ],
+        "wikidata_id": "Q11631209",
+        "verified": true,
+        "scouted_trending": true
+      },
+      "pm": {
+        "person_name": "숀 코네리",
+        "person_name_en": "Sean Connery",
+        "category": "영화 배우",
+        "event_date": "2020-10-31",
+        "keywords": [
+          "제임스본드",
+          "더록",
+          "아카데미남우조연상",
+          "영원한신사"
+        ],
+        "brief": "2020년 10월 31일 별세. 최초의 제임스 본드이자 영원한 신사로서 스크린을 압도하는 카리스마를 남긴 대배우 숀 코네리, 그가 남긴 위대한 영화적 유산은 우리 가슴속에 영원히 살아 숨 쉴 것입니다.",
+        "is_deceased": true,
+        "trend_score": 99,
+        "trend_reason": "초대 제임스 본드로서 영화사에 지울 수 없는 족적을 남겼으며, '더 록', '인디아나 존스' 등 한국 대중에게도 매우 친숙한 명작들의 주연으로서 남녀노소 불문하고 압도적인 인지도와 추모의 감정을 불러일으키는 독보적인 레전드이기 때문입니다.",
+        "top_candidates": [
+          {
+            "rank": 1,
+            "person_name": "숀 코네리",
+            "person_name_en": "Sean Connery",
+            "category": "영화 배우",
+            "death_date": "2020-10-31",
+            "korean_resonance": "'007' 시리즈의 초대 제임스 본드로 한국 대중에게도 첩보 액션의 전설로 각인되어 있으며, 영화 '더 록', '인디아나 존스 3' 등 수많은 명작으로 전 세대를 아우르는 사랑을 받았습니다. 그의 중후한 목소리와 카리스마는 영원한 신사의 상징입니다.",
+            "legacy_point": "최초의 제임스 본드이자 아카데미 남우조연상 수상자로서, 20세기 영화사를 대표하는 불멸의 아이콘.",
+            "traffic_score": 99
+          },
+          {
+            "rank": 2,
+            "person_name": "리버 피닉스",
+            "person_name_en": "River Phoenix",
+            "category": "영화 배우",
+            "death_date": "1993-10-31",
+            "korean_resonance": "영화 '스탠 바이 미'와 '아이다호'를 통해 90년대 청춘의 고독과 반항을 대변했던 천재 배우로, 23세라는 너무나 이른 나이에 요절하여 한국 영화 팬들의 가슴에 영원히 아련하고 먹먹한 아픔으로 남아 있습니다.",
+            "legacy_point": "베니스 영화제 남우주연상 수상 및 아카데미 노미네이트 등 짧지만 강렬했던 천재적 연기력과 불꽃 같은 삶.",
+            "traffic_score": 97
+          },
+          {
+            "rank": 3,
+            "person_name": "해리 후디니",
+            "person_name_en": "Harry Houdini",
+            "category": "마술사",
+            "death_date": "1926-10-31",
+            "korean_resonance": "역사상 가장 위대한 탈출 마술사이자 일루셔니스트로, 한국에서도 '후디니'라는 이름 자체가 불가능한 탈출이나 기적을 뜻하는 대명사로 널리 쓰이며, 할로윈 데이에 세상을 떠난 그의 극적인 삶은 대중의 경외감을 자극합니다.",
+            "legacy_point": "현대 마술의 기틀을 마련하고 마술을 단순한 속임수에서 위대한 예술의 경지로 끌어올린 선구자.",
+            "traffic_score": 95
+          }
+        ],
+        "wikidata_id": "Q4573",
+        "verified": true,
+        "scouted_trending": true
+      },
+      "daily_champion": {
+        "selected_mode": "pm",
+        "person_name": "숀 코네리",
+        "person_name_en": "Sean Connery",
+        "winning_score": 99,
+        "decision_reason": "[PM 숀 코네리]이(가) 트래픽 점수 99점으로 상대 슬롯을 제치고 오늘 당일 최고 화제성 단일 픽으로 확정됨.",
+        "head_to_head": {
+          "am_contender": {
+            "person_name": "허광한",
+            "person_name_en": "Greg Han Hsu",
+            "trend_score": 98,
+            "trend_reason": "한국 대중, 특히 쇼츠의 핵심 소비층인 1030 세대에게 '첫사랑 기억조작 남'으로 불리며 막강한 팬덤('상친자')을 보유하고 있습니다. 최근 한국 드라마 '노 웨이 아웃'에 직접 출연하는 등 한국 시장과의 접점이 매우 강력하며, 그의 독보적인 비주얼과 극적인 무명 극복 서사는 쇼츠 알고리즘을 터뜨리기에 가장 완벽한 카드입니다."
+          },
+          "pm_contender": {
+            "person_name": "숀 코네리",
+            "person_name_en": "Sean Connery",
+            "trend_score": 99,
+            "trend_reason": "초대 제임스 본드로서 영화사에 지울 수 없는 족적을 남겼으며, '더 록', '인디아나 존스' 등 한국 대중에게도 매우 친숙한 명작들의 주연으로서 남녀노소 불문하고 압도적인 인지도와 추모의 감정을 불러일으키는 독보적인 레전드이기 때문입니다."
+          }
+        }
+      }
     }
   },
-  "total_dates": 16
+  "total_dates": 17
 }
