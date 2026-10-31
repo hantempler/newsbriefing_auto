@@ -5,9 +5,9 @@
     "target_audience": "Korean YouTube Shorts Viewers (1030세대 & 대중)",
     "korean_familiarity_priority": true,
     "min_year": 1960,
-    "period": "10-15 ~ 10-31 (Live Accumulated)",
-    "total_dates": 17,
-    "total_stars": 35,
+    "period": "10-15 ~ 11-01 (Live Accumulated)",
+    "total_dates": 18,
+    "total_stars": 38,
     "categories": [
       "K-Culture (드라마/예능/아이돌/가요 레전드)",
       "Global Pop (내한 떼창/손하트)",
@@ -1158,7 +1158,132 @@
           }
         }
       }
+    },
+    "11-01": {
+      "am": {
+        "person_name": "정연",
+        "person_name_en": "Yu Jeong-yeon",
+        "category": "대중음악 (K-pop)",
+        "event_date": "1996-11-01",
+        "keywords": [
+          "트와이스",
+          "걸크러시",
+          "인간승리",
+          "눈물의복귀"
+        ],
+        "brief": "아픔을 딛고 다시 일어선 트와이스의 걸크러시, 전 세계를 울린 눈물겨운 무대 복귀와 인간 승리의 드라마!",
+        "is_deceased": false,
+        "trend_score": 98,
+        "trend_reason": "세계적인 K-pop 그룹 트와이스의 핵심 멤버로서 한국 대중과의 정서적 유대감이 가장 깊으며, 목 디스크와 공황장애라는 치명적인 시련을 극복하고 무대로 돌아온 그녀의 서사는 80초 쇼츠 포맷에서 시청자들의 눈물샘과 도파민을 동시에 자극할 수 있는 최고의 그로스 치트키이기 때문입니다.",
+        "top_candidates": [
+          {
+            "rank": 1,
+            "person_name": "정연",
+            "person_name_en": "Yu Jeong-yeon",
+            "category": "대중음악 (K-pop)",
+            "birth_date": "1996-11-01",
+            "korean_resonance": "K-pop 레전드 걸그룹 트와이스(TWICE)의 핵심 멤버이자 '걸크러시'의 대명사. 한국 대중에게 친숙한 수많은 메가 히트곡(Cheer Up, TT 등)의 주역으로, 1030 세대의 청춘과 추억을 함께한 아이콘입니다.",
+            "viral_story_point": "목 디스크와 공황장애로 인한 활동 중단, 스테로이드 부작용으로 인한 급격한 체중 변화 등 가혹한 시련 속에서도 멤버들과 팬들의 사랑으로 이를 극복하고 무대로 당당히 복귀한 눈물겨운 인간 승리 서사.",
+            "traffic_score": 98
+          },
+          {
+            "rank": 2,
+            "person_name": "팀 쿡",
+            "person_name_en": "Tim Cook",
+            "category": "IT / 기업인",
+            "birth_date": "1960-11-01",
+            "korean_resonance": "한국 스마트폰 시장의 절반을 차지하는 아이폰의 수장이자, 스티브 잡스의 뒤를 이어 애플을 이끈 세계 최고의 CEO. 한국인들의 일상과 소비 트렌드에 가장 깊숙이 침투한 테크 아이콘입니다.",
+            "viral_story_point": "'잡스 없는 애플은 끝났다'는 전 세계의 조롱과 회의론을 비웃듯 시가총액 세계 1위, 최초의 3조 달러 기업으로 키워낸 반전 드라마. 매일 새벽 3시 45분에 기상해 이메일을 보내는 지독한 워커홀릭 루틴과 최근 CEO 퇴임 및 이사회 의장 전환 이슈.",
+            "traffic_score": 96
+          },
+          {
+            "rank": 3,
+            "person_name": "펜 바드글리",
+            "person_name_en": "Penn Badgley",
+            "category": "배우 (Actor)",
+            "birth_date": "1986-11-01",
+            "korean_resonance": "미드 열풍의 주역 <가십걸>의 '댄 험프리'이자, 넷플릭스 메가 히트작 <너의 모든 것(YOU)>의 주인공 '조 골드버그'로 한국의 해외 드라마 팬들에게 매우 친숙한 얼굴입니다.",
+            "viral_story_point": "<가십걸>의 순정남이자 '가십걸' 본체였던 그가, 넷플릭스 스릴러 <너의 모든 것>에서 소름 돋는 스토커 살인마로 완벽 변신하며 전 세계 시청자들을 충격에 빠뜨린 연기 스펙트럼과 비하인드 스토리.",
+            "traffic_score": 91
+          }
+        ],
+        "wikidata_id": "Q25374501",
+        "verified": true,
+        "scouted_trending": true
+      },
+      "pm": {
+        "person_name": "김현식",
+        "person_name_en": "Kim Hyun-sik",
+        "category": "대중음악",
+        "event_date": "1990-11-01",
+        "keywords": [
+          "내사랑내곁에",
+          "비처럼음악처럼",
+          "사랑의가객",
+          "11월1일의전설"
+        ],
+        "brief": "거칠고 쓸쓸한 목소리로 우리 삶의 가장 깊은 슬픔을 위로했던 '사랑의 가객' 고(故) 김현식 님은 1990년 11월 1일 별세하셨습니다. 마지막 순간까지 피를 토하듯 노래를 녹음하며 남겨둔 그의 처절하고 아름다운 유산은 영원히 우리 곁에 머물 것입니다.",
+        "is_deceased": true,
+        "trend_score": 99,
+        "trend_reason": "11월 1일은 한국 가요계 역사상 가장 슬픈 날로 불립니다. 1987년 유재하가 떠난 지 정확히 3년 뒤인 1990년, 그의 절친한 동료이자 한국 최고의 가객 김현식이 같은 날 세상을 떠났기 때문입니다. 특히 김현식은 간경화 말기라는 극심한 고통 속에서도 마지막 순간까지 마이크를 놓지 않고 피를 토하듯 유작 '내 사랑 내 곁에'를 녹음하다 별세했습니다. 이 처절하고 숭고한 예술혼과 11월 1일이라는 운명적 평행이론은 한국 대중의 감성을 가장 강력하게 자극하며, 폭발적인 추모 댓글과 트래픽을 유도할 절대적 치트키이기에 최종 1위로 선정했습니다.",
+        "top_candidates": [
+          {
+            "rank": 1,
+            "person_name": "김현식",
+            "person_name_en": "Kim Hyun-sik",
+            "category": "대중음악",
+            "death_date": "1990-11-01",
+            "korean_resonance": "한국인의 한(恨)과 슬픔을 위로한 가객으로, 병마와 싸우며 피를 토하듯 부른 유작 '내 사랑 내 곁에'는 매년 11월 1일 비가 오거나 스산한 날씨가 되면 대중이 가장 먼저 떠올리는 목소리입니다.",
+            "legacy_point": "독보적인 거칠고 호소력 짙은 보이스로 80년대 언더그라운드 음악을 주도했으며, 사후 발매된 6집 앨범은 200만 장 이상의 판매고를 기록하며 골든디스크 대상을 수상했습니다.",
+            "traffic_score": 99
+          },
+          {
+            "rank": 2,
+            "person_name": "유재하",
+            "person_name_en": "Yoo Jae-ha",
+            "category": "대중음악",
+            "death_date": "1987-11-01",
+            "korean_resonance": "단 한 장의 앨범 《사랑하기 때문에》로 한국 대중음악의 패러다임을 바꾼 천재 뮤지션으로, 25세의 젊은 나이에 불의의 교통사고로 요절하여 대중의 가슴에 영원한 아픔으로 남아 있습니다.",
+            "legacy_point": "클래식 화성학을 가요에 접목해 '한국형 발라드'를 정립했으며, 그의 이름을 딴 '유재하 음악경연대회'는 한국 가요계를 이끄는 수많은 싱어송라이터들의 등용문이 되었습니다.",
+            "traffic_score": 98
+          },
+          {
+            "rank": 3,
+            "person_name": "함중아",
+            "person_name_en": "Ham Joong-ah",
+            "category": "대중음악",
+            "death_date": "2019-11-01",
+            "korean_resonance": "영화 《범죄와의 전쟁》 삽입곡이자 장기하와 얼굴들이 리메이크해 젊은 세대에게도 매우 친숙한 '풍문으로 들었소'의 원곡자이자 작곡가입니다.",
+            "legacy_point": "70~80년대 하이브리드 록과 싸이케델릭 셔플의 선구자로, '내게도 사랑이', '안개 속의 두 그림자' 등 독창적인 히트곡들을 남기며 한국 그룹사운드의 황금기를 이끌었습니다.",
+            "traffic_score": 90
+          }
+        ],
+        "wikidata_id": "Q12589226",
+        "verified": true,
+        "scouted_trending": true
+      },
+      "daily_champion": {
+        "selected_mode": "pm",
+        "person_name": "김현식",
+        "person_name_en": "Kim Hyun-sik",
+        "winning_score": 99,
+        "decision_reason": "[PM 김현식]이(가) 트래픽 점수 99점으로 상대 슬롯을 제치고 오늘 당일 최고 화제성 단일 픽으로 확정됨.",
+        "head_to_head": {
+          "am_contender": {
+            "person_name": "정연",
+            "person_name_en": "Yu Jeong-yeon",
+            "trend_score": 98,
+            "trend_reason": "세계적인 K-pop 그룹 트와이스의 핵심 멤버로서 한국 대중과의 정서적 유대감이 가장 깊으며, 목 디스크와 공황장애라는 치명적인 시련을 극복하고 무대로 돌아온 그녀의 서사는 80초 쇼츠 포맷에서 시청자들의 눈물샘과 도파민을 동시에 자극할 수 있는 최고의 그로스 치트키이기 때문입니다."
+          },
+          "pm_contender": {
+            "person_name": "김현식",
+            "person_name_en": "Kim Hyun-sik",
+            "trend_score": 99,
+            "trend_reason": "11월 1일은 한국 가요계 역사상 가장 슬픈 날로 불립니다. 1987년 유재하가 떠난 지 정확히 3년 뒤인 1990년, 그의 절친한 동료이자 한국 최고의 가객 김현식이 같은 날 세상을 떠났기 때문입니다. 특히 김현식은 간경화 말기라는 극심한 고통 속에서도 마지막 순간까지 마이크를 놓지 않고 피를 토하듯 유작 '내 사랑 내 곁에'를 녹음하다 별세했습니다. 이 처절하고 숭고한 예술혼과 11월 1일이라는 운명적 평행이론은 한국 대중의 감성을 가장 강력하게 자극하며, 폭발적인 추모 댓글과 트래픽을 유도할 절대적 치트키이기에 최종 1위로 선정했습니다."
+          }
+        }
+      }
     }
   },
-  "total_dates": 17
+  "total_dates": 18
 }
