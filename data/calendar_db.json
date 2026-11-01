@@ -5,9 +5,9 @@
     "target_audience": "Korean YouTube Shorts Viewers (1030세대 & 대중)",
     "korean_familiarity_priority": true,
     "min_year": 1960,
-    "period": "10-15 ~ 11-01 (Live Accumulated)",
-    "total_dates": 18,
-    "total_stars": 38,
+    "period": "10-15 ~ 11-02 (Live Accumulated)",
+    "total_dates": 19,
+    "total_stars": 41,
     "categories": [
       "K-Culture (드라마/예능/아이돌/가요 레전드)",
       "Global Pop (내한 떼창/손하트)",
@@ -1283,7 +1283,132 @@
           }
         }
       }
+    },
+    "11-02": {
+      "am": {
+        "person_name": "김소연",
+        "person_name_en": "Kim So-yeon",
+        "category": "배우",
+        "event_date": "1980-11-02",
+        "keywords": [
+          "천서진",
+          "펜트하우스",
+          "갭모에",
+          "이브의 모든 것"
+        ],
+        "brief": "화면 속 광기의 악녀 천서진, 카메라 뒤에선 세상 무해한 천사? 전 국민을 홀린 역대급 반전 매력의 소유자!",
+        "is_deceased": false,
+        "trend_score": 98,
+        "trend_reason": "드라마 '펜트하우스'의 천서진 역으로 연기대상까지 거머쥔 대한민국 대표 배우로, 극 중 소름 돋는 악역 연기와 실제 예능에서 보여주는 극단적인 '순둥이' 반전 매력(갭모에)은 쇼츠 알고리즘에서 가장 선호하는 도파민 자극 치트키이기 때문입니다.",
+        "top_candidates": [
+          {
+            "rank": 1,
+            "person_name": "김소연",
+            "person_name_en": "Kim So-yeon",
+            "category": "배우",
+            "birth_date": "1980-11-02",
+            "korean_resonance": "90년대 하이틴 스타 시절부터 '이브의 모든 것'의 허영미, 그리고 '펜트하우스'의 천서진까지 한국 드라마 역사상 가장 독보적인 악역 캐릭터들을 남기며 전 국민의 뇌리에 강렬하게 각인된 배우입니다.",
+            "viral_story_point": "화면 속에서는 피도 눈물도 없는 광기의 악녀(피 묻은 피아노 씬 등)이지만, 실제 일상이나 예능에서는 세상 무해하고 착하며 리액션이 넘쳐나는 '천사 그 자체'라는 엄청난 갭모에 반전 매력입니다.",
+            "traffic_score": 98
+          },
+          {
+            "rank": 2,
+            "person_name": "넬리",
+            "person_name_en": "Nelly",
+            "category": "래퍼",
+            "birth_date": "1974-11-02",
+            "korean_resonance": "2000년대 미니홈피 시절, 한국인들의 감성을 지배했던 싸이월드 BGM의 절대 강자 'Dilemma'의 주인공입니다. 전주만 들어도 \"어, 어~\" 하며 자동 떼창을 유발하는 추억의 아이콘입니다.",
+            "viral_story_point": "전 세계를 뒤흔든 'Dilemma' 뮤직비디오 속 희대의 밈이 핵심입니다. 피처링한 켈리 롤랜드가 노키아 폰으로 넬리에게 문자를 보내는데, 하필 '마이크로소프트 엑셀(Excel)' 앱에 텍스트를 치고 답장이 안 온다며 화를 내는 황당하고 유쾌한 비하인드 썰입니다.",
+            "traffic_score": 95
+          },
+          {
+            "rank": 3,
+            "person_name": "데이비드 쉼머",
+            "person_name_en": "David Schwimmer",
+            "category": "배우",
+            "birth_date": "1966-11-02",
+            "korean_resonance": "한국인들이 영어 공부를 위해 최소 한 번은 거쳐 갔다는 인생 미드 '프렌즈(Friends)'의 영원한 '로스 겔러' 역으로 한국 대중에게 매우 친숙한 인물입니다.",
+            "viral_story_point": "프렌즈 최고의 명장면으로 꼽히는 '가죽 바지 소동'과 소파를 옮기며 외치던 \"PIVOT!\" 등, 그의 신들린 슬랩스틱 코미디와 찌질하면서도 미워할 수 없는 연기 비하인드 스토리입니다.",
+            "traffic_score": 92
+          }
+        ],
+        "wikidata_id": "Q464372",
+        "verified": true,
+        "scouted_trending": true
+      },
+      "pm": {
+        "person_name": "박지선",
+        "person_name_en": "Park Ji-sun",
+        "category": "희극인",
+        "event_date": "2020-11-02",
+        "keywords": [
+          "멋쟁이희극인",
+          "개그콘서트",
+          "선한영향력",
+          "영원한미소"
+        ],
+        "brief": "남을 깎아내리지 않고 오직 따뜻한 온기로 가득한 웃음만을 선물했던 영원한 '멋쟁이 희극인', 고(.) 박지선 님이 2020년 11월 2일 별세하셨습니다. 그녀가 남긴 선한 미소와 다정한 위로의 말들은 여전히 우리의 가슴속에 깊은 울림으로 살아 숨 쉬고 있습니다.",
+        "is_deceased": true,
+        "trend_score": 99,
+        "trend_reason": "한국 대중에게 가장 친숙하면서도 가슴 아픈 그리움을 남긴 인물로, 매년 11월 2일 기일이 되면 그녀의 따뜻했던 성품과 동료들의 애도 글이 SNS를 통해 자발적으로 확산되며 폭발적인 추모 트래픽을 유도하기 때문입니다.",
+        "top_candidates": [
+          {
+            "rank": 1,
+            "person_name": "박지선",
+            "person_name_en": "Park Ji-sun",
+            "category": "희극인",
+            "death_date": "2020-11-02",
+            "korean_resonance": "스스로를 '멋쟁이 희극인'이라 부르며 타인을 비하하지 않는 건강하고 따뜻한 웃음을 선물했던 개그우먼으로, 그녀의 갑작스러운 비보는 대중과 동료들에게 깊은 슬픔과 그리움을 남겼습니다.",
+            "legacy_point": "KBS 공채 22기 개그맨으로 데뷔해 신인상, 우수상, 최우수상을 모두 거머쥔 천재적인 재능을 증명했으며, 사후 동료들이 그녀의 따뜻한 글들을 모아 에세이집을 발간하는 등 선한 영향력의 아이콘으로 기억되고 있습니다.",
+            "traffic_score": 99
+          },
+          {
+            "rank": 2,
+            "person_name": "조지 버나드 쇼",
+            "person_name_en": "George Bernard Shaw",
+            "category": "극작가",
+            "death_date": "1950-11-02",
+            "korean_resonance": "한국 대중에게 '우물쭈물하다가 내 이럴 줄 알았지'라는 명언 같은 묘비명으로 매우 친숙하며, 삶의 유한함 속에서 실천의 중요성을 일깨워주는 철학적 메시지로 깊은 울림을 줍니다.",
+            "legacy_point": "아일랜드 출신의 대문호로 《피그말리온》, 《인간과 초인》 등의 명작을 남겼으며, 날카로운 사회 풍자와 유머로 근대 희곡의 지평을 넓혀 1925년 노벨문학상을 수상한 거장입니다.",
+            "traffic_score": 96
+          },
+          {
+            "rank": 3,
+            "person_name": "피에르 파올로 파졸리니",
+            "person_name_en": "Pier Paolo Pasolini",
+            "category": "영화감독",
+            "death_date": "1975-11-02",
+            "korean_resonance": "영화 애호가들과 시네필 사이에서 파격적이고 철학적인 메시지를 던진 이탈리아 영화계의 거장으로 기억되며, 그의 비극적이고 의문 가득한 죽음은 영화사 최대의 미스터리로 남아 있습니다.",
+            "legacy_point": "《마태복음》, 《살로 소돔의 120일》 등 논쟁적이면서도 독창적인 예술 영화들을 연출하며 세계 영화사에 뚜렷한 족적을 남긴 천재 감독이자 시인입니다.",
+            "traffic_score": 88
+          }
+        ],
+        "wikidata_id": "Q12597184",
+        "verified": true,
+        "scouted_trending": true
+      },
+      "daily_champion": {
+        "selected_mode": "pm",
+        "person_name": "박지선",
+        "person_name_en": "Park Ji-sun",
+        "winning_score": 99,
+        "decision_reason": "[PM 박지선]이(가) 트래픽 점수 99점으로 상대 슬롯을 제치고 오늘 당일 최고 화제성 단일 픽으로 확정됨.",
+        "head_to_head": {
+          "am_contender": {
+            "person_name": "김소연",
+            "person_name_en": "Kim So-yeon",
+            "trend_score": 98,
+            "trend_reason": "드라마 '펜트하우스'의 천서진 역으로 연기대상까지 거머쥔 대한민국 대표 배우로, 극 중 소름 돋는 악역 연기와 실제 예능에서 보여주는 극단적인 '순둥이' 반전 매력(갭모에)은 쇼츠 알고리즘에서 가장 선호하는 도파민 자극 치트키이기 때문입니다."
+          },
+          "pm_contender": {
+            "person_name": "박지선",
+            "person_name_en": "Park Ji-sun",
+            "trend_score": 99,
+            "trend_reason": "한국 대중에게 가장 친숙하면서도 가슴 아픈 그리움을 남긴 인물로, 매년 11월 2일 기일이 되면 그녀의 따뜻했던 성품과 동료들의 애도 글이 SNS를 통해 자발적으로 확산되며 폭발적인 추모 트래픽을 유도하기 때문입니다."
+          }
+        }
+      }
     }
   },
-  "total_dates": 18
+  "total_dates": 19
 }
