@@ -6,6 +6,7 @@ import argparse
 import base64
 import json
 import os
+import random
 import sys
 from pathlib import Path
 
@@ -40,7 +41,7 @@ PROMPT_AM = "Upbeat quirky funk jazz with bouncy bass, brass horns, lively and e
 PROMPT_PM = "Cinematic mellow lo-fi hip-hop with warm electric piano, vinyl crackle, nostalgic and reflective, 30s instrumental"
 
 
-def run_music_test(prompt=None, mode="am", out_path="star_bgm.wav"):
+def run_music_test(prompt=None, mode="am", out_path="star_bgm.wav", seed=None):
     import google.auth
     from google.auth.transport.requests import Request
     import requests
@@ -53,6 +54,9 @@ def run_music_test(prompt=None, mode="am", out_path="star_bgm.wav"):
     if not prompt:
         prompt = PROMPT_AM if mode.lower() == "am" else PROMPT_PM
 
+    if seed is None:
+        seed = random.randint(1, 999999)
+
     creds, _ = google.auth.default(scopes=["https://www.googleapis.com/auth/cloud-platform"])
     creds.refresh(Request())
 
@@ -60,11 +64,11 @@ def run_music_test(prompt=None, mode="am", out_path="star_bgm.wav"):
         f"https://{GCP_LOCATION}-aiplatform.googleapis.com/v1/projects/{GCP_PROJECT_ID}"
         f"/locations/{GCP_LOCATION}/publishers/google/models/{MODEL}:predict"
     )
-    print(f"[Music] 요청 ({mode.upper()} 모드): {MODEL}")
+    print(f"[Music] 요청 ({mode.upper()} 모드, Seed: {seed}): {MODEL}")
     r = requests.post(
         url,
         headers={"Authorization": f"Bearer {creds.token}"},
-        json={"instances": [{"prompt": prompt, "seed": 42}]},
+        json={"instances": [{"prompt": prompt, "seed": seed}]},
         timeout=300,
     )
     r.raise_for_status()

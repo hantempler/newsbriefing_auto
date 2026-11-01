@@ -130,10 +130,12 @@ def analyze_dynamic_chunks(scenes):
 
         scenes_input = []
         for sc in scenes:
+            # display_text(화면 자막용 표기)가 있으면 우선 사용, 없으면 narration으로 안전하게 폴백
+            sub_text = sc.get("display_text") or sc.get("narration", "")
             scenes_input.append({
                 "scene_no": sc["scene_no"],
                 "caption": sc.get("caption", ""),
-                "narration": sc["narration"]
+                "narration": sub_text
             })
 
         system_instruction = (
@@ -185,9 +187,10 @@ def analyze_dynamic_chunks(scenes):
         print(f"[Subtitle] Gemini AI 분할 실패, 규칙 기반 폴백 적용: {e}")
         fallback_scenes = []
         for sc in scenes:
+            sub_text = sc.get("display_text") or sc.get("narration", "")
             fallback_scenes.append({
                 "scene_no": sc["scene_no"],
-                "chunks": rule_based_chunking(sc["narration"])
+                "chunks": rule_based_chunking(sub_text)
             })
         return fallback_scenes
 
@@ -230,7 +233,8 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
         # 2. 하단 다이내믹 내레이션 자막
         chunks = analyzed_map.get(s_no, [])
         if not chunks:
-            chunks = rule_based_chunking(sc["narration"])
+            sub_text = sc.get("display_text") or sc.get("narration", "")
+            chunks = rule_based_chunking(sub_text)
 
         # 음성 시작 지연(lead-in) 감지
         lead_in = 0.0
