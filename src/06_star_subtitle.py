@@ -85,6 +85,82 @@ def get_audio_voice_activity(wav_path, min_silence_dur=0.20, silence_thresh_db=-
     return lead_in
 
 
+def format_sub_display(text: str) -> str:
+    """내레이션 전문의 한글 발음 표기를 화면 자막용 아라비아 숫자/날짜 표기로 100% 보존 변환."""
+    if not text:
+        return ""
+
+    t = text
+
+    sino_map = {
+        '영': 0, '공': 0, '일': 1, '이': 2, '삼': 3, '사': 4,
+        '오': 5, '육': 6, '칠': 7, '팔': 8, '구': 9
+    }
+    def parse_sino(s):
+        val = 0
+        cur = 0
+        for ch in s:
+            if ch in sino_map:
+                cur = sino_map[ch]
+            elif ch == '십':
+                val += (cur if cur != 0 else 1) * 10
+                cur = 0
+            elif ch == '백':
+                val += (cur if cur != 0 else 1) * 100
+                cur = 0
+            elif ch == '천':
+                val += (cur if cur != 0 else 1) * 1000
+                cur = 0
+        return val + cur
+
+    def repl_year(m):
+        full = m.group(1)
+        try:
+            val = parse_sino(full)
+            if 1800 <= val <= 2099:
+                return f"{val}년"
+        except Exception:
+            pass
+        return m.group(0)
+
+    # 1. 연도: 천구백... 또는 이천...
+    t = re.sub(r'((?:천구백|이천)[영공일이삼사오육칠팔구십백천]*)년', repl_year, t)
+
+    # 2. 월: 시월, 유월, 십월 등
+    month_map = {
+        '일월': '1월', '이월': '2월', '삼월': '3월', '사월': '4월',
+        '오월': '5월', '유월': '6월', '칠월': '7월', '팔월': '8월',
+        '구월': '9월', '시월': '10월', '십월': '10월',
+        '십일월': '11월', '십이월': '12월'
+    }
+    for k, v in month_map.items():
+        t = re.sub(rf'(?<![가-힣]){k}', v, t)
+
+    # 3. 일: 1일 ~ 31일
+    def repl_day(m):
+        full = m.group(1)
+        try:
+            val = parse_sino(full)
+            if 1 <= val <= 31:
+                return f"{val}일"
+        except Exception:
+            pass
+        return m.group(0)
+
+    t = re.sub(r'([일이삼사오육칠팔구십]+)일', repl_day, t)
+
+    # 4. 큰 수 단위
+    t = re.sub(r'(?<![가-힣])백만(\s*명|\s*원|\s*달러|\s*장|\s*개|\s*뷰)?', r'100만\1', t)
+    t = re.sub(r'(?<![가-힣])천만(\s*명|\s*원|\s*달러|\s*장|\s*개|\s*뷰)?', r'1,000만\1', t)
+    t = re.sub(r'(?<![가-힣])일억(\s*명|\s*원|\s*달러|\s*장|\s*개)?', r'1억\1', t)
+    t = re.sub(r'(?<![가-힣])십억(\s*명|\s*원|\s*달러|\s*장|\s*개)?', r'10억\1', t)
+    t = re.sub(r'(?<![가-힣])백억(\s*명|\s*원|\s*달러|\s*장|\s*개)?', r'100억\1', t)
+    t = re.sub(r'(?<![가-힣])천억(\s*명|\s*원|\s*달러|\s*장|\s*개)?', r'1,000억\1', t)
+    t = re.sub(r'(?<![가-힣])일조(\s*원|\s*달러)?', r'1조\1', t)
+
+    return t
+
+
 def rule_based_chunking(text):
     """한국어 구문 및 쉼표 기준 자연스러운 호흡 단위(12~24자) 분할 알고리즘."""
     # 문장 부호(쉼표, 마침표, 느낌표, 물음표) 기준 1차 분할
