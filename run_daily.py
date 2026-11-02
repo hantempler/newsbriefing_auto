@@ -127,41 +127,68 @@ def run_best_daily(date_str=None, upload=True, privacy="private", publish_at=Non
     return pkg_dir
 
 
-def run_full_daily(date_str=None, upload=True, privacy="private"):
-    """하루 2편(AM 탄생 + PM 기일) 모두 제작 모드."""
+def calculate_scheduled_publish_time(date_str, mode="am"):
+    """당일 날짜(MM-DD)와 모드(AM: 07:00 KST, PM: 19:00 KST)에 맞는 유튜브 예약 공개 시각(RFC 3339 UTC) 산출.
+    만약 목표 시각이 현재 시각(KST)보다 이미 경과하였거나 5분 이내라면 (None, False)를 반환하여 즉시 공개로 안전 폴백.
+    """
+    kst = datetime.timezone(datetime.timedelta(hours=9))
+    now_kst = datetime.datetime.now(kst)
+
+    month, day = map(int, date_str.split("-"))
+    year = now_kst.year
+
+    target_hour = 7 if mode.lower() == "am" else 19
+    target_dt_kst = datetime.datetime(year, month, day, target_hour, 0, 0, tzinfo=kst)
+
+    # 미래 시각인지 검증 (YouTube API는 최소 5분 이상의 미래 시각 예약 요구)
+    if target_dt_kst > now_kst + datetime.timedelta(minutes=5):
+        target_utc = target_dt_kst.astimezone(datetime.timezone.utc)
+        publish_at_str = target_utc.strftime("%Y-%m-%dT%H:%M:%SZ")
+        return publish_at_str, True
+    else:
+        return None, False
+
+
+def run_full_daily(date_str=None, upload=True, privacy="public"):
+    """하루 2편(AM 생일 07:00 KST + PM 추모 19:00 KST) 무인 전자동 제작 및 정규 예약 공개 파이프라인."""
     if not date_str:
         date_str = get_today_kst_str()
 
+    am_publish_at, am_is_scheduled = calculate_scheduled_publish_time(date_str, mode="am")
+    pm_publish_at, pm_is_scheduled = calculate_scheduled_publish_time(date_str, mode="pm")
+
     print(f"\n#################################################################")
-    print(f"  [스타이즈본 일일 2편(AM + PM) 무인 전자동 파이프라인 가동]")
-    print(f"  기준 일자: {date_str} (KST 한국 표준시 기준)")
+    print(f"  [스타이즈본 일일 2편(AM 생일 + PM 기일) 듀얼 제작 및 정규 예약 파이프라인]")
+    print(f"  기준 일자: {date_str} (KST 한국 표준시)")
+    print(f"  🌅 AM 생일 공개 (목표: 07:00 KST): {'예약 설정 (' + am_publish_at + ')' if am_is_scheduled else '목표 시각 경과 ➔ 즉시 공개 반영'}")
+    print(f"  🌃 PM 기일 공개 (목표: 19:00 KST): {'예약 설정 (' + pm_publish_at + ')' if pm_is_scheduled else '목표 시각 경과 ➔ 즉시 공개 반영'}")
     print(f"#################################################################\n")
 
-    # 1. AM 편 생성 및 업로드
-    print("\n>>> [1/2] AM 탄생 편 가동 시작 <<<")
-    run_pipeline(mode="am", date_str=date_str, upload=upload, privacy=privacy)
+    # 1. AM 생일 축하 편 생성 및 예약 업로드
+    print("\n>>> [1/2] 🌅 AM 생일 축하 편 가동 시작 <<<")
+    run_pipeline(mode="am", date_str=date_str, upload=upload, privacy=privacy, publish_at=am_publish_at)
 
     # 2. API 쿼터 안전 대기 (Rate Limit 429 방지)
     print("\n[Launcher] AM 편 완료. Google Cloud API 쿼터 안전 쿨다운 대기 (15초)...")
     time.sleep(15)
 
-    # 3. PM 편 생성 및 업로드
-    print("\n>>> [2/2] PM 기일 편 가동 시작 <<<")
-    run_pipeline(mode="pm", date_str=date_str, upload=upload, privacy=privacy)
+    # 3. PM 고인 추모 편 생성 및 예약 업로드
+    print("\n>>> [2/2] 🌃 PM 고인 추모 편 가동 시작 <<<")
+    run_pipeline(mode="pm", date_str=date_str, upload=upload, privacy=privacy, publish_at=pm_publish_at)
 
     print(f"\n#################################################################")
-    print(f"  [대성공] 오늘({date_str}) AM/PM 쇼츠 2편 일괄 제작 및 업로드 완료!")
+    print(f"  🎉 [대성공] 오늘({date_str}) AM(07:00 생일) / PM(19:00 추모) 2편 제작 및 업로드/예약 완료!")
     print(f"#################################################################\n")
 
 
 if __name__ == "__main__":
     p = argparse.ArgumentParser(description="스타이즈본 통합 쇼츠 런처")
-    p.add_argument("--mode", default="best", choices=["best", "am", "pm", "both"], help="제작 모드: best (당일 최고 트래픽 1편), am (생일), pm (기일), both (2편 일괄)")
+    p.add_argument("--mode", default="both", choices=["both", "am", "pm", "best"], help="제작 모드: both (1일 2편 AM 07시+PM 19시 정규 예약), am (생일), pm (기일), best (단일 픽)")
     p.add_argument("--date", default=None, help="대상 날짜 (MM-DD, 미지정 시 오늘 날짜)")
     p.add_argument("--person", default=None, help="특정 인물 강제 지정")
     p.add_argument("--upload", dest="upload", action="store_true", default=True, help="유튜브 자동 업로드 수행 (기본 활성화)")
     p.add_argument("--no-upload", dest="upload", action="store_false", help="유튜브 업로드 건너뛰기 (로컬 파일만 생성)")
-    p.add_argument("--privacy", default="private", choices=["private", "unlisted", "public"], help="유튜브 공개 상태")
+    p.add_argument("--privacy", default="public", choices=["private", "unlisted", "public"], help="유튜브 공개 상태 (기본값: public, 예약 시 자동 private 거쳐 public 전환)")
     p.add_argument("--publish-at", default=None, help="예약 공개 일시 (ISO 8601 포맷)")
     args = p.parse_args()
 

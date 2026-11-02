@@ -1,6 +1,6 @@
 ---
 description: Mermaid 다이어그램 출력 시 반드시 아티팩트(Artifact)로 작성하는 규칙
-globs: ["*"]
+globs: "*"
 ---
 
 # Mermaid 다이어그램 아티팩트 출력 규칙

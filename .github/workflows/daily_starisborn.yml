@@ -4,13 +4,13 @@ on:
   workflow_dispatch:
     inputs:
       mode:
-        description: '제작 모드 (best: 최고 트래픽 1편 단일 제작, both: AM+PM 2편 일괄, am: 탄생, pm: 기일)'
+        description: '제작 모드 (both: AM 07시 생일 + PM 19시 추모 2편 정규 발행, best: 1편, am: 탄생, pm: 기일)'
         required: true
-        default: 'best'
+        default: 'both'
         type: choice
         options:
-          - best
           - both
+          - best
           - am
           - pm
       date:
@@ -20,12 +20,12 @@ on:
       privacy:
         description: '유튜브 공개 상태'
         required: true
-        default: 'private'
+        default: 'public'
         type: choice
         options:
+          - public
           - private
           - unlisted
-          - public
   repository_dispatch:
     types: [trigger-starisborn, trigger-news-briefing]
 
@@ -76,8 +76,8 @@ jobs:
 
       - name: Run Star is Born Pipeline
         run: |
-          MODE="best"
-          PRIVACY="private"
+          MODE="both"
+          PRIVACY="public"
           DATE_ARG=""
 
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then

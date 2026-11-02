@@ -191,6 +191,20 @@ def scout_trending_star(date_str=None, mode="am"):
    - 80초 동안 시청자를 홀릴 수 있는 극적인 반전, 대기록, 무명 시절의 치열한 실화가 풍부해야 합니다.
    - [주의]: 단순히 2026년에 '30번째 생일'이라는 식의 산술적 나이 계산에 가산점을 주지 마세요.
 
+[🚨 트래픽 점수 객관적 채점 루브릭 (70~100점)]:
+단순히 숫자를 임의로 적거나 예시를 복사하지 말고, 아래 3대 항목의 합산 점수를 산출하세요:
+1. 한국 대중 체감 인지도 및 정서적 유대감 (40점 만점):
+   - 35~40점: 전 국민적 톱스타/레전드 (이름/얼굴만 봐도 100% 아는 인물)
+   - 28~34점: 특정 세대/장르 톱티어 (1030 인기 아이돌, 유명 주연 배우, 해외축구 영웅)
+   - 20~27점: 마니아층 인지도
+2. 쇼츠 알고리즘 화제성 및 도파민/댓글 유발력 (30점 만점):
+   - 26~30점: 댓글창 폭발, 논쟁, 극적인 갭모에, 감정 폭발 유발
+   - 20~25점: 흥미로운 비하인드 썰 보유
+3. 80초 극적 서사성 및 반전 (30점 만점):
+   - 26~30점: 무명 극복, 세기의 라이벌, 충격적 반전, 감동 실화
+   - 20~25점: 일반적 성공 스토리
+위 3대 항목을 합산하여 90~100점(최상위급) 사이에서 정밀하게 점수를 매기세요.
+
 반드시 아래 JSON 형식으로만 응답하세요:
 ```json
 {{
@@ -203,7 +217,7 @@ def scout_trending_star(date_str=None, mode="am"):
       "birth_date": "YYYY-{date_str}",
       "korean_resonance": "한국 대중과의 구체적인 정서적/추억 연결고리",
       "viral_story_point": "쇼츠에서 터질 핵심 도파민 썰 요약",
-      "traffic_score": 98
+      "traffic_score": 96
     }},
     {{
       "rank": 2,
@@ -213,7 +227,7 @@ def scout_trending_star(date_str=None, mode="am"):
       "birth_date": "YYYY-{date_str}",
       "korean_resonance": "한국 대중과의 정서적 연결고리",
       "viral_story_point": "핵심 썰 요약",
-      "traffic_score": 95
+      "traffic_score": 91
     }}
   ],
   "winner": {{
@@ -224,7 +238,7 @@ def scout_trending_star(date_str=None, mode="am"):
     "keywords": ["핵심키워드1", "대표작/사건2", "도파민키워드3", "키워드4"],
     "brief": "인물의 매력을 압축한 강렬한 찬사 카피 (1~2문장)",
     "is_deceased": false,
-    "trend_score": 98,
+    "trend_score": 96,
     "trend_reason": "경쟁 후보들을 제치고 오늘 최종 1위로 낙점된 결정적 이유"
   }}
 }}
@@ -256,6 +270,20 @@ def scout_trending_star(date_str=None, mode="am"):
    - 이름을 듣자마자 한국 대중 누구나 그가 남긴 명곡, 명작, 명대사, 혹은 숭고한 역사적 업적을 떠올리며 감정이입할 수 있는 인물.
    - [탈락 대상]: 해외 로컬 역사 인물, 대중이 본명조차 모르는 엑스트라/단역 인물은 5주기/10주기라도 즉각 탈락.
 
+[🚨 트래픽 점수 객관적 채점 루브릭 (70~100점)]:
+단순히 숫자를 임의로 적거나 예시를 복사하지 말고, 아래 3대 항목의 합산 점수를 산출하세요:
+1. 한국 대중 체감 인지도 및 정서적 유대감 (40점 만점):
+   - 35~40점: 전 국민적 톱스타/레전드/거장 (이름/얼굴만 봐도 100% 아는 인물)
+   - 28~34점: 특정 세대/장르 톱티어 (1030 친숙 아티스트, 유명 주연 배우, 명장)
+   - 20~27점: 마니아층 인지도
+2. 쇼츠 알고리즘 화제성 및 추모/댓글 유발력 (30점 만점):
+   - 26~30점: 온 국민의 애도, 댓글창 폭발, 눈물샘 자극, 시대를 관통한 메시지
+   - 20~25점: 잔잔한 추모와 존경
+3. 80초 극적 서사성 및 불멸의 유산 (30점 만점):
+   - 26~30점: 처절한 예술혼, 시련 극복, 역사적 족적, 불멸의 대표작
+   - 20~25점: 일반적 회고 스토리
+위 3대 항목을 합산하여 90~100점(최상위급) 사이에서 정밀하게 점수를 매기세요.
+
 반드시 아래 JSON 형식으로만 응답하세요:
 ```json
 {{
@@ -268,7 +296,7 @@ def scout_trending_star(date_str=None, mode="am"):
       "death_date": "YYYY-{date_str}",
       "korean_resonance": "한국 대중이 이 거장을 기리고 추모하는 구체적 이유",
       "legacy_point": "불멸의 업적 및 감동 서사 요약",
-      "traffic_score": 99
+      "traffic_score": 96
     }},
     {{
       "rank": 2,
@@ -278,7 +306,7 @@ def scout_trending_star(date_str=None, mode="am"):
       "death_date": "YYYY-{date_str}",
       "korean_resonance": "한국 대중과의 정서적 연결고리",
       "legacy_point": "불멸의 업적 요약",
-      "traffic_score": 96
+      "traffic_score": 91
     }}
   ],
   "winner": {{
@@ -289,7 +317,7 @@ def scout_trending_star(date_str=None, mode="am"):
     "keywords": ["불멸의대표작1", "역사적업적2", "시그니처3", "추모키워드4"],
     "brief": "인물의 위대한 유산을 기리는 1~2문장의 묵직하고 따뜻한 헌정 문구 (YYYY년 MM월 DD일 별세 명시 필수).",
     "is_deceased": true,
-    "trend_score": 99,
+    "trend_score": 96,
     "trend_reason": "경쟁 후보들을 제치고 오늘 최종 1위 레전드로 낙점된 결정적 이유"
   }}
 }}
@@ -365,6 +393,30 @@ def scout_trending_star(date_str=None, mode="am"):
         raise RuntimeError(f"실시간 3인 후보 스카우트 실패: {e}")
 
 
+def get_recent_consecutive_slot(db, target_date_str):
+    """target_date_str 이전의 최근 날짜들에서 연속으로 같은 슬롯(am 또는 pm)이 선정된 횟수와 해당 슬롯을 반환."""
+    cal = db.get("calendar", {})
+    sorted_dates = [d for d in sorted(cal.keys()) if d < target_date_str]
+    if not sorted_dates:
+        return None, 0
+    
+    last_mode = None
+    streak = 0
+    for d in reversed(sorted_dates):
+        champ = cal[d].get("daily_champion", {})
+        mode = champ.get("selected_mode")
+        if not mode:
+            continue
+        if last_mode is None:
+            last_mode = mode.lower()
+            streak = 1
+        elif mode.lower() == last_mode:
+            streak += 1
+        else:
+            break
+    return last_mode, streak
+
+
 def scout_daily_best_star(date_str=None):
     """[1일 1영상 그랑프리] 당일의 AM(생일) 1위 스타와 PM(기일) 1위 스타를 동시 발굴하여
     트래픽 점수(trend_score)와 서사성을 정면 맞대결(Head-to-Head)시켜 최종 1인(Champion)을 선별.
@@ -384,29 +436,63 @@ def scout_daily_best_star(date_str=None):
     print("\n▶ [2/3] PM(추모) 슬롯 최고 트래픽 후보군 심사...")
     pm_star = scout_trending_star(date_str=date_str, mode="pm")
 
-    # 3. 트래픽 점수 비교 (동점 시 헌정/추모의 파급력을 고려하여 PM 우선)
+    # 3. 슬롯 균형 가드레일 & 트래픽 맞대결 심사
     am_score = am_star.get("trend_score", 90)
     pm_score = pm_star.get("trend_score", 90)
 
-    print(f"\n▶ [3/3] 최종 맞대결 심사:")
+    db = load_calendar_db()
+    recent_mode, streak = get_recent_consecutive_slot(db, date_str)
+    streak_info = f"{recent_mode.upper()} {streak}일 연속 편성 중" if recent_mode else "최근 편중 없음"
+
+    print(f"\n▶ [3/3] 최종 맞대결 심사 (최근 이력: {streak_info}):")
     print(f"   • AM(생일) [{am_star['person_name']}]: 트래픽 점수 {am_score}점 ({am_star.get('trend_reason', '')})")
     print(f"   • PM(추모) [{pm_star['person_name']}]: 트래픽 점수 {pm_score}점 ({pm_star.get('trend_reason', '')})")
 
-    if am_score > pm_score:
+    # [가드레일 A]: 점수 차이가 2점 이상 나면 명확한 우세 스타 우선 (화제성 최우선 존중)
+    if am_score >= pm_score + 2:
         winner = am_star
         winner_mode = "am"
-        print(f"\n🥇 [그랑프리 최종 우승] AM(생일) '{winner['person_name']}' 낙점! ({am_score}점 > {pm_score}점)")
-    else:
+        decision_reason = f"[AM {winner['person_name']}]이(가) 트래픽 점수 {am_score}점으로 PM {pm_star['person_name']}({pm_score}점)을 압도하여 오늘 최고 화제성 단일 픽으로 확정됨."
+        print(f"\n🥇 [그랑프리 최종 우승] AM(생일) '{winner['person_name']}' 압도적 우세 낙점! ({am_score}점 vs {pm_score}점)")
+    elif pm_score >= am_score + 2:
         winner = pm_star
         winner_mode = "pm"
-        print(f"\n🥇 [그랑프리 최종 우승] PM(추모) '{winner['person_name']}' 낙점! ({pm_score}점 >= {am_score}점)")
+        decision_reason = f"[PM {winner['person_name']}]이(가) 트래픽 점수 {pm_score}점으로 AM {am_star['person_name']}({am_score}점)을 압도하여 오늘 최고 화제성 단일 픽으로 확정됨."
+        print(f"\n🥇 [그랑프리 최종 우승] PM(추모) '{winner['person_name']}' 압도적 우세 낙점! ({pm_score}점 vs {am_score}점)")
+    else:
+        # [가드레일 B]: 동점(0점 차) 또는 초박빙(1점 차)인 경우 슬롯 균형 가드레일 가동
+        if streak >= 2 and recent_mode == "pm":
+            winner = am_star
+            winner_mode = "am"
+            decision_reason = f"[슬롯 균형 밸런싱] 초박빙 경합(AM {am_score}점 vs PM {pm_score}점) 속에서, 최근 {streak}일 연속 PM(추모) 편중에 따른 시청자 피로도를 방지하고 탄생의 활력을 불어넣기 위해 AM {winner['person_name']}을 오늘의 원픽으로 확정함."
+            print(f"\n⚖️ [슬롯 균형 밸런싱 적용] 최근 PM {streak}일 연속 편중 해소를 위해 초박빙 접전 속 AM(생일) '{winner['person_name']}' 낙점! ({am_score}점 vs {pm_score}점)")
+        elif streak >= 2 and recent_mode == "am":
+            winner = pm_star
+            winner_mode = "pm"
+            decision_reason = f"[슬롯 균형 밸런싱] 초박빙 경합(AM {am_score}점 vs PM {pm_score}점) 속에서, 최근 {streak}일 연속 AM(생일) 편중에 따른 깊이 있는 헌정을 위해 PM {winner['person_name']}을 오늘의 원픽으로 확정함."
+            print(f"\n⚖️ [슬롯 균형 밸런싱 적용] 최근 AM {streak}일 연속 편중 해소를 위해 초박빙 접전 속 PM(추모) '{winner['person_name']}' 낙점! ({pm_score}점 vs {am_score}점)")
+        elif am_score > pm_score:
+            winner = am_star
+            winner_mode = "am"
+            decision_reason = f"[AM {winner['person_name']}]이(가) 트래픽 점수 {am_score}점으로 근소 우세하여 오늘의 원픽으로 확정됨."
+            print(f"\n🥇 [그랑프리 최종 우승] AM(생일) '{winner['person_name']}' 근소 우세 낙점! ({am_score}점 vs {pm_score}점)")
+        elif pm_score > am_score:
+            winner = pm_star
+            winner_mode = "pm"
+            decision_reason = f"[PM {winner['person_name']}]이(가) 트래픽 점수 {pm_score}점으로 근소 우세하여 오늘의 원픽으로 확정됨."
+            print(f"\n🥇 [그랑프리 최종 우승] PM(추모) '{winner['person_name']}' 근소 우세 낙점! ({pm_score}점 vs {am_score}점)")
+        else:
+            # 완전 동점(am_score == pm_score)이고 최근 편중도 없는 경우: AM(생일 축하의 긍정 에너지) 우선
+            winner = am_star
+            winner_mode = "am"
+            decision_reason = f"[AM {winner['person_name']}]이(가) {am_score}점 동점 상황에서 탄생과 찬사의 긍정 에너지 우선 원칙에 따라 오늘의 원픽으로 확정됨."
+            print(f"\n🥇 [그랑프리 최종 우승] {am_score}점 동점 상황에서 AM(생일) '{winner['person_name']}' 낙점!")
 
     winner["selected_mode"] = winner_mode
     winner["vs_score"] = {"am": am_score, "pm": pm_score}
 
     # calendar_db.json에 당일의 daily_champion 및 AM/PM 맞대결 선정 과정 상세 기록
     try:
-        db = load_calendar_db()
         cal = db.setdefault("calendar", {})
         day_slot = cal.setdefault(date_str, {})
         day_slot["daily_champion"] = {
@@ -414,7 +500,7 @@ def scout_daily_best_star(date_str=None):
             "person_name": winner["person_name"],
             "person_name_en": winner.get("person_name_en"),
             "winning_score": max(am_score, pm_score),
-            "decision_reason": f"[{winner_mode.upper()} {winner['person_name']}]이(가) 트래픽 점수 {max(am_score, pm_score)}점으로 상대 슬롯을 제치고 오늘 당일 최고 화제성 단일 픽으로 확정됨.",
+            "decision_reason": decision_reason,
             "head_to_head": {
                 "am_contender": {
                     "person_name": am_star["person_name"],
