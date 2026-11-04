@@ -5,9 +5,9 @@
     "target_audience": "Korean YouTube Shorts Viewers (1030세대 & 대중)",
     "korean_familiarity_priority": true,
     "min_year": 1960,
-    "period": "10-15 ~ 11-04 (Live Accumulated)",
-    "total_dates": 20,
-    "total_stars": 44,
+    "period": "10-15 ~ 11-05 (Live Accumulated)",
+    "total_dates": 21,
+    "total_stars": 46,
     "categories": [
       "K-Culture (드라마/예능/아이돌/가요 레전드)",
       "Global Pop (내한 떼창/손하트)",
@@ -1513,7 +1513,101 @@
         "verified": true,
         "scouted_trending": true
       }
+    },
+    "11-05": {
+      "am": {
+        "person_name": "보아",
+        "person_name_en": "BoA",
+        "category": "가수",
+        "event_date": "1986-11-05",
+        "keywords": [
+          "아시아의별",
+          "넘버원",
+          "SM개척신화",
+          "K팝레전드"
+        ],
+        "brief": "만 13세의 나이로 아시아를 정복하고 K-POP의 위대한 영토를 개척한 영원한 우리들의 '아시아의 별'.",
+        "is_deceased": false,
+        "trend_score": 98,
+        "trend_reason": "보아는 단순한 인기 가수를 넘어 한국 대중음악사에서 '해외 개척'이라는 상징성을 가진 독보적인 인물입니다. 1040 세대 전체를 아우르는 강력한 정서적 유대감과 추억 소환 능력을 가지고 있으며, 부도 위기의 기획사를 홀로 구원해 낸 서사는 쇼츠 시청자들의 도파민과 감동을 동시에 자극합니다. 2026년 현재도 활발히 활동 중인 생존 스타로서, 11월 5일 생일 축하 알고리즘을 폭발시킬 가장 확실한 카드입니다.",
+        "top_candidates": [
+          {
+            "rank": 1,
+            "person_name": "보아",
+            "person_name_en": "BoA",
+            "category": "가수",
+            "birth_date": "1986-11-05",
+            "korean_resonance": "‘아시아의 별’이라 불리며 2000년대 한국 대중가요계의 해외 진출 길을 개척한 독보적인 레전드입니다. 'No.1', '아틀란티스 소녀', 'Valenti' 등 전 국민의 미니홈피 BGM이자 청춘의 한 페이지를 장식한 메가 히트곡들의 주인공으로, 한국인들에게 깊은 정서적 향수를 자극합니다.",
+            "viral_story_point": "만 13세의 어린 나이에 데뷔해 부도 위기에 처했던 SM엔터테인먼트의 운명을 짊어지고 홀로 일본으로 건너가 오리콘 차트 1위를 정복한 눈물겨운 성공 신화입니다. 하루에 10시간씩 연습하며 다져진 완벽한 라이브와 칼군무, 그리고 현재의 SM 사옥을 세웠다고 평가받는 '걸어 다니는 대기업'의 도파민 서사가 쇼츠 알고리즘을 저격하기에 완벽합니다.",
+            "traffic_score": 98
+          },
+          {
+            "rank": 2,
+            "person_name": "틸다 스윈튼",
+            "person_name_en": "Tilda Swinton",
+            "category": "배우",
+            "birth_date": "1960-11-05",
+            "korean_resonance": "봉준호 감독의 페르소나이자 영화 <설국열차>의 메이슨 총리, <옥자>의 루시 미란도 역으로 한국 관객들에게 압도적인 존재감을 각인시킨 친한(親韓) 할리우드 대배우입니다. 한국 예능과 인터뷰에서도 특유의 우아하고 위트 있는 태도로 한국 대중에게 매우 친숙합니다.",
+            "viral_story_point": "영국 명문 귀족 가문 출신이자 다이애나 세자빈의 초등학교 동창이라는 반전 배경을 가졌으나, 안락한 삶을 거부하고 삭발, 노인 분장, 기괴한 캐릭터 등 한계를 모르는 파격 변신을 시도하는 '카멜레온 배우'의 예술적 광기가 돋보입니다. 미술관 유리 상자 안에서 잠을 자는 퍼포먼스 등 쇼츠 비주얼로 활용하기 좋은 도파민 소스가 가득합니다.",
+            "traffic_score": 94
+          }
+        ],
+        "wikidata_id": "Q487907",
+        "verified": true,
+        "scouted_trending": true
+      },
+      "pm": {
+        "person_name": "아론 카터",
+        "person_name_en": "Aaron Carter",
+        "category": "가수 / 팝스타",
+        "event_date": "2022-11-05",
+        "keywords": [
+          "I Want Candy",
+          "백스트리트보이즈",
+          "비운의아역스타",
+          "추억의팝송"
+        ],
+        "brief": "찬란했던 세기말의 아이콘이자 우리들의 영원한 미소년, 아론 카터가 2022년 11월 5일 향년 34세의 나이로 별세했습니다.",
+        "is_deceased": true,
+        "trend_score": 96,
+        "trend_reason": "아론 카터는 90년대생 한국 대중에게 '첫사랑' 같은 세기말 팝 감성을 선물한 상징적인 인물입니다. 그의 화려했던 전성기와 대비되는 쓸쓸하고 비극적인 삶의 마무리는 쇼츠 알고리즘에서 감정적 몰입도를 극대화하며, 백스트리트 보이즈와의 서사 및 최근 젊은 팝스타들의 비극과 맞물려 폭발적인 추모 댓글과 트래픽을 유도하기에 가장 적합한 '오늘의 레전드'입니다.",
+        "top_candidates": [
+          {
+            "rank": 1,
+            "person_name": "아론 카터",
+            "person_name_en": "Aaron Carter",
+            "category": "가수 / 팝스타",
+            "death_date": "2022-11-05",
+            "korean_resonance": "90년대 말과 2000년대 초반을 풍미한 미소년 팝스타이자 백스트리트 보이즈 닉 카터의 친동생으로, 한국의 90년대생들에게 깊은 향수를 자극하는 인물입니다. 'I Want Candy', 'Crush on You' 등의 히트곡으로 큰 사랑을 받았으나, 34세라는 젊은 나이에 욕조에서 숨진 채 발견되어 대중에게 큰 충격과 안타까움을 안겼습니다.",
+            "legacy_point": "이른 나이에 얻은 화려한 인기 뒤에 가려진 마음의 병과 중독의 아픔을 극복하려 애썼던 비운의 천재 아티스트로, 대중에게 찬란했던 청춘의 기억과 함께 아픈 울림을 남겼습니다.",
+            "traffic_score": 96
+          },
+          {
+            "rank": 2,
+            "person_name": "바비 해트필드",
+            "person_name_en": "Bobby Hatfield",
+            "category": "가수",
+            "death_date": "2003-11-05",
+            "korean_resonance": "영화 '사랑과 영혼(Ghost)'의 불멸의 OST 'Unchained Melody'를 부른 듀오 '라이터스 브라더스(The Righteous Brothers)'의 멤버입니다. 한국인이라면 전주만 들어도 가슴이 아련해지는 명곡의 주인공으로, 그의 애절하고 폭발적인 고음 테너 보컬은 세대를 초월해 사랑받고 있습니다.",
+            "legacy_point": "역사상 가장 위대한 소울 발라드로 꼽히는 'Unchained Melody'의 독보적인 보컬리스트로서, 세상을 떠나는 순간까지도 무대를 준비하다 잠들 듯 영면에 들어 음악적 순수함을 증명했습니다.",
+            "traffic_score": 93
+          },
+          {
+            "rank": 3,
+            "person_name": "블라디미르 호로비츠",
+            "person_name_en": "Vladimir Horowitz",
+            "category": "클래식 피아니스트",
+            "death_date": "1989-11-05",
+            "korean_resonance": "20세기 피아노의 거장 중의 거장으로, 한국의 클래식 애호가들과 수많은 피아노 전공자들에게 경외의 대상입니다. 그의 압도적인 테크닉과 낭만주의적 감수성은 오늘날까지도 전설로 회자됩니다.",
+            "legacy_point": "'피아노의 황제'로 불리며 라흐마니노프, 리스트, 쇼팽의 해석에 있어 독보적인 경지를 개척했고, 음악을 향한 타협 없는 예술혼으로 클래식 역사에 불멸의 족적을 남겼습니다.",
+            "traffic_score": 91
+          }
+        ],
+        "wikidata_id": "Q301818",
+        "verified": true,
+        "scouted_trending": true
+      }
     }
   },
-  "total_dates": 20
+  "total_dates": 21
 }
