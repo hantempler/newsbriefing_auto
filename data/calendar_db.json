@@ -5,9 +5,9 @@
     "target_audience": "Korean YouTube Shorts Viewers (1030세대 & 대중)",
     "korean_familiarity_priority": true,
     "min_year": 1960,
-    "period": "10-15 ~ 11-08 (Live Accumulated)",
-    "total_dates": 24,
-    "total_stars": 52,
+    "period": "10-15 ~ 11-09 (Live Accumulated)",
+    "total_dates": 25,
+    "total_stars": 54,
     "categories": [
       "K-Culture (드라마/예능/아이돌/가요 레전드)",
       "Global Pop (내한 떼창/손하트)",
@@ -1920,7 +1920,111 @@
         "verified": true,
         "scouted_trending": true
       }
+    },
+    "11-09": {
+      "am": {
+        "person_name": "엄태구",
+        "person_name_en": "Uhm Tae-goo",
+        "category": "배우",
+        "event_date": "1983-11-09",
+        "keywords": [
+          "놀아주는 여자",
+          "극내향인",
+          "허스키보이스",
+          "밀정 하시모토"
+        ],
+        "brief": "스크린을 찢는 압도적 카리스마와 현실 속 수줍은 극내향인의 경계를 넘나들며, 독보적인 허스키 보이스로 대중의 마음을 훔친 대체 불가의 배우.",
+        "is_deceased": false,
+        "trend_score": 96,
+        "trend_reason": "최근 로맨틱 코미디 '놀아주는 여자'를 통해 대세 배우로 완벽히 자리매김한 시의성과 더불어, '조폭 전문 배우가 사실은 마이크도 제대로 못 잡는 수줍은 성격'이라는 극적인 반전(갭모에) 요소가 유튜브 쇼츠 알고리즘에서 폭발적인 조회수와 댓글 반응을 이끌어내기에 가장 최적화되어 있기 때문입니다.",
+        "top_candidates": [
+          {
+            "rank": 1,
+            "person_name": "엄태구",
+            "person_name_en": "Uhm Tae-goo",
+            "category": "배우",
+            "birth_date": "1983-11-09",
+            "korean_resonance": "드라마 '놀아주는 여자'를 통해 대세 로코킹으로 등극하며 1040 여성층의 전폭적인 지지를 받고 있으며, '밀정', '택시운전사', '낙원의 밤' 등 굵직한 흥행작들을 통해 한국 대중에게 매우 친숙하고 호감도가 높은 배우입니다.",
+            "viral_story_point": "스크린 속에서는 피도 눈물도 없는 조폭이나 악역을 연기하지만, 실제로는 눈도 제대로 못 마주치고 목소리마저 기어들어 가는 극도의 내향인(MBTI 극I)이라는 충격적인 '갭모에' 반전 매력. 목소리가 너무 허스키해서 목젖이 없다는 루머까지 돌았던 독보적인 목소리 비하인드 스토리.",
+            "traffic_score": 96
+          },
+          {
+            "rank": 2,
+            "person_name": "모모",
+            "person_name_en": "Momo",
+            "category": "가수",
+            "birth_date": "1996-11-09",
+            "korean_resonance": "K-POP 레전드 걸그룹 트와이스(TWICE)의 메인댄서로, 데뷔 이래 수많은 히트곡을 탄생시키며 한국 대중음악계의 전성기를 이끌어 대중적 인지도와 친근함이 최상위권에 달하는 스타입니다.",
+            "viral_story_point": "서바이벌 프로그램 'SIXTEEN'에서 중간 탈락의 고배를 마셨으나, 압도적인 댄스 실력과 성실함을 인정받아 최종회에서 기적적으로 추가 합격하며 트와이스로 데뷔하게 된 눈물의 드라마틱 서사.",
+            "traffic_score": 91
+          },
+          {
+            "rank": 3,
+            "person_name": "알레산드로 델 피에로",
+            "person_name_en": "Alessandro Del Piero",
+            "category": "스포츠",
+            "birth_date": "1974-11-09",
+            "korean_resonance": "해외축구 전성기를 지켜본 한국 3050 남성 축구팬들의 영원한 판타지스타이자, 페널티 박스 왼쪽 부근을 뜻하는 '델 피에로 존(Zone)'의 창시자로 한국 스포츠 팬들에게 깊은 향수를 자극합니다.",
+            "viral_story_point": "소속팀 유벤투스가 승부조작 스캔들로 2부 리그로 강등당했을 때, 수많은 빅클럽의 이적 제안을 거절하고 '신사는 숙녀(유벤투스의 애칭)가 필요로 할 때 떠나지 않는다'라는 명언을 남기며 팀을 의리로 지켜낸 낭만 서사.",
+            "traffic_score": 83
+          }
+        ],
+        "wikidata_id": "Q16174686",
+        "verified": true,
+        "scouted_trending": true
+      },
+      "pm": {
+        "person_name": "딜런 토마스",
+        "person_name_en": "Dylan Thomas",
+        "category": "문학 (시인)",
+        "event_date": "1953-11-09",
+        "keywords": [
+          "순순히어두운밤을받아들이지마오",
+          "인터스텔라",
+          "천재시인",
+          "분노하라분노하라"
+        ],
+        "brief": "영화 '인터스텔라'를 관통하며 수많은 이들의 심장을 울린 불멸의 시 '순순히 어두운 밤을 받아들이지 마오'를 남긴 천재 시인 딜런 토마스는, 1953년 11월 9일 39세의 젊은 나이에 별세하였습니다.",
+        "is_deceased": true,
+        "trend_score": 96,
+        "trend_reason": "한국에서 1,000만 관객을 돌파하며 인생 영화로 꼽히는 '인터스텔라'의 핵심 메시지이자 시그니처 대사인 'Rage, rage against the dying of the light'의 원작자로서 대중적 인지도가 압도적입니다. 임종을 앞둔 아버지를 향해 삶의 의지를 놓지 말라고 절규하는 시의 비하인드 스토리와 39세 요절이라는 극적인 서사는 쇼츠 알고리즘에서 폭발적인 추모와 감동 댓글을 유도하기에 가장 완벽한 카드입니다.",
+        "top_candidates": [
+          {
+            "rank": 1,
+            "person_name": "딜런 토마스",
+            "person_name_en": "Dylan Thomas",
+            "category": "문학 (시인)",
+            "death_date": "1953-11-09",
+            "korean_resonance": "영화 '인터스텔라'에서 인류의 생존 의지를 상징하는 시 '순순히 어두운 밤을 받아들이지 마오'로 한국 대중에게 깊은 감동을 준 20세기 최고의 천재 시인입니다.",
+            "legacy_point": "임종을 앞둔 아버지를 위해 쓴 눈물겨운 비가이자, 삶의 마지막 순간까지 불꽃처럼 저항하라는 메시지를 담은 시를 남기고 39세의 젊은 나이에 요절한 불꽃 같은 예술가입니다.",
+            "traffic_score": 96
+          },
+          {
+            "rank": 2,
+            "person_name": "이브 몽땅",
+            "person_name_en": "Yves Montand",
+            "category": "대중음악 / 영화",
+            "death_date": "1991-11-09",
+            "korean_resonance": "쓸쓸한 늦가을이 되면 한국인의 감성을 자극하며 거리마다 울려 퍼지는 불후의 샹송 명곡 '고엽(Les Feuilles mortes)'의 목소리이자 세기의 배우입니다.",
+            "legacy_point": "가난한 이탈리아 이민자 출신 부두 노동자에서 에디트 피아프를 만나 프랑스 최고의 국민 가수가 되었으며, 영화 '마농의 샘' 등에서 명연기를 펼치고 심장마비로 별세하기 전까지 예술혼을 불태웠습니다.",
+            "traffic_score": 91
+          },
+          {
+            "rank": 3,
+            "person_name": "스티그 라르손",
+            "person_name_en": "Stieg Larsson",
+            "category": "문학 (소설가)",
+            "death_date": "2004-11-09",
+            "korean_resonance": "전 세계 1억 부 이상 판매되며 한국에서도 신드롬을 일으킨 추리 소설 '밀레니엄' 3부작(여자를 증오한 남자들 등)의 천재 작가입니다.",
+            "legacy_point": "극우 세력의 암살 위협 속에서도 정의를 외치던 기자였으며, 평생 공들여 쓴 소설의 출간을 불과 6개월 앞두고 50세의 나이에 갑작스러운 심장마비로 요절하여 전 세계 팬들의 가슴을 아프게 했습니다.",
+            "traffic_score": 90
+          }
+        ],
+        "wikidata_id": "Q191023",
+        "verified": true,
+        "scouted_trending": true
+      }
     }
   },
-  "total_dates": 24
+  "total_dates": 25
 }
