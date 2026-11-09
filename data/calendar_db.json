@@ -5,9 +5,9 @@
     "target_audience": "Korean YouTube Shorts Viewers (1030세대 & 대중)",
     "korean_familiarity_priority": true,
     "min_year": 1960,
-    "period": "10-15 ~ 11-09 (Live Accumulated)",
-    "total_dates": 25,
-    "total_stars": 54,
+    "period": "10-15 ~ 11-10 (Live Accumulated)",
+    "total_dates": 26,
+    "total_stars": 56,
     "categories": [
       "K-Culture (드라마/예능/아이돌/가요 레전드)",
       "Global Pop (내한 떼창/손하트)",
@@ -2024,7 +2024,111 @@
         "verified": true,
         "scouted_trending": true
       }
+    },
+    "11-10": {
+      "am": {
+        "person_name": "원빈",
+        "person_name_en": "Won Bin",
+        "category": "배우",
+        "event_date": "1977-11-10",
+        "keywords": [
+          "원빈",
+          "아저씨",
+          "근황",
+          "참기름"
+        ],
+        "brief": "대한민국 비주얼의 정점이자 16년째 복귀작을 고르고 있는, 이제는 '참기름 짜는 농부'가 된 신비주의 레전드 배우 원빈의 생일을 축하합니다!",
+        "is_deceased": false,
+        "trend_score": 98,
+        "trend_reason": "원빈은 이름 석 자만으로 전 세대 한국인의 시선을 0.1초 만에 사로잡는 독보적인 인지도를 가졌습니다. 특히 16년이라는 전무후무한 공백기 동안 '농사 근황'과 '참기름 썰' 등 대중의 호기심과 도파민을 자극하는 유니크한 서사를 보유하고 있어, 쇼츠 알고리즘을 폭발시키고 댓글창을 가장 뜨겁게 달굴 수 있는 압도적인 1위 후보입니다.",
+        "top_candidates": [
+          {
+            "rank": 1,
+            "person_name": "원빈",
+            "person_name_en": "Won Bin",
+            "category": "배우",
+            "birth_date": "1977-11-10",
+            "korean_resonance": "대한민국 미남의 대명사이자 '아저씨', '태극기 휘날리며', '가을동화' 등으로 전 국민의 가슴에 깊이 각인된 레전드 배우입니다.",
+            "viral_story_point": "2010년 영화 '아저씨' 이후 16년째 작품 활동이 없는 미스터리한 공백기, 그리고 최근 강원도 정선에서 아로니아 농사를 지으며 참기름을 짜서 지인들에게 나눠준다는 근황이 알려져 '농부 원빈'이라는 유쾌하고도 충격적인 도파민 썰이 커뮤니티를 폭발시켰습니다.",
+            "traffic_score": 98
+          },
+          {
+            "rank": 2,
+            "person_name": "홍은채",
+            "person_name_en": "Hong Eun-chae",
+            "category": "가수",
+            "birth_date": "2006-11-10",
+            "korean_resonance": "글로벌 대세 걸그룹 르세라핌(LE SSERAFIM)의 막내이자 '뮤직뱅크' MC, '은채의 스타일기' 등으로 1030 세대에게 압도적인 친숙함을 자랑하는 스타입니다.",
+            "viral_story_point": "르세라핌 데뷔 당시 단 2시간 만에 타이틀곡 'FEARLESS'의 안무를 완벽히 마스터한 천재적인 재능과 초등학교 전교회장 출신이라는 반전 이력, 그리고 언니들의 사랑을 독차지하는 '만채' 캐릭터의 갭모에가 쇼츠 알고리즘을 자극합니다.",
+            "traffic_score": 93
+          },
+          {
+            "rank": 3,
+            "person_name": "태런 에저튼",
+            "person_name_en": "Taron Egerton",
+            "category": "영화 배우",
+            "birth_date": "1989-11-10",
+            "korean_resonance": "대한민국에 '매너가 사람을 만든다' 신드롬을 일으키며 600만 관객을 돌파한 영화 '킹스맨'의 주인공으로, 한국 팬들에게 '김태런'이라는 애칭으로 불릴 만큼 정서적 유대감이 깊은 할리우드 스타입니다.",
+            "viral_story_point": "그의 독특한 이름 '태런(Taron)'이 사실은 어머니의 철자 실수로 '천둥'을 뜻하는 웨일스어 'Taran' 대신 잘못 등록된 해프닝이라는 비하인드와, 평범한 마트 직원에서 골든글로브 남우주연상까지 거머쥔 극적인 신데렐라 스토리가 도파민을 자극합니다.",
+            "traffic_score": 91
+          }
+        ],
+        "wikidata_id": "Q494856",
+        "verified": true,
+        "scouted_trending": true
+      },
+      "pm": {
+        "person_name": "다카쿠라 켄",
+        "person_name_en": "Ken Takakura",
+        "category": "영화 배우",
+        "event_date": "2014-11-10",
+        "keywords": [
+          "철도원",
+          "폿포야",
+          "사토오토마츠",
+          "일본국민배우"
+        ],
+        "brief": "하얀 눈으로 뒤덮인 종착역에서 평생 묵묵히 자리를 지키며 한국 관객들의 가슴을 먹먹하게 울렸던 영화 '철도원'의 전설적인 거장, 다카쿠라 켄이 2014년 11월 10일 향년 83세로 별세했습니다.",
+        "is_deceased": true,
+        "trend_score": 97,
+        "trend_reason": "영화 '철도원'은 한국 대중에게 일본 영화 개방 초기 가장 강렬한 감동을 선사했던 인생작으로 꼽힙니다. 눈 내리는 플랫폼에서 고독하게 호루라기를 불던 그의 모습은 세대를 초월해 눈물샘을 자극하는 불멸의 명장면이며, 그의 묵직하고 숭고한 삶의 태도는 쇼츠 알고리즘에서 중장년층의 향수와 청년층의 존경을 동시에 이끌어내며 폭발적인 추모 트래픽을 유발할 최적의 카드입니다.",
+        "top_candidates": [
+          {
+            "rank": 1,
+            "person_name": "다카쿠라 켄",
+            "person_name_en": "Ken Takakura",
+            "category": "영화 배우",
+            "death_date": "2014-11-10",
+            "korean_resonance": "영화 '철도원(폿포야)'의 주인공 '사토 오토마츠' 역으로 한국 관객들의 눈시울을 붉히게 만든 일본의 전설적인 국민 배우입니다. 평생 눈 덮인 호로마이 역을 지키며 가족을 먼저 떠나보낸 고독한 철도원의 숭고한 직업정신과 애절한 부성애를 묵직한 연기로 표현해 한국 대중에게 깊은 울림을 주었습니다.",
+            "legacy_point": "몬트리올 국제영화제 남우주연상 수상작인 '철도원'을 비롯해 '행복의 노란 손수건', 할리우드 영화 '블랙 레인' 등 200편이 넘는 작품에 출연하며 평생을 영화에 헌신한 아시아 영화계의 거장입니다.",
+            "traffic_score": 97
+          },
+          {
+            "rank": 2,
+            "person_name": "케빈 콘로이",
+            "person_name_en": "Kevin Conroy",
+            "category": "성우 / 배우",
+            "death_date": "2022-11-10",
+            "korean_resonance": "1990년대 전설적인 애니메이션 '배트맨: 더 애니메이티드 시리즈(BTAS)'부터 '아캄 시리즈' 게임에 이르기까지, 30년 동안 배트맨의 목소리를 전담하며 한국의 수많은 DC 팬들과 게이머들에게 '진정한 배트맨의 목소리'로 각인된 인물입니다.",
+            "legacy_point": "배트맨의 고독하고 묵직한 내면을 완벽하게 표현한 독보적인 연기력으로 역대 최고의 배트맨 성우로 칭송받으며, 9/11 테러 당시 소방관들에게 음식을 배달하는 등 현실에서도 영웅적인 삶을 살았던 인물입니다.",
+            "traffic_score": 93
+          },
+          {
+            "rank": 3,
+            "person_name": "아르튀르 랭보",
+            "person_name_en": "Arthur Rimbaud",
+            "category": "시인",
+            "death_date": "1891-11-10",
+            "korean_resonance": "'지옥에서 보낸 한 철' 등으로 한국 문학 청년들과 대중에게 '방랑과 반항의 아이콘'이자 천재 시인의 대명사로 불리는 프랑스 상징주의 시인입니다. 20세에 절필하고 방랑의 길을 걷다 37세의 젊은 나이에 요절한 그의 극적인 삶은 한국에서도 뮤지컬 '랭보' 등으로 제작되어 큰 사랑을 받고 있습니다.",
+            "legacy_point": "현대 문학과 초현실주의의 선구자로서 문학사에 불멸의 족적을 남겼으며, 파란만장한 삶 자체가 하나의 예술이었던 천재 시인입니다.",
+            "traffic_score": 92
+          }
+        ],
+        "wikidata_id": "Q741184",
+        "verified": true,
+        "scouted_trending": true
+      }
     }
   },
-  "total_dates": 25
+  "total_dates": 26
 }
