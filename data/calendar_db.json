@@ -5,9 +5,9 @@
     "target_audience": "Korean YouTube Shorts Viewers (1030세대 & 대중)",
     "korean_familiarity_priority": true,
     "min_year": 1960,
-    "period": "10-15 ~ 11-11 (Live Accumulated)",
-    "total_dates": 27,
-    "total_stars": 57,
+    "period": "10-15 ~ 11-12 (Live Accumulated)",
+    "total_dates": 28,
+    "total_stars": 59,
     "categories": [
       "K-Culture (드라마/예능/아이돌/가요 레전드)",
       "Global Pop (내한 떼창/손하트)",
@@ -2181,7 +2181,111 @@
         "verified": true,
         "scouted_trending": true
       }
+    },
+    "11-12": {
+      "am": {
+        "person_name": "앤 해서웨이",
+        "person_name_en": "Anne Hathaway",
+        "category": "배우",
+        "event_date": "1982-11-12",
+        "keywords": [
+          "인터스텔라",
+          "악마는 프라다를 입는다",
+          "레미제라블",
+          "하사헤이트"
+        ],
+        "brief": "전 세계를 홀린 독보적 아우라의 배우이자, 1000만 관객의 인생작 '인터스텔라'와 '악마는 프라다를 입는다'로 한국인의 심장에 영원히 각인된 시대의 아이콘.",
+        "is_deceased": false,
+        "trend_score": 98,
+        "trend_reason": "한국 영화사에서 외화 최초로 1,000만 관객을 돌파한 '인터스텔라'와 직장인들의 영원한 바이블 '악마는 프라다를 입는다'의 주역으로, 한국 대중에게 가장 친숙하고 압도적인 인지도를 자랑합니다. 특히 2026년 최근 '악마는 프라다를 입는다 2' 홍보차 내한하여 한국 팬들과 뜨겁게 소통하며 화제성의 정점을 찍고 있으며, 과거 오스카 수상 이후 겪었던 전 세계적 사이버 불링인 '하사헤이트(Hathahate)'를 우아하게 극복해낸 극적인 서사는 쇼츠 알고리즘에서 폭발적인 도파민과 감동을 유발하기에 완벽합니다.",
+        "top_candidates": [
+          {
+            "rank": 1,
+            "person_name": "앤 해서웨이",
+            "person_name_en": "Anne Hathaway",
+            "category": "배우",
+            "birth_date": "1982-11-12",
+            "korean_resonance": "한국 영화사에서 외화 최초로 1,000만 관객을 돌파한 '인터스텔라'의 주역이자, 직장인들의 영원한 바이블 '악마는 프라다를 입는다'로 한국 대중에게 가장 친숙하고 깊은 정서적 연결고리를 가진 할리우드 최고의 여배우입니다.",
+            "viral_story_point": "오스카 수상 이후 '너무 완벽하고 가식적이다'라는 황당한 이유로 전 세계적인 사이버 불링인 '하사헤이트(Hathahate)'를 겪으며 커리어의 위기를 맞았으나, 크리스토퍼 놀란 감독의 굳건한 신뢰로 '인터스텔라'에 캐스팅되어 이를 멋지게 극복해낸 감동적인 재기 스토리입니다.",
+            "traffic_score": 98
+          },
+          {
+            "rank": 2,
+            "person_name": "라이언 고슬링",
+            "person_name_en": "Ryan Gosling",
+            "category": "배우",
+            "birth_date": "1980-11-12",
+            "korean_resonance": "한국인들이 가장 사랑하는 로맨스 영화 '노트북'과 인생 음악 영화 '라라랜드'의 남주인공으로, 한국 대중에게 '낭만' 그 자체로 기억되는 배우입니다. 그의 대표작 OST 'City of Stars'는 여전히 한국인들의 감성을 자극합니다.",
+            "viral_story_point": "'라라랜드' 촬영 당시 대역을 쓰지 않기 위해 3달 동안 매일 4시간씩 피아노를 연습해 모든 연주 장면을 직접 소화해낸 지독한 노력파 썰과 뉴욕 거리에서 차에 치일 뻔한 시민을 직접 구해낸 영웅담입니다.",
+            "traffic_score": 95
+          },
+          {
+            "rank": 3,
+            "person_name": "산다라박",
+            "person_name_en": "Sandara Park",
+            "category": "가수",
+            "birth_date": "1984-11-12",
+            "korean_resonance": "레전드 걸그룹 2NE1의 멤버로, 최근 완전체 재결합 콘서트를 통해 한국 대중에게 뜨거운 향수와 눈물을 선사했습니다. 필리핀 탑스타 출신이라는 독특한 이력과 함께 한국 2세대 아이돌 전성기를 이끈 주역입니다.",
+            "viral_story_point": "필리핀에서 이미 신드롬급 인기를 누리던 탑스타였음에도 모든 기득권을 내려놓고 한국 YG 연습생 바닥부터 다시 시작해 성공을 거둔 극적인 서사와 독보적인 '야자수 머리' 비주얼 비하인드입니다.",
+            "traffic_score": 92
+          }
+        ],
+        "wikidata_id": "Q36301",
+        "verified": true,
+        "scouted_trending": true
+      },
+      "pm": {
+        "person_name": "스탠 리",
+        "person_name_en": "Stan Lee",
+        "category": "만화가 및 영화 제작자",
+        "event_date": "2018-11-12",
+        "keywords": [
+          "스파이더맨",
+          "아이언맨",
+          "어벤져스",
+          "마블의아버지"
+        ],
+        "brief": "2018년 11월 12일 별세. 우리에게 영웅을 꿈꾸게 하고, 스스로 가장 친근한 영웅이 되어 떠난 마블의 아버지 스탠 리를 기립니다.",
+        "is_deceased": true,
+        "trend_score": 98,
+        "trend_reason": "전 세계와 한국 대중문화에 지대한 영향을 미친 마블의 창조자이자, 영화 속 카메오로 우리 곁에 늘 살아 숨 쉬던 영원한 히어로들의 아버지이기 때문입니다.",
+        "top_candidates": [
+          {
+            "rank": 1,
+            "person_name": "스탠 리",
+            "person_name_en": "Stan Lee",
+            "category": "만화가 및 영화 제작자",
+            "death_date": "2018-11-12",
+            "korean_resonance": "마블 시네마틱 유니버스(MCU)의 전성기를 함께하며 자란 한국 대중에게 단순한 만화가를 넘어 꿈과 희망을 심어준 거장입니다. 영화마다 카메오로 깜짝 등장해 관객들에게 친근한 이웃집 할아버지 같은 미소를 선사하며 한국 팬들과 깊은 정서적 유대감을 형성했습니다.",
+            "legacy_point": "스파이더맨, 아이언맨, 헐크, 엑스맨 등 완벽하지 않고 결핍을 가진 '인간적인 영웅'들을 창조해 현대 대중문화의 판도를 바꾸었으며, 그가 남긴 마블 세계관은 인류 역사상 가장 성공적인 미디어 프랜차이즈로 자리 잡았습니다.",
+            "traffic_score": 98
+          },
+          {
+            "rank": 2,
+            "person_name": "송재림",
+            "person_name_en": "Song Jae-rim",
+            "category": "배우 및 모델",
+            "death_date": "2024-11-12",
+            "korean_resonance": "드라마 '해를 품은 달'의 과묵한 호위무사 '운' 역으로 대중에게 강렬한 눈도장을 찍었고, 예능 '우리 결혼했어요'에서 보여준 다정하고 유쾌한 모습으로 큰 사랑을 받았습니다. 2024년 11월 12일, 39세라는 너무나 젊은 나이에 갑작스럽게 세상을 떠나 대중과 동료들에게 형언할 수 없는 슬픔과 충격을 안겼습니다.",
+            "legacy_point": "모델에서 배우로 전향한 후 드라마, 영화, 예능, 뮤지컬을 넘나들며 늘 성실하고 진정성 있는 연기를 보여주었습니다. 그의 마지막 SNS 프로필에 남겨진 '긴 여행 시작'이라는 문구는 많은 이들의 눈시울을 붉히며 영원히 기억될 따뜻한 발자취로 남았습니다.",
+            "traffic_score": 96
+          },
+          {
+            "rank": 3,
+            "person_name": "윌리엄 홀든",
+            "person_name_en": "William Holden",
+            "category": "배우",
+            "death_date": "1981-11-12",
+            "korean_resonance": "'선셋 대로', '제17 포로수용소', '콰이강의 다리' 등 할리우드 황금기를 수놓은 전설적인 명작들로 한국의 고전 영화 팬들에게 깊은 향수와 감동을 선사한 배우입니다.",
+            "legacy_point": "아카데미 남우주연상을 수상하며 연기력을 입증했고, 특유의 냉소적이면서도 정의로운 캐릭터와 선 굵은 마스크로 1950년대 할리우드를 지배한 불멸의 아이콘입니다.",
+            "traffic_score": 91
+          }
+        ],
+        "wikidata_id": "Q181900",
+        "verified": true,
+        "scouted_trending": true
+      }
     }
   },
-  "total_dates": 27
+  "total_dates": 28
 }
