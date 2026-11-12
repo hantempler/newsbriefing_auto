@@ -5,9 +5,9 @@
     "target_audience": "Korean YouTube Shorts Viewers (1030세대 & 대중)",
     "korean_familiarity_priority": true,
     "min_year": 1960,
-    "period": "10-15 ~ 11-12 (Live Accumulated)",
-    "total_dates": 28,
-    "total_stars": 59,
+    "period": "10-15 ~ 11-13 (Live Accumulated)",
+    "total_dates": 29,
+    "total_stars": 61,
     "categories": [
       "K-Culture (드라마/예능/아이돌/가요 레전드)",
       "Global Pop (내한 떼창/손하트)",
@@ -2285,7 +2285,111 @@
         "verified": true,
         "scouted_trending": true
       }
+    },
+    "11-13": {
+      "am": {
+        "person_name": "기무라 타쿠야",
+        "person_name_en": "Takuya Kimura",
+        "category": "배우, 가수",
+        "event_date": "1972-11-13",
+        "keywords": [
+          "하울의움직이는성",
+          "기무라타쿠야",
+          "쿠도시즈카",
+          "원조꽃미남"
+        ],
+        "brief": "일본 대중문화 역사상 가장 찬란하게 빛난 불멸의 아이콘이자, 목소리 하나로 전 세계 여심을 뒤흔든 영원한 마법사 하울.",
+        "is_deceased": false,
+        "trend_score": 98,
+        "trend_reason": "한국 대중에게 '일드 열풍'을 일으킨 장본인이자 지브리 역사상 가장 매력적인 캐릭터 '하울'의 본체입니다. 전성기 시절 콘서트 도중 기습 결혼을 발표하며 '이 사람 말고 또 누가 있겠습니까?'라는 희대의 명대사를 남긴 도파민 폭발 서사와, 하울 더빙을 위해 대사를 통째로 외워 미야자키 하야오를 놀라게 한 비하인드는 80초 쇼츠 알고리즘을 터뜨리기에 완벽한 치트키입니다.",
+        "top_candidates": [
+          {
+            "rank": 1,
+            "person_name": "기무라 타쿠야",
+            "person_name_en": "Takuya Kimura",
+            "category": "배우, 가수",
+            "birth_date": "1972-11-13",
+            "korean_resonance": "90년대~2000년대 일본 대중문화 개방 시기 한국 청소년과 대학생들의 심장을 저격한 '원조 일드 레전드'이자 청춘의 상징. 원빈 닮은꼴로도 유명하며, 지브리 애니메이션 '하울의 움직이는 성'의 주인공 하울 목소리로 한국인들에게 가장 친숙하고 정서적 깊이가 있는 일본의 영원한 아이콘입니다.",
+            "viral_story_point": "전성기 시절 콘서트 도중 기습 결혼 발표로 일본 열도를 발칵 뒤집어놓은 사건(기자가 '상대가 쿠도 시즈카입니까?'라고 묻자 '이 사람 말고 또 누가 있겠습니까?'라고 답한 전설의 멘트), 그리고 하울의 목소리를 연기하기 위해 대사를 전부 외워가 미야자키 하야오 감독을 감동시킨 캐스팅 비하인드 스토리.",
+            "traffic_score": 98
+          },
+          {
+            "rank": 2,
+            "person_name": "문채원",
+            "person_name_en": "Moon Chae-won",
+            "category": "배우",
+            "birth_date": "1986-11-13",
+            "korean_resonance": "'찬란한 유산', '공주의 남자', '착한 남자', '굿 닥터' 등 시청률 대박 드라마의 주연으로 활약하며 단아하고 우아한 이미지로 전 세대 한국인에게 큰 사랑을 받는 배우입니다.",
+            "viral_story_point": "예능 '런닝맨'에서 이승기를 향해 보여준 레전드 애교 '야, 줘봐~' 한 마디로 대한민국 남심을 초토화시키고 지금까지도 쇼츠 치트키 짤로 소환되는 화제성, 그리고 서양화를 전공하다 배우가 되기 위해 대학을 자퇴한 반전 서사.",
+            "traffic_score": 92
+          },
+          {
+            "rank": 3,
+            "person_name": "우피 골드버그",
+            "person_name_en": "Whoopi Goldberg",
+            "category": "배우, 코미디언",
+            "birth_date": "1955-11-13",
+            "korean_resonance": "90년대 한국 극장가를 휩쓴 영화 '사랑과 영혼'의 영매 오다 메이, '시스터 액트'의 가짜 수녀 들로리스 역으로 한국인들의 유년 시절 웃음과 감동을 책임졌던 추억의 할리우드 스타입니다.",
+            "viral_story_point": "미국 대중문화계 최고 권위인 EGOT(에미, 그래미, 오스카, 토니상)를 모두 석권한 전설적인 커리어와, 배우가 되기 전 생계를 위해 벽돌공, 영장 관리사(시신 화장 및 메이크업 아티스트)로 일했던 충격적인 반전 과거사.",
+            "traffic_score": 90
+          }
+        ],
+        "wikidata_id": "Q362254",
+        "verified": true,
+        "scouted_trending": true
+      },
+      "pm": {
+        "person_name": "전태일",
+        "person_name_en": "Jeon Tae-il",
+        "category": "사회운동가 / 노동운동가",
+        "event_date": "1970-11-13",
+        "keywords": [
+          "근로기준법준수",
+          "평화시장",
+          "바보회",
+          "아름다운청년"
+        ],
+        "brief": "대한민국 노동 인권의 새벽을 열기 위해 스스로 한 자루의 불꽃이 되었던 아름다운 청년, 1970년 11월 13일 전태일 열사가 별세하셨습니다.",
+        "is_deceased": true,
+        "trend_score": 100,
+        "trend_reason": "대한민국 현대사에서 가장 묵직하고 가슴 아픈 울림을 주는 인물로, '근로기준법을 준수하라'는 그의 마지막 외침은 세대를 초월해 뜨거운 추모와 눈물샘을 자극하며 압도적인 트래픽과 댓글 참여를 이끌어낼 수밖에 없는 불멸의 레전드이기 때문입니다.",
+        "top_candidates": [
+          {
+            "rank": 1,
+            "person_name": "전태일",
+            "person_name_en": "Jeon Tae-il",
+            "category": "사회운동가 / 노동운동가",
+            "death_date": "1970-11-13",
+            "korean_resonance": "대한민국 노동 인권의 역사를 바꾼 불꽃이자, 전 국민의 가슴속에 영원히 부채감과 숭고함으로 남아있는 시대의 청년입니다.",
+            "legacy_point": "평화시장의 참혹한 노동 환경 속에서 '근로기준법을 준수하라', '우리는 기계가 아니다'라고 외치며 온몸을 던져 한국 노동운동의 기폭제가 되었습니다.",
+            "traffic_score": 100
+          },
+          {
+            "rank": 2,
+            "person_name": "에디 게레로",
+            "person_name_en": "Eddie Guerrero",
+            "category": "프로레슬러",
+            "death_date": "2005-11-13",
+            "korean_resonance": "2000년대 초반 WWE 황금기를 지켜본 한국 2030 남성들의 영웅이자, 유쾌한 반칙과 인간미 넘치는 경기력으로 큰 사랑을 받았던 전설입니다.",
+            "legacy_point": "심각한 부상과 약물 중독을 극복하고 마침내 세계 챔피언에 오른 인간 승리의 아이콘이었으나, 전성기 시절 갑작스러운 심장마비로 세상을 떠나 전 세계 팬들을 울렸습니다.",
+            "traffic_score": 91
+          },
+          {
+            "rank": 3,
+            "person_name": "카미유 피사로",
+            "person_name_en": "Camille Pissarro",
+            "category": "화가",
+            "death_date": "1903-11-13",
+            "korean_resonance": "세잔, 고갱 등 불화하던 천재 화가들을 따뜻하게 품어주고 이끌어준 '인상주의의 아버지'이자 가장 온화한 거장으로 기억됩니다.",
+            "legacy_point": "인상주의 화가 중 유일하게 8차례의 인상파 전시회에 모두 참여하며 평생 빛과 자연을 탐구했고, 후배 화가들에게 아낌없는 영감을 준 위대한 멘토였습니다.",
+            "traffic_score": 82
+          }
+        ],
+        "wikidata_id": "Q482694",
+        "verified": true,
+        "scouted_trending": true
+      }
     }
   },
-  "total_dates": 28
+  "total_dates": 29
 }
