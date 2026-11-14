@@ -206,7 +206,16 @@ def format_sub_display(text: str) -> str:
 
     t = re.sub(r'(?<![가-힣])([스서마쉰예일여아열한두세네다여일여아][가-힣]*?)\s*(살|세|명|개|장|권|척|곡|편|회|대|병|잔|골|점)', repl_native_unit, t)
 
-    # 6. 큰 수 단위
+    # 6. 큰 수 단위 (일만 명 -> 1만 명, 오만 명 -> 5만 명 등)
+    def repl_man(m):
+        num_str = m.group(1)
+        val = parse_sino(num_str)
+        unit_trail = m.group(2) or ''
+        if val > 0:
+            return f"{val}만{unit_trail}"
+        return m.group(0)
+
+    t = re.sub(r'(?<![가-힣])([일이삼사오육칠팔구십]+)만(\s*명|\s*원|\s*달러|\s*장|\s*개|\s*뷰|\s*원)?', repl_man, t)
     t = re.sub(r'(?<![가-힣])백만(\s*명|\s*원|\s*달러|\s*장|\s*개|\s*뷰)?', r'100만\1', t)
     t = re.sub(r'(?<![가-힣])천만(\s*명|\s*원|\s*달러|\s*장|\s*개|\s*뷰)?', r'1,000만\1', t)
     t = re.sub(r'(?<![가-힣])일억(\s*명|\s*원|\s*달러|\s*장|\s*개)?', r'1억\1', t)
@@ -251,6 +260,17 @@ def rule_based_chunking(text):
     return results
 
 
+def get_clean_sub_text(sc: dict) -> str:
+    """화면 자막 텍스트 추출 (요약/누락 방지 1:1 보존 인터록)."""
+    disp = sc.get("display_text", "").strip()
+    narr = sc.get("narration", "").strip()
+    # display_text가 없거나 narration보다 지나치게 짧아 요약된 경우(글자 수 85% 미만),
+    # narration 원본을 100% 1:1 보존하는 format_sub_display(narr)로 강제 치환
+    if not disp or (narr and len(disp) < len(narr) * 0.85):
+        return format_sub_display(narr)
+    return disp
+
+
 def analyze_dynamic_chunks(scenes):
     """Gemini 2.5 Flash를 이용해 쇼츠 최적화 호흡 단위 청크 및 키워드 하이라이트 추출."""
     try:
@@ -261,10 +281,7 @@ def analyze_dynamic_chunks(scenes):
 
         scenes_input = []
         for sc in scenes:
-            # display_text(화면 자막용 표기)가 있으면 우선 사용, 없으면 format_sub_display(narration)으로 안전하게 폴백
-            sub_text = sc.get("display_text", "").strip()
-            if not sub_text:
-                sub_text = format_sub_display(sc.get("narration", ""))
+            sub_text = get_clean_sub_text(sc)
             caption_clean = format_sub_display(sc.get("caption", "").strip())
             scenes_input.append({
                 "scene_no": sc["scene_no"],
@@ -321,9 +338,7 @@ def analyze_dynamic_chunks(scenes):
         print(f"[Subtitle] Gemini AI 분할 실패, 규칙 기반 폴백 적용: {e}")
         fallback_scenes = []
         for sc in scenes:
-            sub_text = sc.get("display_text", "").strip()
-            if not sub_text:
-                sub_text = format_sub_display(sc.get("narration", ""))
+            sub_text = get_clean_sub_text(sc)
             fallback_scenes.append({
                 "scene_no": sc["scene_no"],
                 "chunks": rule_based_chunking(sub_text)
@@ -358,20 +373,18 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
         scene_start = current_time
         scene_end = current_time + duration
 
-        # 1. 상단 모던 챕터 태그 (번호와 제목 2단 분리, 굵직하고 또렷한 72pt 볼드)
+        # 1. 상단 모던 챕터 태그 (숫자 배제 클린 타이포그래피, 굵직하고 또렷한 72pt 볼드)
         caption = format_sub_display(sc.get("caption", "").strip())
         if caption:
             start_str = format_ass_time(scene_start)
             end_str = format_ass_time(scene_end)
-            chapter_text = rf"{{\c&H0000E6FF&\fs54}}0{s_no}\N{{\c&H00FFFFFF&\fs72\b1}}{caption}"
+            chapter_text = rf"{{\c&H00FFFFFF&\fs72\b1}}{caption}"
             events.append(f"Dialogue: 1,{start_str},{end_str},TopChapter,,0,0,0,,{chapter_text}")
 
         # 2. 하단 다이내믹 내레이션 자막
         chunks = analyzed_map.get(s_no, [])
         if not chunks:
-            sub_text = sc.get("display_text", "").strip()
-            if not sub_text:
-                sub_text = format_sub_display(sc.get("narration", ""))
+            sub_text = get_clean_sub_text(sc)
             chunks = rule_based_chunking(sub_text)
 
         # 음성 시작 지연(lead-in) 감지

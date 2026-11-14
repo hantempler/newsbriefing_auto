@@ -210,10 +210,14 @@ def generate_shorts_script(client, types, model, person_name, person_name_en, mo
    - [AM - 생일 축하 모드]: 시청자와 팬덤 모두가 감탄하고 진심으로 축하할 수 있는 '역대급 대기록', '치열한 노력과 끈기', '반전 실력과 신드롬', '감동적인 미담과 선한 영향력'을 칭찬과 긍정으로 가득 채우세요.
    - [PM - 기일 추모 모드]: 자극적인 사망 경위나 비극적 사건 묘사는 엄격히 배제하고, 그가 남긴 '불멸의 명곡/명작', '전 세계 팬들의 청춘을 밝혀준 찬란한 순간', '음악과 예술적 유산에 대한 깊은 경의와 따뜻한 리스펙트'를 담으세요.
    - [공통 금기 사항]: 사생활 가십, 세금/법적 분쟁, 성형 루머, 악의적 논란은 100% 원천 배제하세요.
-4. [TTS 낭독 음성 및 화면 자막 표기 가이드 (시각/청각 완전 분리)]:
-   - [화면 자막용 (display_text & caption)]:
-     * 시청자가 화면에서 눈으로 읽을 자막입니다. 시인성을 위해 모든 숫자, 연도, 날짜, 시간, 나이, 순위, 백분율, 외래어 고유명사는 반드시 '아라비아 숫자(1998년, 45분, 182, 65%, 3도 등)'와 표준 기호(%)로 표기하세요.
-     * 상단 챕터 제목(caption)에 숫자가 들어갈 경우에도 '사십오 분'이 아닌 반드시 '45분의 기적'처럼 아라비아 숫자로 작성하세요.
+4. [TTS 낭독 음성 및 화면 자막 표기 가이드 (1:1 쌍둥이 문장 원칙)]:
+   - 🚨 [절대 원칙 - 요약 및 생략 100% 영구 엄금]:
+     * 'display_text'(자막)와 'narration'(음성)은 문장 구성, 단어 개수, 어순이 100% 동일한 '완전 일치 쌍둥이 문장'이어야 합니다!
+     * 자막(display_text)을 짧게 요약하거나 단어를 줄여 쓰는 행위를 100% 엄금합니다! 성우가 읽는 모든 문장이 화면 자막에 온전히 다 나와야 합니다.
+   - [화면 자막용 (display_text)]:
+     * narration의 모든 문장과 단어를 1:1로 그대로 유지하되, 오직 연도, 날짜, 시간, 나이, 순위, 백분율, 외래어 고유명사만 '아라비아 숫자(1998년, 45분, 182, 65%, 3도 등)'와 표준 기호(%)로 표기하세요.
+   - [화면 상단 챕터 제목 (caption)]:
+     * 10자 내외 간결한 명사형 구문으로 작성하며, 숫자가 들어갈 경우 아라비아 숫자(예: '45분의 기적')로 작성하세요.
    - [성우 낭독 대본 (narration)]:
      * AI 성우가 오독하지 않도록 자연스러운 구어체 한국어로 작성하세요. 연도와 날짜, 숫자는 성우가 가장 자연스럽게 읽을 수 있는 한글 발음('천구백구십팔년', '사십오 분', '육십오 퍼센트', '삼도 화상')으로 정확하게 작성합니다.
    - [노란색 하이라이트 키워드 (highlight_keywords)]:
@@ -295,7 +299,7 @@ def generate_shorts_script(client, types, model, person_name, person_name_en, mo
       "scene_no": 1,
       "timing": "00:00-00:05",
       "caption": "화면 상단 세련된 한글 챕터 제목 (10자 내외 간결한 명사형 구문, 숫자는 아라비아 숫자 필수, 예: '45분의 기적')",
-      "display_text": "시청자가 화면에서 눈으로 읽을 자막 문장 (모든 숫자, 시간, 비율, 고유명사는 '1998년', '45분', '65%', '3도 화상', '블링크 182' 등 아라비아 숫자와 기호로 표기)",
+      "display_text": "narration과 단어·어순이 100% 동일한 쌍둥이 자막 문장 (요약/생략 절대 금지! 숫자/연도/단위만 '1998년', '45분', '65%', '3도 화상', '블링크 182' 등 아라비아 숫자로 표기)",
       "narration": "AI 성우가 낭독할 자연스러운 구어체 문장 (TTS 발음 안전 표기: 예: '천구백구십팔년, 밴드 블링크 일팔이에...')",
       "highlight_keywords": ["화면 자막에서 노란색으로 강조할 핵심 키워드 1~2개 (서술어/종결어미 절대 금지, 예: '블링크 182')"],
       "camera_motion": "face_zoom 또는 pan_lr 등 위 6대 모션 중 택1",
@@ -336,8 +340,13 @@ def generate_shorts_script(client, types, model, person_name, person_name_en, mo
         for sc in script_data.get("scenes", []):
             if sc.get("caption"):
                 sc["caption"] = _fmt(sc["caption"])
-            if not sc.get("display_text"):
-                sc["display_text"] = _fmt(sc.get("narration", ""))
+            narr = sc.get("narration", "").strip()
+            disp = sc.get("display_text", "").strip()
+            # 🚨 자막 요약/누락 원천 차단:
+            # display_text가 없거나 narration보다 현저히 짧아 요약된 경우(글자 수 85% 미만),
+            # narration 전체를 100% 1:1 보존하는 format_sub_display(narr)로 강제 치환하여 자막 누락을 물리적으로 차단
+            if not disp or (narr and len(disp) < len(narr) * 0.85):
+                sc["display_text"] = _fmt(narr)
 
     return script_data
 
