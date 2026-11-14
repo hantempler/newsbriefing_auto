@@ -210,9 +210,15 @@ def generate_shorts_script(client, types, model, person_name, person_name_en, mo
    - [AM - 생일 축하 모드]: 시청자와 팬덤 모두가 감탄하고 진심으로 축하할 수 있는 '역대급 대기록', '치열한 노력과 끈기', '반전 실력과 신드롬', '감동적인 미담과 선한 영향력'을 칭찬과 긍정으로 가득 채우세요.
    - [PM - 기일 추모 모드]: 자극적인 사망 경위나 비극적 사건 묘사는 엄격히 배제하고, 그가 남긴 '불멸의 명곡/명작', '전 세계 팬들의 청춘을 밝혀준 찬란한 순간', '음악과 예술적 유산에 대한 깊은 경의와 따뜻한 리스펙트'를 담으세요.
    - [공통 금기 사항]: 사생활 가십, 세금/법적 분쟁, 성형 루머, 악의적 논란은 100% 원천 배제하세요.
-4. [TTS 낭독 음성 및 대본 작성 가이드]:
-   - [성우 낭독 대본 (narration)]: AI 성우가 오독하지 않도록 자연스러운 구어체 한국어로 작성하세요. 연도와 날짜, 숫자는 성우가 가장 자연스럽게 읽을 수 있는 발음('천구백팔십오년 시월 이십사일', '이천이십년 시월 삼십일일')으로 작성합니다.
-   - 자막 표시는 시스템이 전체 대본을 100% 보존하면서 시인성 높은 아라비아 숫자로 자동 변환하므로, 내레이션 문장을 요약하거나 줄이지 마세요.
+4. [TTS 낭독 음성 및 화면 자막 표기 가이드 (시각/청각 완전 분리)]:
+   - [화면 자막용 (display_text & caption)]:
+     * 시청자가 화면에서 눈으로 읽을 자막입니다. 시인성을 위해 모든 숫자, 연도, 날짜, 시간, 나이, 순위, 백분율, 외래어 고유명사는 반드시 '아라비아 숫자(1998년, 45분, 182, 65%, 3도 등)'와 표준 기호(%)로 표기하세요.
+     * 상단 챕터 제목(caption)에 숫자가 들어갈 경우에도 '사십오 분'이 아닌 반드시 '45분의 기적'처럼 아라비아 숫자로 작성하세요.
+   - [성우 낭독 대본 (narration)]:
+     * AI 성우가 오독하지 않도록 자연스러운 구어체 한국어로 작성하세요. 연도와 날짜, 숫자는 성우가 가장 자연스럽게 읽을 수 있는 한글 발음('천구백구십팔년', '사십오 분', '육십오 퍼센트', '삼도 화상')으로 정확하게 작성합니다.
+   - [노란색 하이라이트 키워드 (highlight_keywords)]:
+     * 시청자의 시선을 순간적으로 사로잡을 씬별 핵심 단어 1~2개를 반드시 배열로 지정하세요 (예: ["블링크 182"], ["65%", "3도 화상"]).
+     * 🚨 [절대 금기]: '~했습니다', '~있었습니다', '~뿐이었다' 같은 서술어/종결어미나 '~에게', '~에서' 같은 조사를 하이라이트로 지정하는 것을 100% 엄금합니다. 반드시 숫자, 사건명, 고유명사, 핵심 명사형만 지정하세요.
    - 채팅 자음(ㄱㄱ, ㄷㄷ, ㅋㅋ, ㅠㅠ, ㄹㅇ 등)이나 슬랭 약어 사용 절대 금지.
 5. [아웃트로(씬 7) 엔딩 작성 절대 룰 - 절제와 여운의 미학 (Dignified Understatement)]:
    - 🚨 절대 금기 (피로감 유발 클리셰 100% 영구 배제):
@@ -288,8 +294,10 @@ def generate_shorts_script(client, types, model, person_name, person_name_en, mo
     {{
       "scene_no": 1,
       "timing": "00:00-00:05",
-      "caption": "화면 상단 세련된 한글 챕터 제목 (10자 내외 간결한 명사형 구문, 영문 금지, 예: '꿈의 구단 맨유')",
-      "narration": "성우가 낭독할 자연스러운 구어체 문장 (TTS 발음 안전 표기: 예: '이천이십년 시월 삼십일일, 오늘은 영원한...')",
+      "caption": "화면 상단 세련된 한글 챕터 제목 (10자 내외 간결한 명사형 구문, 숫자는 아라비아 숫자 필수, 예: '45분의 기적')",
+      "display_text": "시청자가 화면에서 눈으로 읽을 자막 문장 (모든 숫자, 시간, 비율, 고유명사는 '1998년', '45분', '65%', '3도 화상', '블링크 182' 등 아라비아 숫자와 기호로 표기)",
+      "narration": "AI 성우가 낭독할 자연스러운 구어체 문장 (TTS 발음 안전 표기: 예: '천구백구십팔년, 밴드 블링크 일팔이에...')",
+      "highlight_keywords": ["화면 자막에서 노란색으로 강조할 핵심 키워드 1~2개 (서술어/종결어미 절대 금지, 예: '블링크 182')"],
       "camera_motion": "face_zoom 또는 pan_lr 등 위 6대 모션 중 택1",
       "bg_prompt": "English 9:16 vertical visual prompt starting with {person_name_en}"
     }},
@@ -310,11 +318,28 @@ def generate_shorts_script(client, types, model, person_name, person_name_en, mo
     )
     resp = generate_content_with_retry(client, model, contents=prompt, config=cfg)
     try:
-        return json.loads(resp.text)
+        script_data = json.loads(resp.text)
     except Exception:
         clean_text = re.sub(r"^```json\s*", "", resp.text.strip())
         clean_text = re.sub(r"\s*```$", "", clean_text)
-        return json.loads(clean_text)
+        script_data = json.loads(clean_text)
+
+    # 화면 자막 표기(display_text) 및 챕터(caption) 후처리 안전망
+    try:
+        from importlib import import_module as _im
+        _sub_mod = _im("06_star_subtitle")
+        _fmt = _sub_mod.format_sub_display
+    except Exception:
+        _fmt = None
+
+    if _fmt and isinstance(script_data, dict):
+        for sc in script_data.get("scenes", []):
+            if sc.get("caption"):
+                sc["caption"] = _fmt(sc["caption"])
+            if not sc.get("display_text"):
+                sc["display_text"] = _fmt(sc.get("narration", ""))
+
+    return script_data
 
 
 def run_pipeline(mode="am", date_str=None, person=None):

@@ -92,6 +92,9 @@ def format_sub_display(text: str) -> str:
 
     t = text
 
+    # 0. 고유명사 특정 음차 복원 (예: 블링크 일팔이 -> 블링크 182)
+    t = re.sub(r'블링크\s*일팔이', '블링크 182', t)
+
     sino_map = {
         '영': 0, '공': 0, '일': 1, '이': 2, '삼': 3, '사': 4,
         '오': 5, '육': 6, '칠': 7, '팔': 8, '구': 9
@@ -112,6 +115,30 @@ def format_sub_display(text: str) -> str:
                 val += (cur if cur != 0 else 1) * 1000
                 cur = 0
         return val + cur
+
+    native_tens = {'스물': 20, '서른': 30, '마흔': 40, '쉰': 50, '예순': 60, '일흔': 70, '여든': 80, '아흔': 90}
+    native_ones = {'하나': 1, '한': 1, '둘': 2, '두': 2, '셋': 3, '세': 3, '넷': 4, '네': 4, '다섯': 5, '여섯': 6, '일곱': 7, '여덟': 8, '아홉': 9, '열': 10}
+
+    def parse_native(s):
+        val = 0
+        rem = s
+        if rem.startswith('열') and len(rem) > 1:
+            val += 10
+            rem = rem[1:]
+        else:
+            for k, v in native_tens.items():
+                if rem.startswith(k):
+                    val += v
+                    rem = rem[len(k):]
+                    break
+        for k, v in native_ones.items():
+            if rem == k:
+                val += v
+                rem = ''
+                break
+        if rem == '' and val > 0:
+            return val
+        return None
 
     def repl_year(m):
         full = m.group(1)
@@ -149,7 +176,37 @@ def format_sub_display(text: str) -> str:
 
     t = re.sub(r'([일이삼사오육칠팔구십]+)일', repl_day, t)
 
-    # 4. 큰 수 단위
+    # 4. 일반 수사 + 단위 결합 (분, 초, 시간, 퍼센트, %, 도, 살, 세, 명, 개, 장, 권, 척, 곡, 편, 회, 등, 위, 점, 배, 대, 병, 잔, 골, 승, 패)
+    unit_pattern = r'(?<![가-힣])([일이삼사오육칠팔구십백천]+)\s*(분|초|시간|퍼센트|%|프로|도|살|세|명|개|장|권|척|곡|편|회|등|위|점|배|대|병|잔|골|승|패)'
+    def repl_unit(m):
+        full = m.group(1)
+        unit = m.group(2)
+        try:
+            val = parse_sino(full)
+            if val > 0:
+                if unit in ['퍼센트', '프로']:
+                    return f"{val}%"
+                return f"{val}{unit}"
+        except Exception:
+            pass
+        return m.group(0)
+
+    t = re.sub(unit_pattern, repl_unit, t)
+
+    # 5. 고유어 수사 + 단위 (스물다섯 살, 세 명, 두 개 등)
+    native_unit_pattern = r'(?<![가-힣])(스물|서른|마흔|쉰|예순|일흔|여든|아흔|열)?[가-힣]*\s*(살|세|명|개|장|권|척|곡|편|회|대|병|잔|골|점)'
+    def repl_native_unit(m):
+        word = m.group(0).strip()
+        unit = m.group(2)
+        num_part = word[:-len(unit)].strip()
+        val = parse_native(num_part)
+        if val is not None:
+            return f"{val}{unit}"
+        return m.group(0)
+
+    t = re.sub(r'(?<![가-힣])([스서마쉰예일여아열한두세네다여일여아][가-힣]*?)\s*(살|세|명|개|장|권|척|곡|편|회|대|병|잔|골|점)', repl_native_unit, t)
+
+    # 6. 큰 수 단위
     t = re.sub(r'(?<![가-힣])백만(\s*명|\s*원|\s*달러|\s*장|\s*개|\s*뷰)?', r'100만\1', t)
     t = re.sub(r'(?<![가-힣])천만(\s*명|\s*원|\s*달러|\s*장|\s*개|\s*뷰)?', r'1,000만\1', t)
     t = re.sub(r'(?<![가-힣])일억(\s*명|\s*원|\s*달러|\s*장|\s*개)?', r'1억\1', t)
@@ -187,11 +244,9 @@ def rule_based_chunking(text):
 
     results = []
     for c in chunks:
-        words = [w.strip(".,?!'\"") for w in c.split(" ") if len(w.strip(".,?!'\"")) >= 2]
-        longest = max(words, key=len) if words else ""
         results.append({
             "text": c,
-            "highlight": longest
+            "highlight": ""  # 엉뚱한 서술어 하이라이트 방지를 위해 기본 공백 (대본의 highlight_keywords에서 1:1 매칭)
         })
     return results
 
@@ -206,11 +261,14 @@ def analyze_dynamic_chunks(scenes):
 
         scenes_input = []
         for sc in scenes:
-            # display_text(화면 자막용 표기)가 있으면 우선 사용, 없으면 narration으로 안전하게 폴백
-            sub_text = format_sub_display(sc.get("narration", ""))
+            # display_text(화면 자막용 표기)가 있으면 우선 사용, 없으면 format_sub_display(narration)으로 안전하게 폴백
+            sub_text = sc.get("display_text", "").strip()
+            if not sub_text:
+                sub_text = format_sub_display(sc.get("narration", ""))
+            caption_clean = format_sub_display(sc.get("caption", "").strip())
             scenes_input.append({
                 "scene_no": sc["scene_no"],
-                "caption": sc.get("caption", ""),
+                "caption": caption_clean,
                 "narration": sub_text
             })
 
@@ -263,7 +321,9 @@ def analyze_dynamic_chunks(scenes):
         print(f"[Subtitle] Gemini AI 분할 실패, 규칙 기반 폴백 적용: {e}")
         fallback_scenes = []
         for sc in scenes:
-            sub_text = format_sub_display(sc.get("narration", ""))
+            sub_text = sc.get("display_text", "").strip()
+            if not sub_text:
+                sub_text = format_sub_display(sc.get("narration", ""))
             fallback_scenes.append({
                 "scene_no": sc["scene_no"],
                 "chunks": rule_based_chunking(sub_text)
@@ -299,7 +359,7 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
         scene_end = current_time + duration
 
         # 1. 상단 모던 챕터 태그 (번호와 제목 2단 분리, 굵직하고 또렷한 72pt 볼드)
-        caption = sc.get("caption", "").strip()
+        caption = format_sub_display(sc.get("caption", "").strip())
         if caption:
             start_str = format_ass_time(scene_start)
             end_str = format_ass_time(scene_end)
@@ -309,7 +369,9 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
         # 2. 하단 다이내믹 내레이션 자막
         chunks = analyzed_map.get(s_no, [])
         if not chunks:
-            sub_text = format_sub_display(sc.get("narration", ""))
+            sub_text = sc.get("display_text", "").strip()
+            if not sub_text:
+                sub_text = format_sub_display(sc.get("narration", ""))
             chunks = rule_based_chunking(sub_text)
 
         # 음성 시작 지연(lead-in) 감지
@@ -331,6 +393,20 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
         total_weight = sum(weights) if sum(weights) > 0 else 1.0
         available_dur = max(1.0, duration - lead_in)
 
+        # 대본에서 지정한 씬별 핵심 하이라이트 키워드 목록
+        raw_kws = sc.get("highlight_keywords", [])
+        if isinstance(raw_kws, str):
+            raw_kws = [raw_kws]
+        elif not isinstance(raw_kws, list):
+            raw_kws = []
+
+        stop_endings = (
+            "습니다", "었습니다", "았습니다", "였습니다", "있었습니다", "없었습니다",
+            "뿐이었습니다", "뿐이었다", "돌았지만", "했지만", "였지만", "이라며", "라며",
+            "에게", "에서", "으로", "까지", "부터", "하고", "되고", "하며", "합니다",
+            "입니다", "립니다", "칩니다", "옵니다", "냅니다", "봅니다", "줍니다", "겪습니다"
+        )
+
         t_cursor = scene_start + lead_in
         for i, c in enumerate(chunks):
             c_text = c["text"].strip()
@@ -343,9 +419,29 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
 
             # 하이라이트 단어 스타일 태그 적용
             styled_text = c_text
-            if c_highlight and c_highlight in styled_text:
-                replacement = r"{\c&H0000E6FF&}" + c_highlight + r"{\c&H00FFFFFF&}"
-                styled_text = styled_text.replace(c_highlight, replacement, 1)
+            applied_highlight = False
+
+            # 1순위: 대본에서 작가가 직접 지정한 highlight_keywords 1:1 매칭
+            if raw_kws:
+                for kw in raw_kws:
+                    kw_clean = str(kw).strip(" .,?!'\"")
+                    for cand in [kw_clean, format_sub_display(kw_clean)]:
+                        if cand and cand in styled_text:
+                            replacement = rf"{{\c&H0000E6FF&}}{cand}{{\c&H00FFFFFF&}}"
+                            styled_text = styled_text.replace(cand, replacement, 1)
+                            applied_highlight = True
+                            break
+                    if applied_highlight:
+                        break
+
+            # 2순위 (대본에 키워드가 없을 때): 서술어/종결어미 철저 배제
+            if not applied_highlight and c_highlight:
+                cand = c_highlight.strip(" .,?!'\"")
+                if len(cand) >= 2 and not any(cand.endswith(se) for se in stop_endings):
+                    if cand in styled_text:
+                        replacement = rf"{{\c&H0000E6FF&}}{cand}{{\c&H00FFFFFF&}}"
+                        styled_text = styled_text.replace(cand, replacement, 1)
+                        applied_highlight = True
 
             st_str = format_ass_time(t_cursor)
             et_str = format_ass_time(c_end)

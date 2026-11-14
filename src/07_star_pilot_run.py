@@ -84,7 +84,7 @@ def main(script_path, overwrite_tts=False):
             print(f"\n[PilotRun] Scene {n}/{len(script['scenes'])} 이미지 생성 중...")
             run_image(bg_prompt, out_path=str(img_file))
 
-        narration = sc.get("narration", "")
+        narration = sc.get("narration_tts") or sc.get("narration", "")
         if tts_file.exists() and tts_file.stat().st_size > 5000 and not overwrite_tts:
             print(f"[PilotRun] Scene {n} TTS 내레이션 이미 존재 (스킵)")
         else:
