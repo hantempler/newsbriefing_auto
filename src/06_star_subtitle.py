@@ -373,12 +373,12 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
         scene_start = current_time
         scene_end = current_time + duration
 
-        # 1. 상단 모던 챕터 태그 (숫자 배제 클린 타이포그래피, 굵직하고 또렷한 72pt 볼드)
+        # 1. 상단 모던 챕터 태그 (번호와 제목 2단 분리, 굵직하고 또렷한 72pt 볼드)
         caption = format_sub_display(sc.get("caption", "").strip())
         if caption:
             start_str = format_ass_time(scene_start)
             end_str = format_ass_time(scene_end)
-            chapter_text = rf"{{\c&H00FFFFFF&\fs72\b1}}{caption}"
+            chapter_text = rf"{{\c&H0000E6FF&\fs54}}0{s_no}\N{{\c&H00FFFFFF&\fs72\b1}}{caption}"
             events.append(f"Dialogue: 1,{start_str},{end_str},TopChapter,,0,0,0,,{chapter_text}")
 
         # 2. 하단 다이내믹 내레이션 자막
