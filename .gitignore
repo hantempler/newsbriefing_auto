@@ -30,3 +30,12 @@ Thumbs.db
 *copy*.json
 *.bak
 test/
+
+# Local & Experimental pipelines (isolated from newsbriefing_auto daily live repo)
+onthenext_shorts/
+starisborn_evergreen/
+evergreen/
+pilot/
+scratch/
+_old/
+
