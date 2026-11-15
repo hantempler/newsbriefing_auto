@@ -346,7 +346,7 @@ def analyze_dynamic_chunks(scenes):
         return fallback_scenes
 
 
-def build_pro_ass_file(scenes, analyzed_scenes, durations, ass_path, offset=0.0, wav_paths=None):
+def build_pro_ass_file(scenes, analyzed_scenes, durations, ass_path, offset=0.0, wav_paths=None, meta=None):
     """유튜브 쇼츠 프로 스타일 ASS 자막 파일 생성 (Gmarket Sans TTF, 세이프존, 정밀 음성 싱크)."""
     header = """[Script Info]
 Title: Star is Born Dynamic Shorts Subtitle
@@ -357,8 +357,8 @@ ScaledBorderAndShadow: yes
 
 [V4+ Styles]
 Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
-Style: TopChapter, Gmarket Sans TTF, 70, &H00FFFFFF, &H00000000, &H00000000, &H00000000, 1, 0, 0, 0, 100, 100, 0, 0, 1, 7.5, 4.5, 8, 40, 40, 150, 1
-Style: DynamicSub, Gmarket Sans TTF, 74, &H00FFFFFF, &H00000000, &H00000000, &H00000000, 1, 0, 0, 0, 100, 100, 0, 0, 1, 7.0, 4.0, 2, 50, 50, 480, 1
+Style: TopChapter, Gmarket Sans TTF Bold, 60, &H0000E6FF, &H00000000, &H00000000, &H00000000, 0, 0, 0, 0, 100, 100, 0, 0, 1, 6.0, 3.5, 8, 40, 40, 230, 1
+Style: DynamicSub, Gmarket Sans TTF Bold, 74, &H00FFFFFF, &H00000000, &H00000000, &H00000000, 0, 0, 0, 0, 100, 100, 0, 0, 1, 7.0, 4.0, 2, 50, 50, 480, 1
 
 [Events]
 Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
@@ -373,13 +373,12 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
         scene_start = current_time
         scene_end = current_time + duration
 
-        # 1. 상단 모던 챕터 태그 (번호와 제목 2단 분리, 굵직하고 또렷한 72pt 볼드)
+        # 1. 상단 챕터 태그 (숫자 제외, 순수 60pt 노란색 볼드 단독 표시)
         caption = format_sub_display(sc.get("caption", "").strip())
         if caption:
             start_str = format_ass_time(scene_start)
             end_str = format_ass_time(scene_end)
-            chapter_text = rf"{{\c&H0000E6FF&\fs54}}0{s_no}\N{{\c&H00FFFFFF&\fs72\b1}}{caption}"
-            events.append(f"Dialogue: 1,{start_str},{end_str},TopChapter,,0,0,0,,{chapter_text}")
+            events.append(f"Dialogue: 1,{start_str},{end_str},TopChapter,,0,0,0,,{caption}")
 
         # 2. 하단 다이내믹 내레이션 자막
         chunks = analyzed_map.get(s_no, [])
@@ -504,7 +503,7 @@ def generate_subtitles(script_path, output_ass=None, thumb_offset=3.0):
 
     # 오프닝 3.0초 썸네일 인서트 오프셋 반영
     offset = float(thumb_offset) if (pkg_dir / "thumbnail.jpg").exists() else 0.0
-    build_pro_ass_file(scenes, analyzed_scenes, durations, output_ass, offset=offset, wav_paths=wav_paths)
+    build_pro_ass_file(scenes, analyzed_scenes, durations, output_ass, offset=offset, wav_paths=wav_paths, meta=meta)
 
     # 분석 JSON도 함께 보관
     sub_json = assets_dir / "subtitles_dynamic.json"

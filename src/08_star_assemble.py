@@ -395,15 +395,24 @@ def assemble_shorts(script_path):
         # 카메라 모션 결정 (대본 지정 모션 또는 자동 순환)
         motion = sc.get("camera_motion")
 
+        if part_mp4.exists() and part_mp4.stat().st_size > 100000:
+            print(f"[Assemble] Scene {i} 클립 이미 존재 (스킵): {part_mp4.name}")
+            part_clips.append(part_mp4)
+            continue
+
         render_scene_clip_dynamic(img_file, wav_file, part_mp4, dur, scene_idx=i, camera_motion=motion, sfx_file=scene_sfx)
         print(f"[Assemble] Scene {i} 클립 완성 ({dur:.1f}s, Motion: {motion or 'auto'}, SFX: {'Whoosh' if scene_sfx else 'None'})")
         part_clips.append(part_mp4)
 
     # 6. 클립 Concat
     concat_list = assets_dir / "concat_list.txt"
+    concat_mp4 = assets_dir / "concat.mp4"
     concat_list.write_text("".join(f"file '{c.name}'\n" for c in part_clips), encoding="utf-8")
-    print(f"[Assemble] 4. 전체 씬 연결 중...")
-    run_cmd(["ffmpeg", "-y", "-f", "concat", "-safe", "0", "-i", "concat_list.txt", "-c", "copy", "concat.mp4"], cwd=assets_dir)
+    if not (concat_mp4.exists() and concat_mp4.stat().st_size > 1000000):
+        print(f"[Assemble] 4. 전체 씬 연결 중...")
+        run_cmd(["ffmpeg", "-y", "-f", "concat", "-safe", "0", "-i", "concat_list.txt", "-c", "copy", "concat.mp4"], cwd=assets_dir)
+    else:
+        print(f"[Assemble] 4. 전체 씬 연결 파일(concat.mp4) 이미 존재 (스킵)")
 
     # 7. ASS 자막 번인 + 오디오 덕킹(Audio Ducking) 적용 BGM 믹싱
     final_shorts = pkg_dir / "final_shorts.mp4"
@@ -416,9 +425,45 @@ def assemble_shorts(script_path):
 
     sub_filter = f"ass='subtitles.ass'{fonts_opt}"
 
+    # 7. 상단 브랜드 라벨 투명 워터마크 PNG 생성 (첫 화면 썸네일과 1:1 동일 규격 유지)
+    brand_overlay_file = assets_dir / "brand_overlay.png"
+    has_brand_overlay = False
+    try:
+        from PIL import Image, ImageDraw, ImageFont
+        font_path_main = FONT_DIR / "GmarketSansTTFBold.ttf"
+        font_brand = ImageFont.truetype(str(font_path_main), 36) if font_path_main.exists() else ImageFont.load_default()
+        b_img = Image.new("RGBA", (1080, 1920), (0, 0, 0, 0))
+        b_draw = ImageDraw.Draw(b_img)
+        brand_y = 120
+        mode_str = str(meta.get("mode", "AM")).upper()
+        is_pm = mode_str == "PM"
+        brand_label = "THE LEGEND FALLS" if is_pm else "STAR IS BORN"
+        target_date = meta.get("target_date", "10-16").replace("-", ".")
+        gold_color = (255, 204, 0)  # 무조건 골드 적용 (#FFCC00)
+        dot_color = gold_color
+        b_draw.ellipse([70, brand_y - 10, 88, brand_y + 8], fill=dot_color)
+        prefix_text = f"{brand_label}   |   {target_date}"
+        if person_name:
+            prefix_text += "   "
+            b_draw.text((105, brand_y), prefix_text, fill=(240, 240, 250), font=font_brand, anchor="lm")
+            bbox = b_draw.textbbox((105, brand_y), prefix_text, font=font_brand, anchor="lm")
+            b_draw.text((bbox[2], brand_y), person_name, fill=gold_color, font=font_brand, anchor="lm")
+        else:
+            b_draw.text((105, brand_y), prefix_text, fill=(240, 240, 250), font=font_brand, anchor="lm")
+        b_img.save(str(brand_overlay_file), "PNG")
+        has_brand_overlay = True
+    except Exception as e:
+        print(f"[Assemble] 브랜드 워터마크 생성 경고: {e}")
+
+    # 비디오 필터 체인: 자막 번인 후 썸네일 이후 구간(t >= thumb_duration)에 브랜드 워터마크 오버레이
+    if has_brand_overlay:
+        video_chain = f"[0:v]{sub_filter}[sub_v];[sub_v][2:v]overlay=0:0:enable='gte(t,{thumb_duration})'[v];"
+    else:
+        video_chain = f"[0:v]{sub_filter}[v];"
+
     # 오디오 덕킹: 성우 목소리 구간에서 BGM 볼륨 자동 축소 (-12dB), 일시 정지 시 즉각 복원
     ducking_filter_complex = (
-        f"[0:v]{sub_filter}[v];"
+        f"{video_chain}"
         f"[0:a]asplit=2[nar][sc];"
         f"[1:a]volume=0.45[bgm];"
         f"[bgm][sc]sidechaincompress=threshold=0.035:ratio=3:attack=50:release=350[ducked_bgm];"
@@ -427,16 +472,22 @@ def assemble_shorts(script_path):
         f"[v_nar][v_bgm]amix=inputs=2:duration=first:normalize=0[aout]"
     )
 
-    print(f"[Assemble] 5. 다이내믹 자막 번인 및 오디오 덕킹(sidechaincompress) 믹싱 중...")
+    # 전체 영상 길이 (썸네일 + 전체 내레이션 음성)
+    total_video_len = thumb_duration + total_narr_dur
+
+    print(f"[Assemble] 5. 다이내믹 자막 번인 및 오디오 덕킹(sidechaincompress) 믹싱 중... (목표 길이: {total_video_len:.2f}s)")
+    extra_inputs = ["-i", "brand_overlay.png"] if has_brand_overlay else []
     try:
         cmd_final = [
             "ffmpeg", "-y",
             "-i", "concat.mp4",
-            "-stream_loop", "-1", "-i", "bgm.wav",
+            "-stream_loop", "-1", "-i", "bgm.wav"
+        ] + extra_inputs + [
             "-filter_complex", ducking_filter_complex,
             "-map", "[v]", "-map", "[aout]",
             "-c:v", "libx264", "-preset", "veryfast", "-threads", "0", "-crf", "18",
             "-c:a", "aac", "-b:a", "192k",
+            "-t", f"{total_video_len:.2f}",
             "-movflags", "+faststart",
             str(final_shorts)
         ]
@@ -445,7 +496,7 @@ def assemble_shorts(script_path):
     except Exception as e:
         print(f"[Assemble] 오디오 덕킹 필터 예외 발생, 기본 믹싱으로 폴백: {e}")
         fallback_filter = (
-            f"[0:v]{sub_filter}[v];"
+            f"{video_chain}"
             f"[1:a]volume=0.35[bgm];"
             f"[0:a]volume=1.0[nar];"
             f"[nar][bgm]amix=inputs=2:duration=first:normalize=0[aout]"
@@ -453,11 +504,13 @@ def assemble_shorts(script_path):
         cmd_final = [
             "ffmpeg", "-y",
             "-i", "concat.mp4",
-            "-stream_loop", "-1", "-i", "bgm.wav",
+            "-stream_loop", "-1", "-i", "bgm.wav"
+        ] + extra_inputs + [
             "-filter_complex", fallback_filter,
             "-map", "[v]", "-map", "[aout]",
             "-c:v", "libx264", "-preset", "veryfast", "-threads", "0", "-crf", "18",
             "-c:a", "aac", "-b:a", "192k",
+            "-t", f"{total_video_len:.2f}",
             "-movflags", "+faststart",
             str(final_shorts)
         ]

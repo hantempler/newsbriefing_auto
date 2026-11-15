@@ -112,14 +112,22 @@ def generate_shorts_thumbnail(person_name, person_name_en, hook_title, out_path=
         font_name = ImageFont.load_default()
         font_sub = ImageFont.load_default()
 
-    # 5. 상단 모던 미니멀 브랜드 라벨 (AM: STAR IS BORN vs PM: THE LEGEND FALLS)
+    # 5. 상단 모던 미니멀 브랜드 라벨 (AM/PM 무조건 골드 통일 & 날짜 옆 주인공 이름 바인딩)
     brand_y = 120
     is_pm = str(mode).upper() == "PM"
     brand_label = "THE LEGEND FALLS" if is_pm else "STAR IS BORN"
-    dot_color = (255, 204, 0) if is_pm else (255, 45, 85)  # PM: 기일/추모 골드, AM: 탄생 레드
+    gold_color = (255, 204, 0)  # 무조건 골드 적용 (#FFCC00)
+    dot_color = gold_color
 
     draw.ellipse([70, brand_y - 10, 88, brand_y + 8], fill=dot_color)
-    draw.text((105, brand_y), f"{brand_label}   |   {target_date}", fill=(240, 240, 250), font=font_brand, anchor="lm")
+    prefix_text = f"{brand_label}   |   {target_date}"
+    if person_name:
+        prefix_text += "   "
+        draw.text((105, brand_y), prefix_text, fill=(240, 240, 250), font=font_brand, anchor="lm")
+        bbox = draw.textbbox((105, brand_y), prefix_text, font=font_brand, anchor="lm")
+        draw.text((bbox[2], brand_y), person_name, fill=gold_color, font=font_brand, anchor="lm")
+    else:
+        draw.text((105, brand_y), prefix_text, fill=(240, 240, 250), font=font_brand, anchor="lm")
 
     # 6. 메인 헤드라인 정제 및 분할 (콜론/부제 및 중복 인물명 제거 후 2행 밸런스 유지)
     clean_hook = hook_title.strip()
