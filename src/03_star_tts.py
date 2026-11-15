@@ -77,8 +77,106 @@ def get_recommended_voice(person_name="", mode="AM", category=""):
     return "Kore"
 
 
+def int_to_korean(num: int) -> str:
+    """정수를 자연스러운 한국어 한자 수사로 변환 (예: 1993 -> 천구백구십삼)."""
+    if num == 0:
+        return "영"
+    digits = ["", "일", "이", "삼", "사", "오", "육", "칠", "팔", "구"]
+    units = ["", "십", "백", "천"]
+    big_units = ["", "만", "억", "조"]
+
+    num_str = str(num)
+    chunks = []
+    while num_str:
+        chunks.append(num_str[-4:])
+        num_str = num_str[:-4]
+
+    result = []
+    for chunk_idx, chunk in enumerate(chunks):
+        chunk_val = int(chunk)
+        if chunk_val == 0:
+            continue
+        chunk_str = ""
+        c_len = len(chunk)
+        for i, digit in enumerate(chunk):
+            d = int(digit)
+            pos = c_len - 1 - i
+            if d > 0:
+                if pos > 0 and d == 1:
+                    chunk_str += units[pos]
+                else:
+                    chunk_str += digits[d] + units[pos]
+        chunk_str += big_units[chunk_idx]
+        result.append(chunk_str)
+
+    return "".join(reversed(result))
+
+
+def convert_numbers_to_spoken_korean(text: str) -> str:
+    """아라비아 숫자 및 단위를 AI 성우가 자연스럽게 낭독할 수 있는 한국어 구어체로 자동 변환."""
+    if not text:
+        return ""
+    t = text
+
+    # 고유명사 예외 선반영
+    t = re.sub(r'블링크\s*182', '블링크 일팔이', t, flags=re.IGNORECASE)
+
+    # 1. 연도: 1800~2099년
+    def repl_year(m):
+        return f"{int_to_korean(int(m.group(1)))}년"
+    t = re.sub(r'(\d{4})년', repl_year, t)
+
+    # 2. 월: 6월(유월), 10월(시월) 등 발음 예외 처리
+    month_special = {'6': '유', '06': '유', '10': '시'}
+    def repl_month(m):
+        val = m.group(1)
+        if val in month_special:
+            return f"{month_special[val]}월"
+        return f"{int_to_korean(int(val))}월"
+    t = re.sub(r'(?<!\d)(\d{1,2})월', repl_month, t)
+
+    # 3. 일: 1~31일
+    def repl_day(m):
+        val = int(m.group(1))
+        if 1 <= val <= 31:
+            return f"{int_to_korean(val)}일"
+        return m.group(0)
+    t = re.sub(r'(?<!\d)(\d{1,2})일', repl_day, t)
+
+    # 4. 백분율: % -> 퍼센트
+    def repl_percent(m):
+        val = m.group(1)
+        if "." in val:
+            parts = val.split(".")
+            return f"{int_to_korean(int(parts[0]))} 점 {int_to_korean(int(parts[1]))} 퍼센트"
+        return f"{int_to_korean(int(val))} 퍼센트"
+    t = re.sub(r'(\d+(?:\.\d+)?)%', repl_percent, t)
+
+    # 5. 시간 단위: 분, 초
+    def repl_time(m):
+        return f"{int_to_korean(int(m.group(1)))} {m.group(2)}"
+    t = re.sub(r'(\d+)\s*(분|초)', repl_time, t)
+
+    # 6. 도(화상/각도/온도), 위(순위), 세(나이), 대(연령대)
+    def repl_unit(m):
+        return f"{int_to_korean(int(m.group(1)))}{m.group(2)}"
+    t = re.sub(r'(\d+)\s*(도|위|세|대|선)', repl_unit, t)
+
+    # 7. 수량/인원 단위: 명, 개, 번, 회, 곡, 편, 만, 억
+    def repl_count(m):
+        return f"{int_to_korean(int(m.group(1)))} {m.group(2)}"
+    t = re.sub(r'(\d+)\s*(명|개|번|회|곡|편|만|억)', repl_count, t)
+
+    # 8. 잔여 단독 숫자 변환
+    def repl_standalone(m):
+        return int_to_korean(int(m.group(1)))
+    t = re.sub(r'(?<![A-Za-z0-9])(\d+)(?![A-Za-z0-9])', repl_standalone, t)
+
+    return t
+
+
 def normalize_tts_text(text: str) -> str:
-    """TTS 낭독 시 어색한 자음 약어 및 슬랭을 자연스러운 발음으로 자동 치환."""
+    """TTS 낭독 시 어색한 자음 약어, 슬랭, 아라비아 숫자를 자연스러운 한국어 발음으로 자동 치환."""
     replacements = [
         (r"ㄱㄱ", "고고"),
         (r"ㄷㄷ", "덜덜"),
@@ -96,6 +194,9 @@ def normalize_tts_text(text: str) -> str:
     cleaned = text
     for pattern, repl in replacements:
         cleaned = re.sub(pattern, repl, cleaned)
+
+    # 아라비아 숫자 ➔ 한국어 낭독 발음 변환
+    cleaned = convert_numbers_to_spoken_korean(cleaned)
     return cleaned.strip()
 
 

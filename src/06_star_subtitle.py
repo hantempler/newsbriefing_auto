@@ -264,11 +264,11 @@ def get_clean_sub_text(sc: dict) -> str:
     """화면 자막 텍스트 추출 (요약/누락 방지 1:1 보존 인터록)."""
     disp = sc.get("display_text", "").strip()
     narr = sc.get("narration", "").strip()
-    # display_text가 없거나 narration보다 지나치게 짧아 요약된 경우(글자 수 85% 미만),
-    # narration 원본을 100% 1:1 보존하는 format_sub_display(narr)로 강제 치환
-    if not disp or (narr and len(disp) < len(narr) * 0.85):
-        return format_sub_display(narr)
-    return disp
+    if disp:
+        return disp
+    if narr:
+        return narr
+    return ""
 
 
 def analyze_dynamic_chunks(scenes):

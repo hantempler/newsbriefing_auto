@@ -48,6 +48,47 @@ GCP_LOCATION = "global"
 MODEL_PRO = "gemini-3.5-flash"
 MODEL_FLASH = "gemini-3.5-flash"
 
+# ==============================================================================
+# 5대 서사 플롯 모듈화 (인물 특성별 전개 공식)
+# ==============================================================================
+NARRATIVE_PLOTS = {
+    "PLOT_A": {
+        "name": "상식 파괴 & 반전 추적형 (오해/루머/반전 정체)",
+        "guide": """- 씬 1 (오프닝 훅): "우리가 알던 이 사실, 100% 가짜였다?!" 도발적 반전 훅
+- 씬 2~3 (오해의 시작): 당대 미디어와 대중이 왜 이 인물을 오해하고 비난했는가?
+- 씬 4~5 (팩트의 진실): 결정적 증거와 숨겨진 팩트로 밝혀낸 진짜 진실과 도파민 폭발
+- 씬 6~7 (역사의 재평가): 시대를 앞서간 천재를 향한 재평가와 여운의 헌사"""
+    },
+    "PLOT_B": {
+        "name": "언더독 카타르시스형 (밑바닥/무명/편견을 독기로 뚫어낸 인물)",
+        "guide": """- 씬 1 (오프닝 훅): 가장 처절하게 내동댕이쳐졌던 절망의 밑바닥 순간으로 직행
+- 씬 2~3 (지독한 시련): 비웃음과 차가운 거절 속에서 이를 악물고 갈고닦은 독기
+- 씬 4~5 (도파민 폭발): 단 한 번의 무대/기회에서 세상을 뒤집어버린 압도적 카타르시스
+- 씬 6~7 (통쾌한 증명): 나를 무시하던 세상에 통쾌하게 날린 완벽한 증명과 찬사"""
+    },
+    "PLOT_C": {
+        "name": "세기의 맞대결 & 라이벌전 (스포츠/경쟁/세기의 격돌)",
+        "guide": """- 씬 1 (오프닝 훅): 숨 막히는 결전의 현장, 두 거인이 마주선 1초 오프닝
+- 씬 2~3 (천재 vs 천재): 상반된 스타일과 천재성, 피할 수 없는 운명적 충돌
+- 씬 4~5 (결정적 순간): 전 세계 수억 명이 숨죽인 결정적 명장면과 승부의 분수령
+- 씬 6~7 (영원한 리스펙트): 승패를 초월한 위대한 라이벌 드라마와 영원한 리스펙트"""
+    },
+    "PLOT_D": {
+        "name": "도파민 폭발 엽기 기행형 (유쾌한 천재성과 기상천외한 실화)",
+        "guide": """- 씬 1 (오프닝 훅): "대체 왜 이런 짓을 벌였을까?!" 황당한 돌발 사건 훅
+- 씬 2~3 (상식 파괴 실화): 상식을 와장창 깨부수는 유쾌하고 대담한 실화 에피소드
+- 씬 4~5 (위기를 기회로): 방송사고나 돌발 위기를 역대급 흥행으로 바꾼 천재성
+- 씬 6~7 (미친 매력): 세상을 유쾌하게 뒤흔든 독보적 폼과 유쾌한 찬사"""
+    },
+    "PLOT_E": {
+        "name": "시네마틱 레거시 추모/헌정형 (불멸의 작품과 깊은 존경)",
+        "guide": """- 씬 1 (오프닝 훅): 그날의 기억과 가슴 먹먹한 시네마틱 헌정 오프닝
+- 씬 2~3 (청춘의 위로): 시대의 청춘들을 위로했던 불멸의 명곡/명작과 진심
+- 씬 4~5 (마지막 불꽃): 시련 속에서도 끝까지 무대와 예술을 지킨 뜨거운 불꽃
+- 씬 6~7 (영원한 별): 세월이 흘러도 영원히 살아 숨 쉬는 별빛을 향한 깊은 헌사"""
+    }
+}
+
 
 
 
@@ -137,6 +178,8 @@ def run_fact_check(client, types, model, person_name, mode, date_str):
   "debunked_myths": [
     {{"myth": "흔한 오해/루머", "truth": "실제 진실"}}
   ],
+  "recommended_plot": "PLOT_A | PLOT_B | PLOT_C | PLOT_D | PLOT_E 중 최적 1개 선택 (루브릭: PM기일추모=PLOT_E, 오해/상식파괴/반전정체=PLOT_A, 가난/무명/질병/탈락극복=PLOT_B, 스포츠/경쟁/라이벌격돌=PLOT_C, 유쾌한천재/돌발행동/방송사고=PLOT_D, 문학가/클래식/시대적레거시=PLOT_E)",
+  "plot_reason": "선택한 플롯의 결정적 근거 팩트 1문장 요약",
   "summary_for_shorts": "쇼츠 핵심 테마 요약 (100자 내외)"
 }}
 반드시 순수 JSON만 응답하세요."""
@@ -154,8 +197,11 @@ def run_fact_check(client, types, model, person_name, mode, date_str):
         parsed = json.loads(clean_text)
 
     # PM 모드 사망 여부 하드 가드레일 인터록
-    if mode.lower() == "pm" and not parsed.get("is_deceased", True):
-        raise ValueError(f"[🚨 FactCheck 차단] '{person_name}'은(는) 현재 살아있는 생존 인물입니다! PM(사망 기일 추모) 모드로 가짜뉴스 대본을 쓸 수 없습니다.")
+    if mode.lower() == "pm":
+        if not parsed.get("is_deceased", True):
+            raise ValueError(f"[🚨 FactCheck 차단] '{person_name}'은(는) 현재 살아있는 생존 인물입니다! PM(사망 기일 추모) 모드로 가짜뉴스 대본을 쓸 수 없습니다.")
+        parsed["recommended_plot"] = "PLOT_E"
+        parsed["plot_reason"] = "영원한 레거시와 불멸의 유산을 기리는 시네마틱 추모"
 
     return parsed
 
@@ -163,7 +209,15 @@ def run_fact_check(client, types, model, person_name, mode, date_str):
 def generate_shorts_script(client, types, model, person_name, person_name_en, mode, date_str, fact_data):
     """검증된 팩트를 바탕으로 7개 씬(80~100초) 서사 확장 쇼츠 대본 생성."""
     mode_title = "[A Star is Born] 오늘 태어난 스타" if mode.lower() == "am" else "[The Legend Falls] 오늘 별이 된 레전드"
-    print(f"[Script] {mode_title} - 7개 씬 서사 확장 대본 집필 중...")
+
+    # 서사 플롯 결정 (PM은 무조건 PLOT_E, AM은 팩트체크 기반 루브릭 판정)
+    selected_plot = fact_data.get("recommended_plot", "PLOT_B")
+    if mode.lower() == "pm":
+        selected_plot = "PLOT_E"
+    plot_info = NARRATIVE_PLOTS.get(selected_plot, NARRATIVE_PLOTS["PLOT_B"])
+    plot_reason = fact_data.get("plot_reason", "인물의 핵심 생애에 최적화된 서사")
+    print(f"[Script] {mode_title} - 서사 플롯: {plot_info['name']} ({plot_reason})")
+    print(f"[Script] 7개 씬 서사 확장 대본 집필 중...")
 
     if mode.lower() == "am":
         tone_instruction = """- [AM 탄생 축하 모드 컬러/조명 철학 - 생생한 원색 풀컬러 (Vivid Full Color)]:
@@ -210,16 +264,14 @@ def generate_shorts_script(client, types, model, person_name, person_name_en, mo
    - [AM - 생일 축하 모드]: 시청자와 팬덤 모두가 감탄하고 진심으로 축하할 수 있는 '역대급 대기록', '치열한 노력과 끈기', '반전 실력과 신드롬', '감동적인 미담과 선한 영향력'을 칭찬과 긍정으로 가득 채우세요.
    - [PM - 기일 추모 모드]: 자극적인 사망 경위나 비극적 사건 묘사는 엄격히 배제하고, 그가 남긴 '불멸의 명곡/명작', '전 세계 팬들의 청춘을 밝혀준 찬란한 순간', '음악과 예술적 유산에 대한 깊은 경의와 따뜻한 리스펙트'를 담으세요.
    - [공통 금기 사항]: 사생활 가십, 세금/법적 분쟁, 성형 루머, 악의적 논란은 100% 원천 배제하세요.
-4. [TTS 낭독 음성 및 화면 자막 표기 가이드 (1:1 쌍둥이 문장 원칙)]:
-   - 🚨 [절대 원칙 - 요약 및 생략 100% 영구 엄금]:
-     * 'display_text'(자막)와 'narration'(음성)은 문장 구성, 단어 개수, 어순이 100% 동일한 '완전 일치 쌍둥이 문장'이어야 합니다!
-     * 자막(display_text)을 짧게 요약하거나 단어를 줄여 쓰는 행위를 100% 엄금합니다! 성우가 읽는 모든 문장이 화면 자막에 온전히 다 나와야 합니다.
-   - [화면 자막용 (display_text)]:
-     * narration의 모든 문장과 단어를 1:1로 그대로 유지하되, 오직 연도, 날짜, 시간, 나이, 순위, 백분율, 외래어 고유명사만 '아라비아 숫자(1998년, 45분, 182, 65%, 3도 등)'와 표준 기호(%)로 표기하세요.
+4. [대본 작성 및 서사 분량 절대 룰 (80~100초 보장)]:
+   - 🚨 [각 씬당 3~4문장 필수 (요약/단문 절대 엄금)]:
+     * 1분 미만 깡통 영상 방지를 위해, 각 씬당 반드시 3~4문장, 공백 포함 85~115자의 풍부한 서사로 작성하세요.
+     * 한두 문장짜리 초단문 요약은 절대 금지합니다!
+   - [표준 표기 (숫자/기호/고유명사)]:
+     * 연도, 날짜, 시간, 나이, 순위, 백분율, 외래어 고유명사는 사람이 읽는 자연스러운 아라비아 숫자('1998년', '45분', '182', '65%', '3도' 등)와 표준 기호(%)로 표기하세요.
    - [화면 상단 챕터 제목 (caption)]:
      * 10자 내외 간결한 명사형 구문으로 작성하며, 숫자가 들어갈 경우 아라비아 숫자(예: '45분의 기적')로 작성하세요.
-   - [성우 낭독 대본 (narration)]:
-     * AI 성우가 오독하지 않도록 자연스러운 구어체 한국어로 작성하세요. 연도와 날짜, 숫자는 성우가 가장 자연스럽게 읽을 수 있는 한글 발음('천구백구십팔년', '사십오 분', '육십오 퍼센트', '삼도 화상')으로 정확하게 작성합니다.
    - [노란색 하이라이트 키워드 (highlight_keywords)]:
      * 시청자의 시선을 순간적으로 사로잡을 씬별 핵심 단어 1~2개를 반드시 배열로 지정하세요 (예: ["블링크 182"], ["65%", "3도 화상"]).
      * 🚨 [절대 금기]: '~했습니다', '~있었습니다', '~뿐이었다' 같은 서술어/종결어미나 '~에게', '~에서' 같은 조사를 하이라이트로 지정하는 것을 100% 엄금합니다. 반드시 숫자, 사건명, 고유명사, 핵심 명사형만 지정하세요.
@@ -238,44 +290,15 @@ def generate_shorts_script(client, types, model, person_name, person_name_en, mo
    - 씬 1부터 씬 7까지 모든 bg_prompt 첫머리에 반드시 '{person_name_en} with his/her iconic features' 실명과 대표 외형 시그니처를 포함해야 합니다.
    {visual_style_instruction}
 
-[서사 다변화 가이드 - 매일 다른 플롯 선택]
-인물의 특성과 팩트에 가장 잘 어울리는 아래 5가지 서사 플롯 중 하나를 자동 선택하여 7개 씬을 유기적으로 전개하세요:
-
-플롯 A. [상식 파괴 & 반전 추적형] (오해와 루머가 있거나 반전이 있는 인물):
-  - 씬 1: "우리가 알던 이 사실, 100% 가짜였다?!" 도발적 훅
-  - 씬 2~3: 당대 사람들이 왜 이 사람을 오해하고 비난했는가?
-  - 씬 4~5: 역사적 팩트와 결정적 증거로 밝혀낸 진짜 진실
-  - 씬 6~7: 역사의 재평가와 여운 + 간결한 CTA
-
-플롯 B. [언더독 카타르시스형] (밑바닥, 무명, 편견을 독기로 뚫어낸 인물):
-  - 씬 1: 가장 비참하게 내동댕이쳐졌던 절망의 순간
-  - 씬 2~3: 곰팡이 단칸방/비웃음 속에서 이를 악물고 갈고닦은 무기
-  - 씬 4~5: 단 한 번의 무대/기회에서 세상을 뒤집어버린 도파민 폭발
-  - 씬 6~7: 나를 무시하던 자들을 향한 가장 통쾌한 복수 + 간결한 CTA
-
-플롯 C. [세기의 맞대결 & 라이벌전] (치열한 승부와 라이벌이 있는 스포츠/테크 스타):
-  - 씬 1: 숨 막히는 격돌의 현장 오프닝
-  - 씬 2~3: 천재 vs 천재, 스타일과 성격의 극단적 대비
-  - 씬 4~5: 전 세계 수억 명이 숨죽인 결정적 명장면/충돌
-  - 씬 6~7: 승패를 초월한 리스펙트와 영원한 드라마 + 간결한 CTA
-
-플롯 D. [도파민 폭발 엽기 기행형] (유쾌한 썰과 기발한 천재성이 돋보이는 인물):
-  - 씬 1: "대체 왜 이런 짓을 했을까?" 황당한 돌발 상황 훅
-  - 씬 2~3: 상식을 와장창 깨부수는 기상천외한 실화 에피소드
-  - 씬 4~5: 방송사고나 위기를 역대급 마케팅/흥행으로 바꾼 천재성
-  - 씬 6~7: 미친 폼과 세상을 웃게 만든 매력 + 간결한 CTA
-
-플롯 E. [시네마틱 레거시 추모형] (전 국민의 가슴에 영원히 남은 레전드):
-  - 씬 1: 그날의 기억과 가슴 먹먹한 오프닝
-  - 씬 2~3: 시대의 청춘들을 위로했던 명곡/명연기와 진심
-  - 씬 4~5: 아픔 속에서도 마지막까지 무대와 사람을 지킨 불꽃
-  - 씬 6~7: 세월이 흘러도 여전히 우리 곁에 살아 숨 쉬는 별 + 헌사 CTA
+[이번 쇼츠의 핵심 서사 플롯: {plot_info['name']}]
+- 판정 근거: {plot_reason}
+- 씬 1부터 씬 7까지의 필수 전개 공식:
+{plot_info['guide']}
 
 [대본 구성 절대 룰 - 1회차 시청자 100% 몰입 및 완벽한 기승전결]
 1. 씬 1 (오프닝 훅, 5~8초):
    - 대뜸 "바로 ~였습니다"처럼 질문도 안 했는데 대답부터 하는 쌩뚱맞은 문장 절대 금지!
-   - 1회차 시청자가 들었을 때 즉시 귀를 기울이게 만드는 도발적인 질문, 호기심 폭발 명대사, 놀라운 반전 팩트로 자연스럽게 시작하세요.
-   - 예: "노래방 가면 무조건 부르는 전설의 명곡 'Maria'! 그런데 이 폭발적인 고음의 주인공이 가수가 아니라 여배우라는 사실, 알고 계셨나요? 오늘 태어난 스타, 김아중의 미친 반전 스토리입니다."
+   - 1회차 시청자가 들었을 때 즉시 귀를 기울이게 만드는 도발적인 질문, 호기심 폭발 명대사, 충격적인 절망/결전의 순간 등 지정된 서사 플롯({plot_info['name']})의 씬 1 공식에 맞추어 첫 5초에 시청자의 멱살을 잡으세요.
 2. 씬 2~6 (본문 전개, 각 12~17초):
    - 선택한 플롯에 맞추어 기승전결 텐션 유지. 뼈를 깎는 노력과 극적인 반전, 카타르시스 폭발.
 3. 씬 7 (아웃트로, 8~10초):
@@ -299,8 +322,7 @@ def generate_shorts_script(client, types, model, person_name, person_name_en, mo
       "scene_no": 1,
       "timing": "00:00-00:05",
       "caption": "화면 상단 세련된 한글 챕터 제목 (10자 내외 간결한 명사형 구문, 숫자는 아라비아 숫자 필수, 예: '45분의 기적')",
-      "display_text": "narration과 단어·어순이 100% 동일한 쌍둥이 자막 문장 (요약/생략 절대 금지! 숫자/연도/단위만 '1998년', '45분', '65%', '3도 화상', '블링크 182' 등 아라비아 숫자로 표기)",
-      "narration": "AI 성우가 낭독할 자연스러운 구어체 문장 (TTS 발음 안전 표기: 예: '천구백구십팔년, 밴드 블링크 일팔이에...')",
+      "narration": "인물의 삶을 생생하게 묘사하는 풍부한 3~4문장 (공백 포함 85~115자 필수, 숫자는 '1998년', '45분', '65%', '3도 화상', '블링크 182' 등 아라비아 숫자로 자연스럽게 표기)",
       "highlight_keywords": ["화면 자막에서 노란색으로 강조할 핵심 키워드 1~2개 (서술어/종결어미 절대 금지, 예: '블링크 182')"],
       "camera_motion": "face_zoom 또는 pan_lr 등 위 6대 모션 중 택1",
       "bg_prompt": "English 9:16 vertical visual prompt starting with {person_name_en}"
@@ -336,22 +358,20 @@ def generate_shorts_script(client, types, model, person_name, person_name_en, mo
     except Exception:
         _fmt = None
 
-    if _fmt and isinstance(script_data, dict):
+    if isinstance(script_data, dict):
+        script_data["narrative_plot"] = selected_plot
+        script_data["plot_reason"] = plot_reason
         for sc in script_data.get("scenes", []):
-            if sc.get("caption"):
+            if sc.get("caption") and _fmt:
                 sc["caption"] = _fmt(sc["caption"])
             narr = sc.get("narration", "").strip()
-            disp = sc.get("display_text", "").strip()
-            # 🚨 자막 요약/누락 원천 차단:
-            # display_text가 없거나 narration보다 현저히 짧아 요약된 경우(글자 수 85% 미만),
-            # narration 전체를 100% 1:1 보존하는 format_sub_display(narr)로 강제 치환하여 자막 누락을 물리적으로 차단
-            if not disp or (narr and len(disp) < len(narr) * 0.85):
-                sc["display_text"] = _fmt(narr)
+            # 하위 호환 및 자막 1:1 보존을 위해 display_text를 narration 원본으로 동기화
+            sc["display_text"] = narr
 
     return script_data
 
 
-def run_pipeline(mode="am", date_str=None, person=None):
+def run_pipeline(mode="am", date_str=None, person=None, plot=None):
     from google import genai
     from google.genai import types
 
@@ -414,6 +434,13 @@ def run_pipeline(mode="am", date_str=None, person=None):
     fact_data = run_fact_check(client, types, model, person, mode, date_str)
     print(f"[FactCheck] 결과: 날짜일치={fact_data.get('target_date_match')}, 확인일자={fact_data.get('verified_date')}")
 
+    # 수동 지정 플롯이 있으면 최우선 적용 (PM 모드는 PLOT_E 하드 가드레일 유지)
+    if plot and mode.lower() != "pm":
+        plot_key = f"PLOT_{plot.upper()}" if not plot.upper().startswith("PLOT_") else plot.upper()
+        if plot_key in NARRATIVE_PLOTS:
+            fact_data["recommended_plot"] = plot_key
+            fact_data["plot_reason"] = f"사용자 수동 지정 플롯 ({plot_key})"
+
     # 팩트체크와 대본 생성 사이 쿨다운 (API 429 방지)
     time.sleep(3)
 
@@ -448,6 +475,7 @@ if __name__ == "__main__":
     p.add_argument("--mode", default="am", choices=["am", "pm"])
     p.add_argument("--date", default=None)
     p.add_argument("--person", default=None)
+    p.add_argument("--plot", default=None, help="서사 플롯 수동 지정 (A, B, C, D, E)")
     args = p.parse_args()
 
-    run_pipeline(mode=args.mode, date_str=args.date, person=args.person)
+    run_pipeline(mode=args.mode, date_str=args.date, person=args.person, plot=args.plot)
