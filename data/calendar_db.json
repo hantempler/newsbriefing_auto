@@ -5,9 +5,9 @@
     "target_audience": "Korean YouTube Shorts Viewers (1030세대 & 대중)",
     "korean_familiarity_priority": true,
     "min_year": 1960,
-    "period": "10-15 ~ 11-17 (Live Accumulated)",
-    "total_dates": 33,
-    "total_stars": 69,
+    "period": "10-15 ~ 11-18 (Live Accumulated)",
+    "total_dates": 34,
+    "total_stars": 70,
     "categories": [
       "K-Culture (드라마/예능/아이돌/가요 레전드)",
       "Global Pop (내한 떼창/손하트)",
@@ -2805,7 +2805,60 @@
         "verified": true,
         "scouted_trending": true
       }
+    },
+    "11-18": {
+      "pm": {
+        "person_name": "마르셀 프루스트",
+        "person_name_en": "Marcel Proust",
+        "category": "문학 (소설)",
+        "event_date": "1922-11-18",
+        "keywords": [
+          "잃어버린시간을찾아서",
+          "프루스트효과",
+          "마들렌과홍차",
+          "20세기대문호"
+        ],
+        "brief": "홍차에 적신 마들렌 한 조각으로 잃어버린 시간의 기억을 깨웠던 20세기의 위대한 대문호, 마르셀 프루스트가 1922년 11월 18일 별세했습니다. 그가 남긴 불멸의 문장들은 오늘날에도 우리 삶의 가장 아름다운 순간들을 되돌아보게 만듭니다.",
+        "is_deceased": true,
+        "trend_score": 98,
+        "trend_reason": "마르셀 프루스트는 단순한 고전 작가를 넘어 현대 대중문화와 심리학에서도 끊임없이 회자되는 '프루스트 효과(향기 기억 현상)'의 시초입니다. 한국인들에게 '마들렌과 홍차'라는 감성적 아이콘으로 깊이 각인되어 있어, 쇼츠 영상 제작 시 시각적·감각적 연출이 매우 용이하고 대중의 깊은 정서적 공감과 추모 댓글을 이끌어내기에 가장 완벽한 인물입니다.",
+        "top_candidates": [
+          {
+            "rank": 1,
+            "person_name": "마르셀 프루스트",
+            "person_name_en": "Marcel Proust",
+            "category": "문학 (소설)",
+            "death_date": "1922-11-18",
+            "korean_resonance": "20세기 최고의 소설 '잃어버린 시간을 찾아서'의 저자이며, 향기를 통해 과거의 기억을 떠올리는 '프루스트 효과(Proust Effect)'로 한국 대중에게 깊은 감성적 울림과 친숙함을 주는 대문호입니다.",
+            "legacy_point": "평생 심한 천식과 싸우며 외부와 차단된 코르크 방에 은둔한 채, 오직 인간의 기억과 의식의 흐름을 복원하는 불멸의 대작을 집필하는 데 온 삶을 바쳤습니다.",
+            "traffic_score": 98
+          },
+          {
+            "rank": 2,
+            "person_name": "닐스 보어",
+            "person_name_en": "Niels Bohr",
+            "category": "과학 (물리학)",
+            "death_date": "1962-11-18",
+            "korean_resonance": "현대 양자역학의 기틀을 마련한 노벨 물리학상 수상자로, 한국의 과학 교육과 대중 과학 도서에서 빠지지 않고 등장하는 친숙한 인물입니다. 아인슈타인과의 치열한 학문적 논쟁은 오늘날까지도 흥미로운 서사로 회자됩니다.",
+            "legacy_point": "보어 원자 모형과 상보성 원리를 통해 미시 세계를 이해하는 새로운 눈을 인류에게 선물했으며, 제2차 세계대전 중 핵무기의 평화적 이용을 주장한 평화주의자였습니다.",
+            "traffic_score": 93
+          },
+          {
+            "rank": 3,
+            "person_name": "말콤 영",
+            "person_name_en": "Malcolm Young",
+            "category": "음악 (록/메탈)",
+            "death_date": "2017-11-18",
+            "korean_resonance": "전설적인 하드 록 밴드 AC/DC의 심장이자 리듬 기타리스트로, 한국의 수많은 록 마니아와 음악인들에게 무한한 영감을 주었습니다. 말년에 치매 투병 끝에 세상을 떠나 전 세계 음악 팬들의 가슴을 먹먹하게 만들었습니다.",
+            "legacy_point": "'Back in Black', 'Highway to Hell' 등 역사상 가장 강력하고 완벽한 기타 리프를 창조해 내며 록 음악의 뼈대를 세운 리듬 기타의 교과서입니다.",
+            "traffic_score": 91
+          }
+        ],
+        "wikidata_id": "Q7199",
+        "verified": true,
+        "scouted_trending": true
+      }
     }
   },
-  "total_dates": 33
+  "total_dates": 34
 }
