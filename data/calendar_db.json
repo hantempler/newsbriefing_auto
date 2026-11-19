@@ -5,9 +5,9 @@
     "target_audience": "Korean YouTube Shorts Viewers (1030세대 & 대중)",
     "korean_familiarity_priority": true,
     "min_year": 1960,
-    "period": "10-15 ~ 11-19 (Live Accumulated)",
-    "total_dates": 35,
-    "total_stars": 72,
+    "period": "10-15 ~ 11-20 (Live Accumulated)",
+    "total_dates": 36,
+    "total_stars": 74,
     "categories": [
       "K-Culture (드라마/예능/아이돌/가요 레전드)",
       "Global Pop (내한 떼창/손하트)",
@@ -2962,7 +2962,101 @@
         "verified": true,
         "scouted_trending": true
       }
+    },
+    "11-20": {
+      "am": {
+        "person_name": "요시키",
+        "person_name_en": "Yoshiki",
+        "category": "음악 (록 밴드 X JAPAN 리더)",
+        "event_date": "1965-11-20",
+        "keywords": [
+          "X JAPAN",
+          "Tears",
+          "잠시만 안녕",
+          "광기의 드러머"
+        ],
+        "brief": "목이 부서져라 드럼을 부수던 광기의 록스타이자, 쇼팽을 연주하는 섬세한 피아니스트. 비극을 예술로 승화시킨 시대의 레전드입니다.",
+        "is_deceased": false,
+        "trend_score": 97,
+        "trend_reason": "한국인들의 노래방 애창곡 1순위인 '잠시만 안녕'의 원곡자로서 전 세대를 아우르는 압도적인 인지도를 자랑합니다. 아버지를 잃은 슬픔을 광기 어린 드럼 연주로 승화시킨 서사, 목 보호대를 차고도 무대에 오르는 처절함, 그리고 멤버들의 비극을 딛고 일어선 눈물의 역사는 80초 쇼츠 알고리즘을 완벽히 장악할 치명적인 도파민과 감동을 선사하기에 최종 1위로 낙점했습니다.",
+        "top_candidates": [
+          {
+            "rank": 1,
+            "person_name": "요시키",
+            "person_name_en": "Yoshiki",
+            "category": "음악 (록 밴드 X JAPAN 리더)",
+            "birth_date": "1965-11-20",
+            "korean_resonance": "X JAPAN의 'Tears', 'Endless Rain'은 한국인들의 영혼을 울린 인생 락 발라드입니다. 특히 한국 노래방 메가 히트곡인 엠씨더맥스의 '잠시만 안녕' 원곡자이자, 한국 밴드 트랙스(TRAX)를 직접 프로듀싱하는 등 한국 대중음악 역사와 매우 깊은 정서적 유대감을 공유하고 있습니다.",
+            "viral_story_point": "어린 시절 아버지의 비극적인 죽음으로 인한 분노를 드럼에 쏟아부으며 '광기의 드러머'가 된 서사. 목 디스크가 파열되어 목 보호대를 차고 쓰러질 때까지 드럼을 부수듯 연주하는 파괴적인 모습과, 쇼팽을 연주하는 섬세한 피아니스트의 극단적 갭모에가 쇼츠 시청자들의 도파민을 자극합니다.",
+            "traffic_score": 97
+          },
+          {
+            "rank": 2,
+            "person_name": "이윤열",
+            "person_name_en": "Lee Yoon-yeol",
+            "category": "e스포츠 (前 프로게이머)",
+            "birth_date": "1984-11-20",
+            "korean_resonance": "스타크래프트 전성기 시절 '천재 테란'으로 불리며 임요환, 홍진호와 함께 대한민국 2040 남성들의 밤잠을 설치게 만들었던 e스포츠의 살아있는 전설이자 청춘의 상징입니다.",
+            "viral_story_point": "최전성기 시절 갑작스러운 부친상이라는 거대한 비극을 겪고도, 하늘에 계신 아버지를 위해 눈물을 흘리며 결승전에서 우승을 차지한 감동적인 드라마를 가지고 있습니다. 여기에 흑역사이자 전설의 밈인 '벼봇춤' 영상 소스까지 더해져 감동과 웃음을 동시에 유발합니다.",
+            "traffic_score": 90
+          }
+        ],
+        "wikidata_id": "Q311193",
+        "verified": true,
+        "scouted_trending": true
+      },
+      "pm": {
+        "person_name": "김성재",
+        "person_name_en": "Kim Sung-jae",
+        "category": "가수 (듀스 멤버)",
+        "event_date": "1995-11-20",
+        "keywords": [
+          "말하자면",
+          "듀스",
+          "여름안에서",
+          "영원한스타"
+        ],
+        "brief": "시대를 앞서간 천재적인 감각으로 대중음악의 패러다임을 바꿨으나, 1995년 11월 20일 별세하여 우리 곁을 떠난 영원한 시대의 아이콘 故 김성재를 깊이 추모합니다.",
+        "is_deceased": true,
+        "trend_score": 98,
+        "trend_reason": "솔로 데뷔 무대를 성공적으로 마친 바로 다음 날, 23세라는 꽃다운 나이에 의문의 죽음을 맞이한 비극적 서사는 한국 대중음악사상 가장 미스터리하고 가슴 아픈 사건입니다. 그의 유작 '말하자면'과 듀스의 명곡들은 세대를 초월해 사랑받고 있으며, 매년 11월 20일이 되면 온 국민의 그리움과 추모 열기가 폭발하는 독보적인 화제성을 지니고 있어 최종 1위 레전드로 선정했습니다.",
+        "top_candidates": [
+          {
+            "rank": 1,
+            "person_name": "김성재",
+            "person_name_en": "Kim Sung-jae",
+            "category": "가수 (듀스 멤버)",
+            "death_date": "1995-11-20",
+            "korean_resonance": "1990년대 한국 대중음악계의 판도를 바꾼 전설적인 힙합 듀오 '듀스'의 멤버이자, 솔로 데뷔 무대를 마친 바로 다음 날 거짓말처럼 세상을 떠나 대중에게 가장 큰 충격과 슬픔을 안겨준 비운의 천재 스타입니다.",
+            "legacy_point": "듀스의 '나를 돌아봐', '여름 안에서' 등 시대를 앞서간 명곡들과 솔로 데뷔곡이자 유작이 된 '말하자면'을 남겼으며, 독보적인 패션 감각과 예술혼으로 오늘날까지도 '영원한 트렌드세터'로 추모받고 있습니다.",
+            "traffic_score": 98
+          },
+          {
+            "rank": 2,
+            "person_name": "레프 톨스토이",
+            "person_name_en": "Leo Tolstoy",
+            "category": "소설가 / 사상가",
+            "death_date": "1910-11-20",
+            "korean_resonance": "인류 역사상 가장 위대한 대문호 중 한 명으로, '전쟁과 평화', '안나 카레니나' 등 한국인들에게도 깊은 영혼의 울림을 준 고전들을 집필하며 삶과 죽음, 인간 구원에 대한 묵직한 메시지를 전했습니다.",
+            "legacy_point": "러시아 사실주의 문학의 정점을 찍었으며, 말년에 자신의 모든 기득권을 내려놓고 가출을 감행해 쓸쓸한 간이역에서 숨을 거둔 극적인 삶의 마지막 순간은 불멸의 서사로 남아 있습니다.",
+            "traffic_score": 94
+          },
+          {
+            "rank": 3,
+            "person_name": "로버트 알트만",
+            "person_name_en": "Robert Altman",
+            "category": "영화감독",
+            "death_date": "2006-11-20",
+            "korean_resonance": "할리우드의 이단아이자 거장으로, '매시(M*A*S*H)', '내슈빌' 등을 통해 독창적인 영화 문법을 선보이며 한국의 수많은 시네필과 영화감독들에게 지대한 영감을 준 인물입니다.",
+            "legacy_point": "칸, 베네치아, 베를린 등 세계 3대 영화제 최고상을 모두 석권하고 아카데미 공로상까지 수상하며 현대 영화의 앙상블 캐스팅과 다중 녹음 기법을 개척한 불멸의 시네아스트입니다.",
+            "traffic_score": 88
+          }
+        ],
+        "wikidata_id": "Q483537",
+        "verified": true,
+        "scouted_trending": true
+      }
     }
   },
-  "total_dates": 35
+  "total_dates": 36
 }
