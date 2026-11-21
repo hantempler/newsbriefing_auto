@@ -5,9 +5,9 @@
     "target_audience": "Korean YouTube Shorts Viewers (1030세대 & 대중)",
     "korean_familiarity_priority": true,
     "min_year": 1960,
-    "period": "10-15 ~ 11-23 (Live Accumulated)",
-    "total_dates": 37,
-    "total_stars": 76,
+    "period": "10-15 ~ 12-30 (Live Accumulated)",
+    "total_dates": 40,
+    "total_stars": 81,
     "categories": [
       "K-Culture (드라마/예능/아이돌/가요 레전드)",
       "Global Pop (내한 떼창/손하트)",
@@ -3317,7 +3317,111 @@
         "verified": true,
         "scouted_trending": true
       }
+    },
+    "12-30": {
+      "am": {
+        "person_name": "뷔 (김태형)",
+        "person_name_en": "V (Kim Tae-hyung)",
+        "category": "대중음악 (BTS)",
+        "event_date": "1995-12-30",
+        "keywords": [
+          "방탄소년단",
+          "수방사 SDT 특임대",
+          "거창 소년의 기적",
+          "세계 미남 1위"
+        ],
+        "brief": "거창의 평범한 시골 소년에서 세계를 뒤흔든 슈퍼스타로, 그리고 가장 뜨거운 순간 특수부대 자원입대로 증명한 '진짜 사나이'의 품격!",
+        "is_deceased": false,
+        "trend_score": 98,
+        "trend_reason": "전 세계적인 인지도는 물론, 육군 최정예 특수부대(SDT) 자원입대 및 성실한 군 복무를 통해 한국 대중에게 '호감형 청년'으로서의 정서적 유대감을 완벽히 굳혔습니다. 화려한 무대 위 모습과 늠름한 군인으로서의 갭모에, 그리고 동료들을 챙긴 따뜻한 미담 서사는 80초 쇼츠 알고리즘을 폭발시킬 최고의 도파민 치트키이기에 최종 1위로 선정했습니다.",
+        "top_candidates": [
+          {
+            "rank": 1,
+            "person_name": "뷔 (김태형)",
+            "person_name_en": "V (Kim Tae-hyung)",
+            "category": "대중음악 (BTS)",
+            "birth_date": "1995-12-30",
+            "korean_resonance": "세계적인 그룹 BTS의 멤버이자 한국 대중문화의 상징적인 아이콘. 특유의 매력적인 저음과 독보적인 비주얼로 전 세대를 사로잡았으며, 성실한 군 복무를 거치며 대중적 호감도와 신뢰도가 정점에 달해 있습니다.",
+            "viral_story_point": "최정예 특수부대인 육군 수방사 특임대(SDT)에 자원입대하여 고강도 훈련을 소화한 반전 매력. 팬들과의 약속을 지키기 위해 벌크업을 감행해 다부진 체격으로 전역한 비하인드와 군 동료들을 살뜰히 챙긴 미담이 쇼츠 치트키입니다.",
+            "traffic_score": 98
+          },
+          {
+            "rank": 2,
+            "person_name": "르브론 제임스",
+            "person_name_en": "LeBron James",
+            "category": "스포츠 (농구)",
+            "birth_date": "1984-12-30",
+            "korean_resonance": "국내 농구팬들에게 '릅신', '킹 제임스'라는 애칭으로 불리는 NBA 역사상 최고의 레전드. 20년이 넘는 세월 동안 정상의 자리를 지키며 한국의 1040 남성 스포츠 팬들에게 깊은 경외심을 주는 인물입니다.",
+            "viral_story_point": "40대라는 나이에도 현역 최정상급 기량을 유지하며, NBA 역사상 최초로 자신의 친아들인 브로니 제임스와 한 코트에서 뛰는 '부자(父子) 동반 출전'이라는 영화 같은 대기록을 작성한 감동적인 서사.",
+            "traffic_score": 91
+          },
+          {
+            "rank": 3,
+            "person_name": "타이거 우즈",
+            "person_name_en": "Tiger Woods",
+            "category": "스포츠 (골프)",
+            "birth_date": "1975-12-30",
+            "korean_resonance": "골프 대중화가 이루어진 한국에서 '골프 황제' 하면 0.1초 만에 떠오르는 인물. 그의 전성기를 보며 자란 중장년층부터 젊은 골퍼들까지, 그의 이름 석 자는 한국인들에게 스포츠 그 이상의 전율을 선사합니다.",
+            "viral_story_point": "사생활 논란과 수차례의 척추 수술, 그리고 다리 절단 위기까지 몰고 갔던 치명적인 차량 전복 사고를 극복하고 다시 필드로 돌아온 인간 승리의 아이콘. 불가능을 가능으로 바꾼 그의 재기 스토리는 도파민과 감동을 동시에 자극합니다.",
+            "traffic_score": 91
+          }
+        ],
+        "wikidata_id": "Q0",
+        "verified": true,
+        "scouted_trending": true
+      },
+      "pm": {
+        "person_name": "매염방",
+        "person_name_en": "Anita Mui",
+        "category": "가수 및 배우",
+        "event_date": "2003-12-30",
+        "keywords": [
+          "홍콩의딸",
+          "아시아의마돈나",
+          "마지막콘서트",
+          "장국영"
+        ],
+        "brief": "홍콩 영화와 음악의 찬란한 황금기를 이끌며 아시아를 매료시켰던 불멸의 디바, 매염방이 2003년 12월 30일 자궁경부암 투병 끝에 향년 40세로 별세했습니다.",
+        "is_deceased": true,
+        "trend_score": 98,
+        "trend_reason": "2003년은 장국영에 이어 매염방까지 떠나보내며 홍콩 영화 팬들에게 가장 아픈 해로 기억됩니다. 특히 암 투병 중에도 팬들과의 약속을 지키기 위해 웨딩드레스를 입고 무대에 올라 '나를 잊지 말아달라'며 마지막 노래를 부른 서사는 쇼츠 알고리즘에서 눈물샘을 자극하고 폭발적인 추모 댓글을 유도하기에 가장 완벽한 극적 요소를 지니고 있습니다.",
+        "top_candidates": [
+          {
+            "rank": 1,
+            "person_name": "매염방",
+            "person_name_en": "Anita Mui",
+            "category": "가수 및 배우",
+            "death_date": "2003-12-30",
+            "korean_resonance": "80~90년대 홍콩 영화와 음악의 황금기를 함께한 레전드로, 장국영과의 깊은 우정과 같은 해에 세상을 떠난 비극적 서사로 한국 대중의 가슴에 깊이 각인되어 있습니다.",
+            "legacy_point": "아시아의 마돈나이자 홍콩의 딸로 불리며 음악과 영화계를 모두 제패했고, 자궁경부암 투병 중에도 마지막 콘서트에서 웨딩드레스를 입고 무대와 결혼하겠다는 유언을 남긴 불멸의 디바입니다.",
+            "traffic_score": 98
+          },
+          {
+            "rank": 2,
+            "person_name": "리처드 로저스",
+            "person_name_en": "Richard Rodgers",
+            "category": "작곡가",
+            "death_date": "1979-12-30",
+            "korean_resonance": "영화 '사운드 오브 뮤직'의 '도레미 송', '에델바이스' 등 한국인이라면 유년 시절부터 누구나 듣고 자란 불멸의 멜로디를 탄생시킨 거장입니다.",
+            "legacy_point": "오스카, 토니, 그래미, 에미상(EGOT)에 퓰리처상까지 석권한 최초의 인물로, 900곡이 넘는 명곡과 43편의 뮤지컬을 남기며 현대 뮤지컬의 뼈대를 세웠습니다.",
+            "traffic_score": 94
+          },
+          {
+            "rank": 3,
+            "person_name": "톰 윌킨슨",
+            "person_name_en": "Tom Wilkinson",
+            "category": "배우",
+            "death_date": "2023-12-30",
+            "korean_resonance": "한국인이 인생 영화로 꼽는 '이터널 선샤인'의 하워드 박사, '배트맨 비긴즈'의 마피아 보스 카마인 팔코네 역으로 얼굴만 봐도 누구나 아는 명품 배우입니다.",
+            "legacy_point": "아카데미 2회 노미네이트 및 골든글로브, 에미상 수상에 빛나는 영국의 대배우로, 주조연을 가리지 않고 극에 완벽한 무게감을 더해준 연기 장인입니다.",
+            "traffic_score": 91
+          }
+        ],
+        "wikidata_id": "Q232621",
+        "verified": true,
+        "scouted_trending": true
+      }
     }
   },
-  "total_dates": 39
+  "total_dates": 40
 }
