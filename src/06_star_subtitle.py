@@ -85,146 +85,7 @@ def get_audio_voice_activity(wav_path, min_silence_dur=0.20, silence_thresh_db=-
     return lead_in
 
 
-def format_sub_display(text: str) -> str:
-    """내레이션 전문의 한글 발음 표기를 화면 자막용 아라비아 숫자/날짜 표기로 100% 보존 변환."""
-    if not text:
-        return ""
 
-    t = text
-
-    # 0. 고유명사 특정 음차 복원 (예: 블링크 일팔이 -> 블링크 182)
-    t = re.sub(r'블링크\s*일팔이', '블링크 182', t)
-
-    sino_map = {
-        '영': 0, '공': 0, '일': 1, '이': 2, '삼': 3, '사': 4,
-        '오': 5, '육': 6, '칠': 7, '팔': 8, '구': 9
-    }
-    def parse_sino(s):
-        val = 0
-        cur = 0
-        for ch in s:
-            if ch in sino_map:
-                cur = sino_map[ch]
-            elif ch == '십':
-                val += (cur if cur != 0 else 1) * 10
-                cur = 0
-            elif ch == '백':
-                val += (cur if cur != 0 else 1) * 100
-                cur = 0
-            elif ch == '천':
-                val += (cur if cur != 0 else 1) * 1000
-                cur = 0
-        return val + cur
-
-    native_tens = {'스물': 20, '서른': 30, '마흔': 40, '쉰': 50, '예순': 60, '일흔': 70, '여든': 80, '아흔': 90}
-    native_ones = {'하나': 1, '한': 1, '둘': 2, '두': 2, '셋': 3, '세': 3, '넷': 4, '네': 4, '다섯': 5, '여섯': 6, '일곱': 7, '여덟': 8, '아홉': 9, '열': 10}
-
-    def parse_native(s):
-        val = 0
-        rem = s
-        if rem.startswith('열') and len(rem) > 1:
-            val += 10
-            rem = rem[1:]
-        else:
-            for k, v in native_tens.items():
-                if rem.startswith(k):
-                    val += v
-                    rem = rem[len(k):]
-                    break
-        for k, v in native_ones.items():
-            if rem == k:
-                val += v
-                rem = ''
-                break
-        if rem == '' and val > 0:
-            return val
-        return None
-
-    def repl_year(m):
-        full = m.group(1)
-        try:
-            val = parse_sino(full)
-            if 1800 <= val <= 2099:
-                return f"{val}년"
-        except Exception:
-            pass
-        return m.group(0)
-
-    # 1. 연도: 천구백... 또는 이천...
-    t = re.sub(r'((?:천구백|이천)[영공일이삼사오육칠팔구십백천]*)년', repl_year, t)
-
-    # 2. 월: 시월, 유월, 십월 등
-    month_map = {
-        '일월': '1월', '이월': '2월', '삼월': '3월', '사월': '4월',
-        '오월': '5월', '유월': '6월', '칠월': '7월', '팔월': '8월',
-        '구월': '9월', '시월': '10월', '십월': '10월',
-        '십일월': '11월', '십이월': '12월'
-    }
-    for k, v in month_map.items():
-        t = re.sub(rf'(?<![가-힣]){k}', v, t)
-
-    # 3. 일: 1일 ~ 31일
-    def repl_day(m):
-        full = m.group(1)
-        try:
-            val = parse_sino(full)
-            if 1 <= val <= 31:
-                return f"{val}일"
-        except Exception:
-            pass
-        return m.group(0)
-
-    t = re.sub(r'([일이삼사오육칠팔구십]+)일', repl_day, t)
-
-    # 4. 일반 수사 + 단위 결합 (분, 초, 시간, 퍼센트, %, 도, 살, 세, 명, 개, 장, 권, 척, 곡, 편, 회, 등, 위, 점, 배, 대, 병, 잔, 골, 승, 패)
-    unit_pattern = r'(?<![가-힣])([일이삼사오육칠팔구십백천]+)\s*(분|초|시간|퍼센트|%|프로|도|살|세|명|개|장|권|척|곡|편|회|등|위|점|배|대|병|잔|골|승|패)'
-    def repl_unit(m):
-        full = m.group(1)
-        unit = m.group(2)
-        try:
-            val = parse_sino(full)
-            if val > 0:
-                if unit in ['퍼센트', '프로']:
-                    return f"{val}%"
-                return f"{val}{unit}"
-        except Exception:
-            pass
-        return m.group(0)
-
-    t = re.sub(unit_pattern, repl_unit, t)
-
-    # 5. 고유어 수사 + 단위 (스물다섯 살, 세 명, 두 개 등)
-    native_unit_pattern = r'(?<![가-힣])(스물|서른|마흔|쉰|예순|일흔|여든|아흔|열)?[가-힣]*\s*(살|세|명|개|장|권|척|곡|편|회|대|병|잔|골|점)'
-    def repl_native_unit(m):
-        word = m.group(0).strip()
-        unit = m.group(2)
-        num_part = word[:-len(unit)].strip()
-        val = parse_native(num_part)
-        if val is not None:
-            return f"{val}{unit}"
-        return m.group(0)
-
-    t = re.sub(r'(?<![가-힣])([스서마쉰예일여아열한두세네다여일여아][가-힣]*?)\s*(살|세|명|개|장|권|척|곡|편|회|대|병|잔|골|점)', repl_native_unit, t)
-
-    # 6. 큰 수 단위 (일만 명 -> 1만 명, 오만 명 -> 5만 명 등)
-    def repl_man(m):
-        num_str = m.group(1)
-        val = parse_sino(num_str)
-        unit_trail = m.group(2) or ''
-        if val > 0:
-            return f"{val}만{unit_trail}"
-        return m.group(0)
-
-    t = re.sub(r'(?<![가-힣])([일이삼사오육칠팔구십]+)만(\s*명|\s*원|\s*달러|\s*장|\s*개|\s*뷰|\s*원)?', repl_man, t)
-    t = re.sub(r'(?<![가-힣])백만(\s*명|\s*원|\s*달러|\s*장|\s*개|\s*뷰)?', r'100만\1', t)
-    t = re.sub(r'(?<![가-힣])천만(\s*명|\s*원|\s*달러|\s*장|\s*개|\s*뷰)?', r'1,000만\1', t)
-    t = re.sub(r'(?<![가-힣])일억(\s*명|\s*원|\s*달러|\s*장|\s*개)?', r'1억\1', t)
-    t = re.sub(r'(?<![가-힣])십억(\s*명|\s*원|\s*달러|\s*장|\s*개)?', r'10억\1', t)
-    t = re.sub(r'(?<![가-힣])백억(\s*명|\s*원|\s*달러|\s*장|\s*개)?', r'100억\1', t)
-    t = re.sub(r'(?<![가-힣])천억(\s*명|\s*원|\s*달러|\s*장|\s*개)?', r'1,000억\1', t)
-    t = re.sub(r'(?<![가-힣])일조(\s*원|\s*달러)?', r'1조\1', t)
-
-    return t
 
 
 def rule_based_chunking(text):
@@ -282,23 +143,26 @@ def analyze_dynamic_chunks(scenes):
         scenes_input = []
         for sc in scenes:
             sub_text = get_clean_sub_text(sc)
-            caption_clean = format_sub_display(sc.get("caption", "").strip())
+            caption_clean = sc.get("caption", "").strip()
+            highlight_kw = sc.get("highlight_keyword", "").strip()
             scenes_input.append({
                 "scene_no": sc["scene_no"],
                 "caption": caption_clean,
-                "narration": sub_text
+                "display_text": sub_text,
+                "highlight_keyword": highlight_kw
             })
 
         system_instruction = (
-            "당신은 구독자 100만 유튜브 지식 쇼츠의 전문 자막 디렉터입니다.\n"
-            "각 씬의 내레이션을 성우의 자연스러운 발화 호흡에 맞추어 2.0~3.5초(약 12~22자 내외)의 '의미 있는 구문 덩어리'로 분할하세요.\n"
-            "절대 3~4글자 단위로 자잘하게 파편화하지 마세요! 시청자가 한눈에 읽기 편안한 한 줄 문맥 단위여야 합니다.\n"
-            "각 청크마다 시청자의 시선을 순간적으로 사로잡을 수 있는 '핵심 키워드' 1개를 highlight 필드에 지정하세요.\n"
-            "텍스트의 원본 글자나 의미를 절대 누락하지 마세요."
+            "당신은 유튜브 쇼츠의 전문 자막 디렉터입니다.\n"
+            "1. [재창조 절대 금지]: 원본 텍스트(display_text)의 단어, 어순, 의미를 100% 그대로 보존하세요. 절대 요약하거나 말을 바꾸지 마세요.\n"
+            "2. [호흡 단위 분할]: 성우의 자연스러운 발화 호흡에 맞추어 2.0~3.5초(약 12~22자 내외)의 '의미 있는 구문 덩어리'로 분할하세요.\n"
+            "3. [하이라이트 반영]: 각 씬에 이미 지정된 highlight_keyword 단어가 포함된 청크의 highlight 필드에 해당 단어를 그대로 지정하고, 나머지 일반 청크는 반드시 빈 문자열(\"\")로 비워두세요.\n"
+            "4. 텍스트의 원본 글자나 기호를 절대 누락하지 마세요."
         )
 
         prompt = f"""
-아래 씬 목록의 내레이션을 유튜브 쇼츠용 자연스러운 호흡 자막 청크로 분할해주세요.
+아래 씬 목록의 자막 텍스트(display_text)를 원본 손실 없이 자연스러운 호흡 자막 청크로 분할해주세요.
+각 씬에 지정된 highlight_keyword 단어 1개만 해당 청크의 highlight에 지정하세요.
 
 [입력 씬 목록]
 {json.dumps(scenes_input, ensure_ascii=False, indent=2)}
@@ -311,11 +175,11 @@ def analyze_dynamic_chunks(scenes):
       "chunks": [
         {{
           "text": "노래방 가면 무조건 부르는 전설의 명곡 'Maria'!",
-          "highlight": "전설의 명곡"
+          "highlight": "Maria"
         }},
         {{
           "text": "그런데 이 노래의 주인공이 가수가 아니라면?",
-          "highlight": "가수가 아니라면"
+          "highlight": ""
         }}
       ]
     }}
@@ -374,7 +238,7 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
         scene_end = current_time + duration
 
         # 1. 상단 챕터 태그 (숫자 제외, 순수 60pt 노란색 볼드 단독 표시)
-        caption = format_sub_display(sc.get("caption", "").strip())
+        caption = sc.get("caption", "").strip()
         if caption:
             start_str = format_ass_time(scene_start)
             end_str = format_ass_time(scene_end)
@@ -405,55 +269,26 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
         total_weight = sum(weights) if sum(weights) > 0 else 1.0
         available_dur = max(1.0, duration - lead_in)
 
-        # 대본에서 지정한 씬별 핵심 하이라이트 키워드 목록
-        raw_kws = sc.get("highlight_keywords", [])
-        if isinstance(raw_kws, str):
-            raw_kws = [raw_kws]
-        elif not isinstance(raw_kws, list):
-            raw_kws = []
-
-        stop_endings = (
-            "습니다", "었습니다", "았습니다", "였습니다", "있었습니다", "없었습니다",
-            "뿐이었습니다", "뿐이었다", "돌았지만", "했지만", "였지만", "이라며", "라며",
-            "에게", "에서", "으로", "까지", "부터", "하고", "되고", "하며", "합니다",
-            "입니다", "립니다", "칩니다", "옵니다", "냅니다", "봅니다", "줍니다", "겪습니다"
-        )
-
+        # 씬당 단 1개의 핵심 단어만 노란색 강조 (단어 1개 강조 원칙)
+        scene_highlight_done = False
         t_cursor = scene_start + lead_in
         for i, c in enumerate(chunks):
             c_text = c["text"].strip()
-            c_highlight = c.get("highlight", "").strip()
+            c_highlight = c.get("highlight", "").strip(" .,?!'\"")
 
             c_dur = available_dur * (weights[i] / total_weight)
             c_end = t_cursor + c_dur
             if i == len(chunks) - 1:
                 c_end = scene_end
 
-            # 하이라이트 단어 스타일 태그 적용
             styled_text = c_text
-            applied_highlight = False
-
-            # 1순위: 대본에서 작가가 직접 지정한 highlight_keywords 1:1 매칭
-            if raw_kws:
-                for kw in raw_kws:
-                    kw_clean = str(kw).strip(" .,?!'\"")
-                    for cand in [kw_clean, format_sub_display(kw_clean)]:
-                        if cand and cand in styled_text:
-                            replacement = rf"{{\c&H0000E6FF&}}{cand}{{\c&H00FFFFFF&}}"
-                            styled_text = styled_text.replace(cand, replacement, 1)
-                            applied_highlight = True
-                            break
-                    if applied_highlight:
-                        break
-
-            # 2순위 (대본에 키워드가 없을 때): 서술어/종결어미 철저 배제
-            if not applied_highlight and c_highlight:
-                cand = c_highlight.strip(" .,?!'\"")
-                if len(cand) >= 2 and not any(cand.endswith(se) for se in stop_endings):
-                    if cand in styled_text:
-                        replacement = rf"{{\c&H0000E6FF&}}{cand}{{\c&H00FFFFFF&}}"
-                        styled_text = styled_text.replace(cand, replacement, 1)
-                        applied_highlight = True
+            # 씬당 최초 1회만 유효한 단어 하나 강조 적용
+            if not scene_highlight_done and c_highlight and len(c_highlight) >= 2:
+                cand = c_highlight
+                if cand in styled_text:
+                    replacement = rf"{{\c&H0000E6FF&}}{cand}{{\c&H00FFFFFF&}}"
+                    styled_text = styled_text.replace(cand, replacement, 1)
+                    scene_highlight_done = True
 
             st_str = format_ass_time(t_cursor)
             et_str = format_ass_time(c_end)

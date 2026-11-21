@@ -38,6 +38,7 @@ GCP_PROJECT_ID = _resolve_project_id()
 GCP_LOCATION = "us-central1"
 MODEL_TTS = "gemini-2.5-flash-preview-tts"
 VOICE = "Kore"
+SPEED_RATE = 1.15
 
 # 대본 및 인물 분위기별 가용 성우 풀 (Voice Roster)
 VOICE_ROSTER = {
@@ -77,106 +78,43 @@ def get_recommended_voice(person_name="", mode="AM", category=""):
     return "Kore"
 
 
-def int_to_korean(num: int) -> str:
-    """정수를 자연스러운 한국어 한자 수사로 변환 (예: 1993 -> 천구백구십삼)."""
-    if num == 0:
-        return "영"
-    digits = ["", "일", "이", "삼", "사", "오", "육", "칠", "팔", "구"]
-    units = ["", "십", "백", "천"]
-    big_units = ["", "만", "억", "조"]
-
-    num_str = str(num)
-    chunks = []
-    while num_str:
-        chunks.append(num_str[-4:])
-        num_str = num_str[:-4]
-
-    result = []
-    for chunk_idx, chunk in enumerate(chunks):
-        chunk_val = int(chunk)
-        if chunk_val == 0:
-            continue
-        chunk_str = ""
-        c_len = len(chunk)
-        for i, digit in enumerate(chunk):
-            d = int(digit)
-            pos = c_len - 1 - i
-            if d > 0:
-                if pos > 0 and d == 1:
-                    chunk_str += units[pos]
-                else:
-                    chunk_str += digits[d] + units[pos]
-        chunk_str += big_units[chunk_idx]
-        result.append(chunk_str)
-
-    return "".join(reversed(result))
-
-
-def convert_numbers_to_spoken_korean(text: str) -> str:
-    """아라비아 숫자 및 단위를 AI 성우가 자연스럽게 낭독할 수 있는 한국어 구어체로 자동 변환."""
+def correct_narration_for_tts(text: str) -> str:
+    """TTS 낭독 전 오독 위험이 있는 발음(연도, 날짜, 고유명사)만 AI로 최소 교정.
+    절대 재창조(문장 변형, 단어 교체) 금지, 원문 100% 보존."""
     if not text:
         return ""
-    t = text
+    try:
+        from google import genai
+        from google.genai import types
 
-    # 고유명사 예외 선반영
-    t = re.sub(r'블링크\s*182', '블링크 일팔이', t, flags=re.IGNORECASE)
-
-    # 1. 연도: 1800~2099년
-    def repl_year(m):
-        return f"{int_to_korean(int(m.group(1)))}년"
-    t = re.sub(r'(\d{4})년', repl_year, t)
-
-    # 2. 월: 6월(유월), 10월(시월) 등 발음 예외 처리
-    month_special = {'6': '유', '06': '유', '10': '시'}
-    def repl_month(m):
-        val = m.group(1)
-        if val in month_special:
-            return f"{month_special[val]}월"
-        return f"{int_to_korean(int(val))}월"
-    t = re.sub(r'(?<!\d)(\d{1,2})월', repl_month, t)
-
-    # 3. 일: 1~31일
-    def repl_day(m):
-        val = int(m.group(1))
-        if 1 <= val <= 31:
-            return f"{int_to_korean(val)}일"
-        return m.group(0)
-    t = re.sub(r'(?<!\d)(\d{1,2})일', repl_day, t)
-
-    # 4. 백분율: % -> 퍼센트
-    def repl_percent(m):
-        val = m.group(1)
-        if "." in val:
-            parts = val.split(".")
-            return f"{int_to_korean(int(parts[0]))} 점 {int_to_korean(int(parts[1]))} 퍼센트"
-        return f"{int_to_korean(int(val))} 퍼센트"
-    t = re.sub(r'(\d+(?:\.\d+)?)%', repl_percent, t)
-
-    # 5. 시간 단위: 분, 초
-    def repl_time(m):
-        return f"{int_to_korean(int(m.group(1)))} {m.group(2)}"
-    t = re.sub(r'(\d+)\s*(분|초)', repl_time, t)
-
-    # 6. 도(화상/각도/온도), 위(순위), 세(나이), 대(연령대)
-    def repl_unit(m):
-        return f"{int_to_korean(int(m.group(1)))}{m.group(2)}"
-    t = re.sub(r'(\d+)\s*(도|위|세|대|선)', repl_unit, t)
-
-    # 7. 수량/인원 단위: 명, 개, 번, 회, 곡, 편, 만, 억
-    def repl_count(m):
-        return f"{int_to_korean(int(m.group(1)))} {m.group(2)}"
-    t = re.sub(r'(\d+)\s*(명|개|번|회|곡|편|만|억)', repl_count, t)
-
-    # 8. 잔여 단독 숫자 변환
-    def repl_standalone(m):
-        return int_to_korean(int(m.group(1)))
-    t = re.sub(r'(?<![A-Za-z0-9])(\d+)(?![A-Za-z0-9])', repl_standalone, t)
-
-    return t
+        client = genai.Client(vertexai=True, project=GCP_PROJECT_ID, location="global")
+        prompt = (
+            "당신은 방송 다큐멘터리 성우 낭독 발음 검수관입니다.\n"
+            "아래 문장을 성우가 오독 없이 가장 자연스럽게 낭독할 수 있는 한국어 구어체 발음 표기로 최소 교정하세요.\n\n"
+            "[절대 규칙 - 엄격 준수]\n"
+            "1. 절대 문장을 바꾸거나 새로운 단어를 창작하지 마세요 (재창조 100% 금지).\n"
+            "2. 원본 문장의 단어와 어순을 100% 그대로 보존하세요.\n"
+            "3. 연도는 '일천구백...'이 아닌 반드시 자연스러운 '천구백...'으로 교정하세요.\n"
+            "4. 6월은 '유월', 10월은 '시월' 등 낭독 예외 발음으로 확정하세요.\n"
+            "5. 남아있는 아라비아 숫자는 성우가 읽을 자연스러운 한글 발음으로 바꾸세요.\n"
+            "6. 오직 교정된 최종 텍스트 한 줄만 출력하세요 (따옴표, 부연설명 일절 금지).\n\n"
+            f"검수 대상 문장:\n{text}"
+        )
+        resp = client.models.generate_content(
+            model="gemini-3.5-flash",
+            contents=prompt,
+            config=types.GenerateContentConfig(temperature=0.0)
+        )
+        corrected = resp.text.strip().strip('"\'')
+        if corrected:
+            return corrected
+    except Exception as e:
+        print(f"[TTS] 발음 AI 교정 건너뜀 (오류: {e})")
+    return text
 
 
 def normalize_tts_text(text: str) -> str:
-    """TTS 낭독 시 어색한 자음 약어, 슬랭, 아라비아 숫자를 자연스러운 한국어 발음으로 자동 치환."""
+    """TTS 낭독 시 어색한 자음 약어 정리 및 AI 기반 발음 최소 교정 (재창조 0%)."""
     replacements = [
         (r"ㄱㄱ", "고고"),
         (r"ㄷㄷ", "덜덜"),
@@ -185,9 +123,6 @@ def normalize_tts_text(text: str) -> str:
         (r"ㅠㅠ+", "흑흑"),
         (r"ㅜㅜ+", "흑흑"),
         (r"ㄹㅇ", "진짜"),
-        # (r"쌉(\w+)", r"완전 \1"),
-        # (r"개(\w+)", r"완전 \1"),
-        # (r"존(\w+)", r"완전 \1"),
         (r"@태그", "태그"),
         (r"#shorts", ""),
     ]
@@ -195,12 +130,15 @@ def normalize_tts_text(text: str) -> str:
     for pattern, repl in replacements:
         cleaned = re.sub(pattern, repl, cleaned)
 
-    # 아라비아 숫자 ➔ 한국어 낭독 발음 변환
-    cleaned = convert_numbers_to_spoken_korean(cleaned)
+    cleaned = re.sub(r'[\*\#\_\[\]\(\)\{\}\<\>]', '', cleaned)
+    cleaned = re.sub(r'\s+', ' ', cleaned).strip()
+
+    # AI 기반 발음 최소 교정 적용 (재창조 0%)
+    cleaned = correct_narration_for_tts(cleaned)
     return cleaned.strip()
 
 
-def run_tts_test(text, voice=VOICE, out_path="star_tts.wav"):
+def run_tts_test(text, voice=VOICE, speed=SPEED_RATE, out_path="star_tts.wav"):
     from google import genai
     from google.genai import types
 
@@ -257,7 +195,8 @@ def run_tts_test(text, voice=VOICE, out_path="star_tts.wav"):
     # 2. 방송 표준 2-Pass 리니어 오디오 마스터링 체인 (초반 볼륨 꺼짐 0% 원천 차단)
     import subprocess
     import json
-    pre_filter = "highpass=f=80,apad=pad_dur=0.35"
+    speed_filter = f"atempo={speed}," if speed and speed != 1.0 else ""
+    pre_filter = f"{speed_filter}highpass=f=80,apad=pad_dur=0.35"
 
     # Pass 1: 오디오 음량 통계 사전 측정 (print_format=json)
     pass1_cmd = [
@@ -313,6 +252,7 @@ if __name__ == "__main__":
     p = argparse.ArgumentParser(description="스타이즈본 TTS 생성기")
     p.add_argument("--text", default="내 천재성 외에는 신고할 것이 없다!")
     p.add_argument("--voice", default=VOICE)
+    p.add_argument("--speed", type=float, default=SPEED_RATE)
     p.add_argument("--out", default="test_tts.wav")
     a = p.parse_args()
-    run_tts_test(a.text, a.voice, a.out)
+    run_tts_test(a.text, a.voice, a.speed, a.out)
