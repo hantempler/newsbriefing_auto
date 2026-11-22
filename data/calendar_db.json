@@ -7,7 +7,7 @@
     "min_year": 1960,
     "period": "10-15 ~ 12-30 (Live Accumulated)",
     "total_dates": 40,
-    "total_stars": 81,
+    "total_stars": 82,
     "categories": [
       "K-Culture (드라마/예능/아이돌/가요 레전드)",
       "Global Pop (내한 떼창/손하트)",
@@ -3314,6 +3314,57 @@
           }
         ],
         "wikidata_id": "Q17517177",
+        "verified": true,
+        "scouted_trending": true
+      },
+      "pm": {
+        "person_name": "이예춘",
+        "person_name_en": "Lee Ye-chun",
+        "category": "배우",
+        "event_date": "1977-11-23",
+        "keywords": [
+          "이덕화아버지",
+          "성춘향변학도",
+          "현해탄은알고있다",
+          "눈물의부성애"
+        ],
+        "brief": "대한민국 영화계의 황금기를 이끈 전설적인 악역 배우이자, 아들을 향한 가슴 절절한 부성애를 남기고 1977년 11월 23일 별세한 고(故) 이예춘 선생을 깊이 애도하며 그의 불멸의 연기 혼을 기립니다.",
+        "is_deceased": true,
+        "trend_score": 98,
+        "trend_reason": "평생 스크린에서는 가장 차갑고 무서운 악역을 연기했으나, 현실에서는 아들 이덕화의 비극적 사고 소식에 심장마비와 쇼크로 쓰러져 병실 옆방에서 숨을 거둔 눈물겨운 부성애 서사가 한국 대중의 눈시울을 붉히고 폭발적인 추모 댓글과 알고리즘 유입을 이끌어낼 독보적인 트래픽 치트키이기 때문입니다.",
+        "top_candidates": [
+          {
+            "rank": 1,
+            "person_name": "이예춘",
+            "person_name_en": "Lee Ye-chun",
+            "category": "배우",
+            "death_date": "1977-11-23",
+            "korean_resonance": "국민 배우 이덕화의 아버지이자 1950~60년대 한국 영화 황금기를 이끈 독보적인 악역 전문 배우로, 대중에게 매우 친숙하며 그의 비극적인 가족사가 깊은 감동을 줍니다.",
+            "legacy_point": "영화 '성춘향'의 변학도, '현해탄은 알고 있다'의 모리 일등병 역으로 제1회 대종상 남우조연상을 수상한 연기 거장이며, 아들의 대형 사고 충격으로 지병이 악화되어 병상 옆방에서 숨을 거둔 눈물겨운 부성애의 주인공입니다.",
+            "traffic_score": 98
+          },
+          {
+            "rank": 2,
+            "person_name": "로알드 달",
+            "person_name_en": "Roald Dahl",
+            "category": "아동 문학가",
+            "death_date": "1990-11-23",
+            "korean_resonance": "'찰리와 초콜릿 공장', '마틸다' 등 한국인 누구나 어린 시절 한 번쯤 접해본 불멸의 동화들을 집필하여 세대를 초월한 정서적 유대감을 가지고 있습니다.",
+            "legacy_point": "제2차 세계대전 전투기 조종사 출신이라는 독특한 이력을 가졌으며, 기발한 상상력과 따뜻한 인간미가 담긴 작품들로 전 세계 수억 명의 아이들에게 꿈과 희망을 선물한 아동 문학의 거장입니다.",
+            "traffic_score": 94
+          },
+          {
+            "rank": 3,
+            "person_name": "김광균",
+            "person_name_en": "Kim Kwang-kyun",
+            "category": "시인",
+            "death_date": "1993-11-23",
+            "korean_resonance": "한국 교과서에 반드시 수록되는 시 '와사등'과 '외인촌'의 저자로, '낙엽은 폴란드 망명정부의 지폐'라는 구절을 통해 한국인들의 가을 감성을 자극하는 대표적인 시인입니다.",
+            "legacy_point": "한국 현대시에서 '시는 하나의 그림'이라는 회화적 모더니즘을 개척한 선구자이며, 납북된 동생을 대신해 기업을 이끌면서도 예술혼을 잃지 않았던 위대한 예술가이자 실업가입니다.",
+            "traffic_score": 91
+          }
+        ],
+        "wikidata_id": "Q12612110",
         "verified": true,
         "scouted_trending": true
       }
