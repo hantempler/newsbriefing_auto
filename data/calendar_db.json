@@ -6,8 +6,8 @@
     "korean_familiarity_priority": true,
     "min_year": 1960,
     "period": "10-15 ~ 12-30 (Live Accumulated)",
-    "total_dates": 40,
-    "total_stars": 82,
+    "total_dates": 41,
+    "total_stars": 84,
     "categories": [
       "K-Culture (드라마/예능/아이돌/가요 레전드)",
       "Global Pop (내한 떼창/손하트)",
@@ -3462,7 +3462,91 @@
         "verified": true,
         "scouted_trending": true
       }
+    },
+    "11-24": {
+      "am": {
+        "person_name": "정은채",
+        "person_name_en": "Jung Eun-chae",
+        "category": "배우",
+        "event_date": "1986-11-24",
+        "keywords": [
+          "정년이",
+          "문옥경",
+          "국극 황태자",
+          "숏컷 신드롬"
+        ],
+        "brief": "단 한 번의 파격적인 변신으로 온 나라를 '옥경이 앓이'에 빠뜨린, 시대와 성별을 초월한 대체 불가능한 비주얼 쇼크!",
+        "is_deceased": false,
+        "trend_score": 96,
+        "trend_reason": "드라마 '정년이'에서 보여준 '문옥경' 캐릭터가 쇼츠 플랫폼에서 엄청난 조회수와 편집 영상을 양산하며 트렌드의 중심에 서 있습니다. 기존의 우아하고 참한 이미지를 완전히 깨부순 파격적인 숏컷 변신과 '여성 국극 황태자'라는 독보적인 서사는 80초 쇼츠 영상에서 시각적, 감정적 도파민을 가장 극대화할 수 있는 치트키이기에 최종 1위로 선정했습니다.",
+        "top_candidates": [
+          {
+            "rank": 1,
+            "person_name": "정은채",
+            "person_name_en": "Jung Eun-chae",
+            "category": "배우",
+            "birth_date": "1986-11-24",
+            "korean_resonance": "드라마 '정년이'에서 매란국극단의 황태자 '문옥경' 역을 완벽히 소화하며 신드롬급 인기를 끌었습니다. '안나', '파친코' 등 굵직한 화제작에서 독보적인 마스크와 연기력으로 전 세대 대중에게 깊은 인상을 남긴 친숙한 배우입니다.",
+            "viral_story_point": "평생 긴 머리를 고수하던 그녀가 '정년이' 캐릭터를 위해 생애 첫 숏컷을 감행, 웹툰을 찢고 나온 듯한 완벽한 '국극 왕자님' 비주얼과 중저음 보이스로 여심을 뒤흔들며 쇼츠 알고리즘을 폭발시킨 비하인드 스토리입니다.",
+            "traffic_score": 96
+          },
+          {
+            "rank": 2,
+            "person_name": "권오중",
+            "person_name_en": "Kwon Oh-joong",
+            "category": "배우 / 방송인",
+            "birth_date": "1971-11-24",
+            "korean_resonance": "레전드 시트콤 '순풍산부인과'를 비롯해 수많은 예능에서 독보적인 '19금 토크' 캐릭터로 전 국민에게 큰 웃음을 준 친숙한 스타입니다. 동시에 발달장애를 앓는 아들을 향한 눈물겨운 부성애로 대중과 깊은 정서적 유대감을 공유하고 있습니다.",
+            "viral_story_point": "과거 서태지와 아이들의 '환상 속의 그대' 안무를 제작한 톱클래스 댄서 출신이라는 반전 과거와, 전성기 시절 아들의 간병과 케어를 위해 주연 배우 제안을 거절하고 사회복지사 자격증까지 취득하며 헌신한 눈물겨운 감동 실화입니다.",
+            "traffic_score": 95
+          }
+        ],
+        "wikidata_id": "Q5120477",
+        "verified": true,
+        "scouted_trending": true
+      },
+      "pm": {
+        "person_name": "프레디 머큐리",
+        "person_name_en": "Freddie Mercury",
+        "category": "싱어송라이터",
+        "event_date": "1991-11-24",
+        "keywords": [
+          "보헤미안랩소디",
+          "퀸",
+          "라이브에이드",
+          "불멸의보컬"
+        ],
+        "brief": "전설적인 록 밴드 '퀸'의 프론트맨이자, 시대와 국경을 초월한 목소리로 전 세계를 매료시켰던 불멸의 보컬리스트 프레디 머큐리가 1991년 11월 24일 별세했습니다.",
+        "is_deceased": true,
+        "trend_score": 98,
+        "trend_reason": "대한민국에서 음악 영화 역사상 유례없는 신드롬을 일으킨 주역으로 인지도가 압도적이며, 전설적인 '라이브 에이드' 무대의 전율과 투병 고백 하루 만에 별세한 비극적 서사는 쇼츠 알고리즘에서 폭발적인 조회수와 추모 댓글을 이끌어내기에 가장 완벽한 인물입니다.",
+        "top_candidates": [
+          {
+            "rank": 1,
+            "person_name": "프레디 머큐리",
+            "person_name_en": "Freddie Mercury",
+            "category": "싱어송라이터",
+            "death_date": "1991-11-24",
+            "korean_resonance": "영화 '보헤미안 랩소디'가 국내에서 990만 관객을 돌파하며 전 세대에게 불멸의 레전드로 각인되었고, 그의 명곡들은 여전히 한국인의 일상과 방송에서 끊임없이 사랑받고 있습니다.",
+            "legacy_point": "록 밴드 '퀸'의 프론트맨으로서 4옥타브를 넘나드는 압도적인 가창력과 무대 장악력을 선보였으며, 에이즈 투병 사실을 세상에 당당히 고백한 지 단 하루 만에 세상을 떠나며 전 세계에 깊은 울림과 경각심을 남겼습니다.",
+            "traffic_score": 98
+          },
+          {
+            "rank": 2,
+            "person_name": "구하라",
+            "person_name_en": "Goo Hara",
+            "category": "가수",
+            "death_date": "2019-11-24",
+            "korean_resonance": "2세대 대표 걸그룹 '카라'의 멤버로서 '미스터', '프리티 걸' 등의 메가 히트곡을 남기며 한일 양국 대중문화계에 한 획을 그었고, 그녀의 갑작스러운 비보는 대중의 가슴에 깊은 슬픔과 미안함으로 남아있습니다.",
+            "legacy_point": "무대 위에서 누구보다 밝게 빛났던 아티스트였으며, 사후 양육 의무를 저버린 부모의 상속권을 박탈하는 '구하라법' 제정의 계기가 되어 우리 사회에 거대하고 숭고한 법적 유산을 남겼습니다.",
+            "traffic_score": 96
+          }
+        ],
+        "wikidata_id": "Q15869",
+        "verified": true,
+        "scouted_trending": true
+      }
     }
   },
-  "total_dates": 40
+  "total_dates": 41
 }
