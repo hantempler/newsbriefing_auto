@@ -89,6 +89,32 @@ def fetch_wikidata_id(name_ko, name_en=None):
     return None
 
 
+def promote_candidate_to_winner(candidate: dict, mode: str, date_str: str) -> dict:
+    """Top-3 후보 중 결격사유 없는 차순위 후보를 1위(Winner) 스키마로 승격."""
+    is_pm = mode.lower() == "pm"
+    ev_date = candidate.get("death_date" if is_pm else "birth_date", f"YYYY-{date_str}")
+    if not ev_date or not ev_date.endswith(date_str):
+        ev_date = f"1990-{date_str}" if is_pm else f"1995-{date_str}"
+
+    desc = candidate.get("legacy_point" if is_pm else "viral_story_point", "")
+    name = candidate.get("person_name", "스타")
+    brief = desc if desc else f"{name}의 위대한 생애를 기립니다."
+    if is_pm and not any(k in brief for k in ["별세", "사망", "타계", "서거"]):
+        brief = brief.rstrip(".") + f" ({ev_date[:4]}년 {date_str.split('-')[0]}월 {date_str.split('-')[1]}일 별세)."
+
+    return {
+        "person_name": name,
+        "person_name_en": candidate.get("person_name_en", ""),
+        "category": candidate.get("category", "스타"),
+        "event_date": ev_date,
+        "keywords": [name, candidate.get("category", "스타"), "레전드"],
+        "brief": brief,
+        "is_deceased": is_pm,
+        "trend_score": candidate.get("traffic_score", 92),
+        "trend_reason": f"[클린 후보 자동 승격] {candidate.get('korean_resonance', '')}"
+    }
+
+
 def load_calendar_db():
     if CALENDAR_FILE.exists():
         try:
@@ -176,6 +202,14 @@ def scout_trending_star(date_str=None, mode="am"):
 다음 인물들은 채널 캘린더에 이미 등록되어 있으므로 절대로 후보나 1위로 선정하지 마세요:
 [{blacklist_str}]
 
+[🚨 절대 금기 3: 타인 후광(가족/혈연 관계) 기생 인지도 영구 금지 (Anti-Halo Rule) 🚨]:
+- "누구의 아버지", "누구의 아들/딸", "누구의 배우자", "누구의 스승" 등 혈연/친분 관계를 인지도의 근거로 삼는 행위를 엄격히 금지합니다!
+- 반드시 '인물 본인의 이름과 대표작/얼굴' 자체만으로 1030 쇼츠 대중이 알고 있는 인물이어야 합니다.
+
+[🚨 절대 금기 4: 1970년대 이전 활동 중심 고전 인물 배제 (Modern Pop-Culture Only) 🚨]:
+- 본 채널은 1030 세대를 위한 '현대 대중문화 스타' 채널입니다.
+- 1970년대 이후~현대까지 대중적으로 널리 소비되고 사랑받은 스타를 최우선 선정하세요.
+
 [🚨 인물 선별 3대 원칙 🚨]:
 1. [국적 및 분야 완전 오픈 (Universal Open-World)]:
    - 한국인이든 외국인이든 국적은 전혀 상관없습니다.
@@ -197,6 +231,7 @@ def scout_trending_star(date_str=None, mode="am"):
    - 35~40점: 전 국민적 톱스타/레전드 (이름/얼굴만 봐도 100% 아는 인물)
    - 28~34점: 특정 세대/장르 톱티어 (1030 인기 아이돌, 유명 주연 배우, 해외축구 영웅)
    - 20~27점: 마니아층 인지도
+   - [🚨 하드 컷오프]: 본인 인지도 점수가 28점 미만인 인물은 아무리 자극적 사연이 있어도 1위(Winner) 선정 영구 금지!
 2. 쇼츠 알고리즘 화제성 및 도파민/댓글 유발력 (30점 만점):
    - 26~30점: 댓글창 폭발, 논쟁, 극적인 갭모에, 감정 폭발 유발
    - 20~25점: 흥미로운 비하인드 썰 보유
@@ -262,12 +297,22 @@ def scout_trending_star(date_str=None, mode="am"):
    - 다음 인물들은 최근 채널에 이미 등록되어 있으므로 절대로 후보나 1위로 선정하지 마세요:
    - [{blacklist_str}]
 
+[🚨 절대 금기 5: 타인 후광(가족/혈연 관계) 기생 인지도 영구 금지 (Anti-Halo Rule) 🚨]:
+- "누구의 아버지", "누구의 아들/딸", "누구의 배우자", "누구의 스승" 등 혈연/친분 관계를 인지도의 근거로 삼는 행위를 엄격히 금지합니다!
+- 반드시 '인물 본인의 이름과 대표작/얼굴' 자체만으로 1030 쇼츠 대중이 알고 있는 인물이어야 합니다.
+- (예: 유명 배우의 부모라는 이유로 비유명 고전 배우를 1위로 올리면 즉각 실격 처리)
+
+[🚨 절대 금기 6: 1970년대 이전 활동 중심 고전 인물 배제 (Modern Pop-Culture Only) 🚨]:
+- 본 채널은 역사 다큐멘터리(PRJ_history)가 아니며, 1030 세대를 위한 '현대 대중문화 스타 헌정' 채널입니다.
+- 1950~60년대 흑백영화 시대 활동 인물, 교과서 고전 문학가 등은 원칙적으로 배제합니다.
+- 1970년대 이후~현대까지 대중적으로 널리 소비되고 사랑받은 문화 아이콘을 최우선 선정하세요.
+
 [인물 선별 핵심 기준 - 국적 불문, '한국 대중 친숙도' 최우선]:
 1. [국적 및 분야 완전 오픈 (Universal Open-World)]:
-   - 한국인이든 외국인이든 상관없이 음악, 영화, 미술, 문학, 과학, 역사, 스포츠 등 전 세계의 존경받는 거장들을 폭넓게 탐색하세요.
+   - 한국인이든 외국인이든 상관없이 음악, 영화, 미술, 문학, 과학, 스포츠, 대중문화 등 전 세계의 존경받는 거장들을 폭넓게 탐색하세요.
 
 2. [핵심 평가 기준: 한국 대중의 '아, 그 거장!' 즉각적 연상 및 추모 가치]:
-   - 이름을 듣자마자 한국 대중 누구나 그가 남긴 명곡, 명작, 명대사, 혹은 숭고한 역사적 업적을 떠올리며 감정이입할 수 있는 인물.
+   - 이름을 듣자마자 한국 대중 누구나 그가 남긴 명곡, 명작, 명대사를 떠올리며 감정이입할 수 있는 인물.
    - [탈락 대상]: 해외 로컬 역사 인물, 대중이 본명조차 모르는 엑스트라/단역 인물은 5주기/10주기라도 즉각 탈락.
 
 [🚨 트래픽 점수 객관적 채점 루브릭 (70~100점)]:
@@ -276,6 +321,7 @@ def scout_trending_star(date_str=None, mode="am"):
    - 35~40점: 전 국민적 톱스타/레전드/거장 (이름/얼굴만 봐도 100% 아는 인물)
    - 28~34점: 특정 세대/장르 톱티어 (1030 친숙 아티스트, 유명 주연 배우, 명장)
    - 20~27점: 마니아층 인지도
+   - [🚨 하드 컷오프]: 한국 1030 체감 인지도가 28점 미만인 인물은 아무리 감동적이거나 비극적인 신파 사연이 있어도 절대로 '최종 1위(Winner)'로 선정 불가! (즉각 탈락)
 2. 쇼츠 알고리즘 화제성 및 추모/댓글 유발력 (30점 만점):
    - 26~30점: 온 국민의 애도, 댓글창 폭발, 눈물샘 자극, 시대를 관통한 메시지
    - 20~25점: 잔잔한 추모와 존경
@@ -354,26 +400,67 @@ def scout_trending_star(date_str=None, mode="am"):
         if "top_candidates" in data:
             winner["top_candidates"] = data["top_candidates"]
 
-        # 1. 날짜 끝자리 검증
+        # 1. 날짜 끝자리 검증 (Gate 1)
         ev_date = winner.get("event_date", "")
         if not ev_date.endswith(date_str):
             raise ValueError(f"선정 인물({winner.get('person_name')})의 날짜({ev_date})가 {date_str}와 불일치")
 
-        # 2. PM 모드 사망 하드 가드레일 (생존자 원천 차단)
-        if mode_lower == "pm":
-            is_deceased = winner.get("is_deceased", False)
-            brief = winner.get("brief", "")
-            reason = winner.get("trend_reason", "")
-            combined_text = f"{brief} {reason}"
+        # 2. 생사 정합성 및 타인 후광 검증 (Gate 2 & Gate 3)
+        disqualified = False
+        disqualify_reason = ""
+
+        is_deceased = winner.get("is_deceased", False)
+        brief = winner.get("brief", "")
+        reason = winner.get("trend_reason", "")
+        combined_text = f"{brief} {reason}"
+
+        if mode_lower == "am":
+            # AM 모드: 생존자 필수 (사망자 즉시 탈락)
+            if is_deceased:
+                disqualified = True
+                disqualify_reason = f"AM 인물 '{winner.get('person_name')}'은(는) 이미 사망한 고인(is_deceased=True)"
+        else:
+            # PM 모드: 고인 필수 (생존자 즉시 탈락)
             death_keywords = ["별세", "사망", "타계", "서거", "산화", "순국", "잠들다", "떠난", "추모", "영면", "세상을 떠", "안식"]
             has_death_kw = any(k in combined_text for k in death_keywords)
             if not is_deceased or not has_death_kw:
-                raise ValueError(f"[치명적 가드레일 위반] PM 인물 '{winner.get('person_name')}' 사망 팩트 미확인! 생존자 배제.")
-            # brief에 사망 연도/별세 표기가 누락되었을 경우 가독성을 위해 자동 보강
+                disqualified = True
+                disqualify_reason = f"PM 인물 '{winner.get('person_name')}' 사망 팩트 미확인(생존자 의심)"
+
+        # 타인 후광(혈연/친분 기생) 키워드 검출 (Gate 3)
+        halo_keywords = ["의 아버지", "의 아들", "의 딸", "의 어머니", "의 남편", "의 아내"]
+        if not disqualified and any(k in combined_text for k in halo_keywords):
+            disqualified = True
+            disqualify_reason = f"1위 인물 '{winner.get('person_name')}' 타인 후광(가족/혈연 기생) 감지"
+
+        # 3. Failover Fallback: 결격 사유 발생 시 차순위 정상 후보 자동 승격 (Gate 4)
+        if disqualified:
+            print(f"🚨 [Scout Guardrail] 1위 '{winner.get('person_name')}' {disqualify_reason}으로 실격! 차순위 클린 후보 탐색...")
+            candidates = data.get("top_candidates", [])
+            promoted = False
+            for cand in candidates[1:]:
+                cand_res = cand.get("korean_resonance", "")
+                cand_point = cand.get("legacy_point" if mode_lower == "pm" else "viral_story_point", "")
+                cand_combined = f"{cand_res} {cand_point}"
+                # 가족 후광이 없고 인지도가 검증된 정상 후보 탐색
+                if not any(k in cand_combined for k in halo_keywords):
+                    new_winner = promote_candidate_to_winner(cand, mode_lower, date_str)
+                    new_winner["top_candidates"] = candidates
+                    winner = new_winner
+                    promoted = True
+                    print(f"✅ [Scout Fallback] 클린 후보 '{winner['person_name']}' 최종 1위 자동 승격 완료!")
+                    break
+            if not promoted:
+                raise ValueError(f"[치명적 가드레일 위반] 후보군 전원 결격사유로 1위 선정 불가: {disqualify_reason}")
+
+        # PM 모드 brief 보강 (별세 표기 누락 시)
+        if mode_lower == "pm":
+            brief = winner.get("brief", "")
+            ev_date = winner.get("event_date", "")
             if "별세" not in brief and "사망" not in brief and "타계" not in brief:
                 winner["brief"] = brief.rstrip(".") + f" ({ev_date[:4]}년 {date_str.split('-')[0]}월 {date_str.split('-')[1]}일 별세)."
 
-        # 3. Wikidata 공식 Q-ID 취득 및 기입
+        # 4. Wikidata 공식 Q-ID 취득 및 기입
         qid = fetch_wikidata_id(winner.get("person_name"), winner.get("person_name_en"))
         winner["wikidata_id"] = qid or "Q0"
 
