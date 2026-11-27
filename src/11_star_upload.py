@@ -114,9 +114,10 @@ def upload_shorts_package(package_dir, privacy_status="private", publish_at=None
         try:
             s_data = json.loads(script_json.read_text(encoding="utf-8"))
             sc = s_data.get("script", {})
-            title = sc.get("title", "스타이즈본 역사 인물 쇼츠") + " #shorts"
-            description = sc.get("hook_quote", "") + "\n\n#shorts #스타이즈본"
-            tags = s_data.get("meta", {}).get("keywords", ["스타이즈본", "쇼츠"])
+            yt = sc.get("youtube_metadata", {})
+            title = yt.get("title") or (sc.get("title", "스타이즈본 역사 인물 쇼츠") + " #shorts")
+            description = yt.get("description") or (sc.get("hook_quote", "") + "\n\n#shorts #스타이즈본")
+            tags = yt.get("tags") or s_data.get("meta", {}).get("keywords", ["스타이즈본", "쇼츠"])
         except Exception as e:
             print(f"[Warn] script.json 폴백 실패: {e}")
 

@@ -188,44 +188,49 @@ def render_scene_clip_dynamic(img_file, wav_file, out_mp4, duration, scene_idx, 
         x_expr = "iw/2-(iw/zoom/2)"
         y_expr = "ih*0.42-(ih/zoom*0.42)"
 
-    elif camera_motion == "pan_lr":
-        # 콘서트/무대/넓은 배경: 1.20배 확대 후 좌에서 우로 뚜렷하게 훑는 패닝 (180px 이동)
-        zoom_expr = "1.20"
+def get_camera_vf(motion_type, duration, total_frames):
+    """지정된 모션 타입에 따른 FFmpeg zoompan 필터 문자열 반환"""
+    vignette_prefix = ""
+    if motion_type == "face_zoom":
+        step_in = 0.18 / total_frames
+        zoom_expr = f"min(1.00+on*{step_in:.6f}, 1.18)"
+        x_expr = "iw/2-(iw/zoom/2)"
+        y_expr = "ih*0.45-(ih/zoom*0.45)"
+    elif motion_type == "pan_lr":
+        zoom_expr = "1.18"
         x_expr = f"(iw-iw/zoom)*(on/{max(1, total_frames - 1)})"
-        y_expr = "ih*0.38-(ih/zoom*0.38)"
-
-    elif camera_motion == "tilt_up":
-        # 시련 극복/위상 카리스마: 1.20배 확대 후 아래에서 인물 얼굴로 상승 틸트 (180px 이동)
+        y_expr = "ih*0.45-(ih/zoom*0.45)"
+    elif motion_type == "tilt_up":
         zoom_expr = "1.20"
         x_expr = "iw/2-(iw/zoom/2)"
         y_expr = f"(ih-ih/zoom)*(0.75-0.55*(on/{max(1, total_frames - 1)}))"
-
-    elif camera_motion == "vignette_zoom_out":
-        # 시련/고독/위기: 외곽 어두운 비네팅 + 1.20배에서 1.00배로 물러나는 줌아웃
+    elif motion_type == "vignette_zoom_out":
         vignette_prefix = "vignette=PI/4.2,"
         step_out = 0.20 / total_frames
         zoom_expr = f"max(1.20-on*{step_out:.6f}, 1.00)"
         x_expr = "iw/2-(iw/zoom/2)"
         y_expr = "ih/2-(ih/zoom/2)"
-
-    elif camera_motion == "slow_drift":
-        # 감동/추모/레거시: 1.15배에서 대각선으로 유려하게 유영하는 시네마틱 무빙
+    elif motion_type == "stable_hold":
+        return "scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,fps=30"
+    else:  # slow_drift or default
         zoom_expr = "1.15"
         x_expr = f"(iw-iw/zoom)*(0.15+0.7*(on/{max(1, total_frames - 1)}))"
         y_expr = f"(ih-ih/zoom)*(0.2+0.6*(on/{max(1, total_frames - 1)}))"
 
-    if camera_motion == "stable_hold":
-        vf = "scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,fps=30"
-    else:
-        vf = (
-            f"{vignette_prefix}"
-            f"scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,"
-            f"zoompan=z='{zoom_expr}':x='{x_expr}':y='{y_expr}':d=1:s=1080x1920:fps=30"
-        )
+    return (
+        f"{vignette_prefix}"
+        f"scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,"
+        f"zoompan=z='{zoom_expr}':x='{x_expr}':y='{y_expr}':d=1:s=1080x1920:fps=30"
+    )
+
+
+def render_scene_clip_dynamic(img_file, wav_file, out_mp4, duration, scene_idx=1, camera_motion=None, sfx_file=None):
+    """단일 이미지 기반 씬 클립 생성 (기존 호환)"""
+    total_frames = max(1, int(duration * 30))
+    vf = get_camera_vf(camera_motion or "face_zoom", duration, total_frames)
 
     if sfx_file and Path(sfx_file).exists():
         sfx_vol = 0.35 if scene_idx == 1 else 0.20
-        # normalize=0으로 내레이션 음성이 50%로 줄어들지 않고 100% 원본 크기 유지
         filter_complex = (
             f"[0:v]{vf}[v];"
             f"[1:a]volume=1.0[nar];"
@@ -256,6 +261,94 @@ def render_scene_clip_dynamic(img_file, wav_file, out_mp4, duration, scene_idx, 
             str(out_mp4)
         ]
     run_cmd(cmd)
+
+
+def render_scene_clip_multi_images(img_files, wav_file, out_mp4, duration, scene_idx=1, base_motion="face_zoom", sfx_file=None):
+    """단일 또는 다중(1~3장) 실사 사료 이미지를 씬 내레이션 길이에 맞춰 시네마틱 교차 전환 렌더링"""
+    if not img_files:
+        raise FileNotFoundError(f"Scene {scene_idx} 이미지 파일이 없습니다.")
+
+    # 1. 단일 이미지인 경우 기존 켄 번스 방식 고속 단일 렌더링
+    if len(img_files) == 1:
+        render_scene_clip_dynamic(img_files[0], wav_file, out_mp4, duration, scene_idx, base_motion, sfx_file)
+        return
+
+    # 2. 다중 이미지(2~3장)인 경우: 음성 시간을 균등 분할하여 서브 클립 생성 후 결합
+    num_imgs = len(img_files)
+    sub_dur = duration / num_imgs
+    sub_clips = []
+    parent_dir = out_mp4.parent
+
+    # 서브 컷별 교차 모션 프리셋
+    motion_cycle = ["face_zoom", "vignette_zoom_out", "pan_lr", "tilt_up", "slow_drift"]
+    start_m_idx = (scene_idx * 2) % len(motion_cycle)
+
+    for sub_i, img_p in enumerate(img_files):
+        sub_mp4 = parent_dir / f"temp_s{scene_idx}_sub{sub_i}.mp4"
+        sub_m = motion_cycle[(start_m_idx + sub_i) % len(motion_cycle)]
+        total_frames = max(1, int(sub_dur * 30))
+        vf = get_camera_vf(sub_m, sub_dur, total_frames)
+        
+        cmd_sub = [
+            "ffmpeg", "-y",
+            "-loop", "1", "-i", str(img_p),
+            "-vf", vf,
+            "-t", str(sub_dur),
+            "-c:v", "libx264", "-preset", "veryfast", "-crf", "18",
+            "-pix_fmt", "yuv420p",
+            str(sub_mp4)
+        ]
+        run_cmd(cmd_sub)
+        sub_clips.append(sub_mp4)
+
+    # 서브 클립 concat 리스트
+    sub_concat_txt = parent_dir / f"temp_s{scene_idx}_concat.txt"
+    sub_concat_txt.write_text("".join(f"file '{c.name}'\n" for c in sub_clips), encoding="utf-8")
+    
+    merged_sub_v = parent_dir / f"temp_s{scene_idx}_merged.mp4"
+    run_cmd(["ffmpeg", "-y", "-f", "concat", "-safe", "0", "-i", sub_concat_txt.name, "-c", "copy", merged_sub_v.name], cwd=parent_dir)
+
+    # 결합된 비디오에 원본 내레이션 음성 및 SFX 합성
+    if sfx_file and Path(sfx_file).exists():
+        sfx_vol = 0.35 if scene_idx == 1 else 0.20
+        filter_complex = (
+            f"[1:a]volume=1.0[nar];"
+            f"[2:a]volume={sfx_vol}[sfx];"
+            f"[nar][sfx]amix=inputs=2:duration=first:normalize=0[a]"
+        )
+        cmd_final = [
+            "ffmpeg", "-y",
+            "-i", str(merged_sub_v),
+            "-i", str(wav_file),
+            "-i", str(sfx_file),
+            "-filter_complex", filter_complex,
+            "-map", "0:v", "-map", "[a]",
+            "-c:v", "copy",
+            "-c:a", "aac", "-b:a", "192k", "-ar", "44100", "-ac", "2",
+            "-t", str(duration),
+            str(out_mp4)
+        ]
+    else:
+        cmd_final = [
+            "ffmpeg", "-y",
+            "-i", str(merged_sub_v),
+            "-i", str(wav_file),
+            "-map", "0:v", "-map", "1:a",
+            "-c:v", "copy",
+            "-c:a", "aac", "-b:a", "192k", "-ar", "44100", "-ac", "2",
+            "-t", str(duration),
+            str(out_mp4)
+        ]
+    run_cmd(cmd_final)
+
+    # 임시 파일 정리
+    for sc_p in sub_clips:
+        try: sc_p.unlink()
+        except: pass
+    try: sub_concat_txt.unlink()
+    except: pass
+    try: merged_sub_v.unlink()
+    except: pass
 
 
 def assemble_shorts(script_path):
@@ -395,13 +488,30 @@ def assemble_shorts(script_path):
         # 카메라 모션 결정 (대본 지정 모션 또는 자동 순환)
         motion = sc.get("camera_motion")
 
+        # 메인 및 서브 이미지(최대 3장) 수집
+        img_files = []
+        main_img = assets_dir / f"scene_{i}.jpg"
+        if main_img.exists():
+            img_files.append(main_img)
+        for sub_idx in range(1, 10):
+            sub_file = assets_dir / f"scene_{i}_sub{sub_idx}.jpg"
+            if sub_file.exists():
+                img_files.append(sub_file)
+            else:
+                break
+
+        if not img_files:
+            raise FileNotFoundError(f"Scene {i} 이미지 파일을 찾을 수 없습니다: {main_img.name}")
+
         if part_mp4.exists() and part_mp4.stat().st_size > 100000:
             print(f"[Assemble] Scene {i} 클립 이미 존재 (스킵): {part_mp4.name}")
             part_clips.append(part_mp4)
             continue
 
-        render_scene_clip_dynamic(img_file, wav_file, part_mp4, dur, scene_idx=i, camera_motion=motion, sfx_file=scene_sfx)
-        print(f"[Assemble] Scene {i} 클립 완성 ({dur:.1f}s, Motion: {motion or 'auto'}, SFX: {'Whoosh' if scene_sfx else 'None'})")
+        render_scene_clip_multi_images(img_files, wav_file, part_mp4, dur, scene_idx=i, base_motion=motion, sfx_file=scene_sfx)
+        n_imgs = len(img_files)
+        sub_info = f" ({n_imgs}장 시네마틱 교차 전환)" if n_imgs > 1 else ""
+        print(f"[Assemble] Scene {i} 클립 완성 ({dur:.1f}s, Motion: {motion or 'auto'}{sub_info}, SFX: {'Whoosh' if scene_sfx else 'None'})")
         part_clips.append(part_mp4)
 
     # 6. 클립 Concat

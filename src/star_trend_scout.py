@@ -89,6 +89,30 @@ def fetch_wikidata_id(name_ko, name_en=None):
     return None
 
 
+def check_star_photo_richness(name_ko, name_en=None):
+    """후보 인물이 실사 사료(P18 위키미디어 사진 또는 P345 IMDb 식별자)를 실제로 보유하고 있는지 사전 검증."""
+    qid = fetch_wikidata_id(name_ko, name_en)
+    if not qid:
+        return None, False, "위키데이터 Q-ID 없음"
+    try:
+        url = f"https://www.wikidata.org/w/api.php?action=wbgetentities&ids={qid}&props=claims&format=json"
+        req = urllib.request.Request(url, headers={"User-Agent": "StarIsBornBot/1.0 (https://github.com/hantempler)"})
+        with urllib.request.urlopen(req, timeout=5) as resp:
+            data = json.loads(resp.read().decode("utf-8"))
+        claims = data.get("entities", {}).get(qid, {}).get("claims", {})
+        has_p18 = "P18" in claims
+        has_p345 = "P345" in claims
+        if has_p18 or has_p345:
+            reasons = []
+            if has_p18: reasons.append("위키미디어 공식사진(P18)")
+            if has_p345: reasons.append("IMDb 스틸컷(P345)")
+            return qid, True, f"고화질 사료 보유 ({', '.join(reasons)})"
+        else:
+            return qid, False, "실사 사진 사료 전무 (P18/P345 없음)"
+    except Exception as e:
+        return qid, False, f"사료 검증 오류: {e}"
+
+
 def promote_candidate_to_winner(candidate: dict, mode: str, date_str: str) -> dict:
     """Top-3 후보 중 결격사유 없는 차순위 후보를 1위(Winner) 스키마로 승격."""
     is_pm = mode.lower() == "pm"
@@ -210,6 +234,11 @@ def scout_trending_star(date_str=None, mode="am"):
 - 특정 세대나 연령층에 국한되지 않고, 세대와 시대를 초월하여 대한민국 국민 누구나 이름과 얼굴을 0.1초 만에 알아보는 국민적 생존 스타를 최우선 선정하세요.
 - 본인 고유의 커리어와 독보적 인지도를 지닌 인물만 허용하며, 활동이 전무하여 현대 대중에게 잊혀진 인물은 배제합니다.
 
+[🚨 절대 하드 가드레일 5: 실사 사료(고화질 사진/스틸컷) 풍부 인물 필수! (Visual Richness Rule) 🚨]:
+- 본 채널은 실제 사진 사료를 보여주는 9:16 비주얼 다큐멘터리 쇼츠입니다.
+- 웹상에 고화질 사진이나 영화/드라마/경기 스틸컷이 존재하지 않는 인물(학자, 사서, 고대 인물, 사진 미공개 인물 등)은 영구 실격(Blacklist)입니다!
+- 반드시 국민 누구나 얼굴을 알고 있으며, 고화질 사진/스틸컷이 최소 5장 이상 풍부하게 남아있는 스타/거장/배우/가수/스포츠 영웅을 최우선 선정하세요!
+
 [🚨 인물 선별 3대 원칙 🚨]:
 1. [국적 및 분야 완전 오픈 (Universal Open-World)]:
    - 한국인이든 외국인이든 국적은 전혀 상관없습니다.
@@ -309,6 +338,11 @@ def scout_trending_star(date_str=None, mode="am"):
    20세기 중반 이전 인물이라도 2026년 현재 한국 대중 전 세대에게 여전히 불멸의 레전드로 기억되고 소비되는 거장은 전격 허용합니다.)
 - [배제 대상]: 당대에만 반짝했거나 2026년 현재 한국 대중 대다수가 이름과 얼굴을 전혀 모르는 인물, 
   오직 '누구의 가족(아버지/아들)'이라는 이유로 억지 포장된 비인지 인물은 즉각 실격 처리하세요.
+
+[🚨 절대 하드 가드레일 7: 실사 사료(고화질 사진/스틸컷) 풍부 인물 필수! (Visual Richness Rule) 🚨]:
+- 본 채널은 실제 사진 사료를 보여주는 9:16 비주얼 다큐멘터리 쇼츠입니다.
+- 웹상에 고화질 사진이나 영화/드라마/경기 스틸컷이 존재하지 않는 인물(학자, 사서, 고대 인물, 사진 미공개 인물 등)은 영구 실격(Blacklist)입니다!
+- 반드시 국민 누구나 얼굴을 알고 있으며, 고화질 사진/스틸컷이 최소 5장 이상 풍부하게 남아있는 레전드 스타/거장/배우/가수/스포츠 영웅을 최우선 선정하세요!
 
 [인물 선별 핵심 기준 - 국적 불문, '한국 대중 친숙도' 최우선]:
 1. [국적 및 분야 완전 오픈 (Universal Open-World)]:
@@ -463,8 +497,30 @@ def scout_trending_star(date_str=None, mode="am"):
             if "별세" not in brief and "사망" not in brief and "타계" not in brief:
                 winner["brief"] = brief.rstrip(".") + f" ({ev_date[:4]}년 {date_str.split('-')[0]}월 {date_str.split('-')[1]}일 별세)."
 
-        # 4. Wikidata 공식 Q-ID 취득 및 기입
-        qid = fetch_wikidata_id(winner.get("person_name"), winner.get("person_name_en"))
+        # 4. 실사 사료 사전 검증 (Gate 5: Photo Availability Check)
+        qid, has_photo, photo_msg = check_star_photo_richness(winner.get("person_name"), winner.get("person_name_en"))
+        if not has_photo:
+            print(f"🚨 [Scout Visual Guardrail] 1위 '{winner.get('person_name')}' {photo_msg}으로 실격! 사료 보유 차순위 후보 탐색...")
+            candidates = data.get("top_candidates", [])
+            photo_promoted = False
+            for cand in candidates[1:]:
+                c_name = cand.get("person_name")
+                c_en = cand.get("person_name_en")
+                c_qid, c_has, c_msg = check_star_photo_richness(c_name, c_en)
+                if c_has:
+                    new_winner = promote_candidate_to_winner(cand, mode_lower, date_str)
+                    new_winner["top_candidates"] = candidates
+                    winner = new_winner
+                    qid = c_qid
+                    photo_promoted = True
+                    print(f"✅ [Scout Visual Fallback] 고화질 사료 보유 후보 '{winner['person_name']}' ({c_msg}) 최종 1위 자동 승격 완료!")
+                    break
+            if not photo_promoted:
+                print(f"[Scout Warning] 후보군 중 실사 사료 완비 인물 부재 ({photo_msg})")
+
+        # 5. Wikidata 공식 Q-ID 취득 및 기입
+        if not qid:
+            qid = fetch_wikidata_id(winner.get("person_name"), winner.get("person_name_en"))
         winner["wikidata_id"] = qid or "Q0"
 
         winner["verified"] = True

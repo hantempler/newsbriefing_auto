@@ -24,6 +24,9 @@ DATA_DIR = ROOT_DIR / "data"
 OUTPUT_DIR = ROOT_DIR / "output"
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
+if str(SRC_DIR) not in sys.path:
+    sys.path.insert(0, str(SRC_DIR))
+
 CRED_PATH = ROOT_DIR / "config" / "application_default_credentials.json"
 if CRED_PATH.exists():
     os.environ.setdefault("GOOGLE_APPLICATION_CREDENTIALS", str(CRED_PATH))
@@ -160,10 +163,84 @@ def run_fact_check(client, types, model, person_name, mode, date_str):
     return parsed
 
 
-def generate_shorts_script(client, types, model, person_name, person_name_en, mode, date_str, fact_data):
-    """검증된 팩트를 바탕으로 7개 씬(80~100초) 서사 확장 쇼츠 대본 생성."""
+def ensure_fact_check_in_description(description: str, fact_data: dict, tags: list = None) -> str:
+    """유튜브 설명란에 공식 팩트체크 및 출처 정보 블록과 하단 해시태그가 온전히 포함되도록 100% 보증."""
+    has_fact_block = "[공식 팩트체크 및 출처 정보" in description
+
+    if not has_fact_block:
+        facts = fact_data.get("verified_facts", []) if fact_data else []
+        # 기존 설명란 끝의 모호하거나 축약된 출처 줄 정리
+        desc_clean = re.sub(r"\n*\[?(?:공식\s*)?(?:팩트체크|출처).*$", "", description.strip(), flags=re.DOTALL).strip()
+
+        fact_lines = [desc_clean]
+        if facts:
+            fact_lines.extend([
+                "",
+                "━━━━━━━━━━━━━━━━━━━━",
+                "[공식 팩트체크 및 출처 정보 (Fact Check & Sources)]"
+            ])
+            for idx, f in enumerate(facts, 1):
+                claim = f.get("claim", "").strip()
+                detail = f.get("detail", "").strip()
+                source = f.get("source", "").strip()
+                item_text = claim if claim else detail
+                if detail and detail != claim and not detail.startswith(claim):
+                    item_text = f"{claim} ({detail})"
+                fact_lines.append(f"{idx}. {item_text} (출처: {source})")
+            fact_lines.append("━━━━━━━━━━━━━━━━━━━━")
+        description = "\n".join(fact_lines)
+
+    # 하단 해시태그(#) 블록 보증
+    if tags:
+        tag_list = [f"#{t.strip().replace(' ', '')}" for t in tags if t and t.strip()]
+        if "#shorts" not in [t.lower() for t in tag_list]:
+            tag_list.append("#shorts")
+        hashtag_str = " ".join(tag_list)
+        if hashtag_str and hashtag_str not in description:
+            description = description.rstrip() + "\n\n" + hashtag_str
+
+    return description
+
+
+def generate_shorts_script(client, types, model, person_name, person_name_en, mode, date_str, fact_data, available_photos=None, scouted_meta=None):
+    """검증된 팩트와 인물의 킬러 바이럴 썰을 바탕으로 7개 씬(80~100초) 단 하나의 썰 몰입형 쇼츠 대본 생성."""
     mode_title = "[A Star is Born] 오늘 태어난 스타" if mode.lower() == "am" else "[The Legend Falls] 오늘 별이 된 레전드"
-    print(f"[Script] {mode_title} - 7개 씬 서사 확장 대본 집필 중...")
+    print(f"[Script] {mode_title} - 7개 씬 도파민 킬러 스토리 대본 집필 중...")
+
+    # available_photos 규격 정규화 (딕셔너리 or 리스트 지원)
+    candidates = []
+    if isinstance(available_photos, dict):
+        candidates = available_photos.get("candidates", [])
+    elif isinstance(available_photos, list):
+        candidates = available_photos
+
+    photo_anchor_section = ""
+    if candidates:
+        p_lines = []
+        for p in candidates[:10]:
+            p_lines.append(f"- [사료 ID: {p['id']}] 출처: {p.get('source', '')} | 사진 내용: {p.get('caption', '')}")
+        p_str = "\n".join(p_lines)
+        photo_anchor_section = f"""
+[참고용 확보 사료 목록 (선택적 앵커링)]:
+우리는 이 스타에 대해 아래와 같이 실제로 촬영된 고화질 역사적 실사 사진들을 보유하고 있습니다:
+{p_str}
+
+[사료 활용 지침]:
+1. 대본의 주도권은 '스토리의 재미와 도파민'이 100% 쥐어야 합니다! 절대 사진 목록에 대본을 억지로 꿰맞추지 마세요!
+2. 7개 씬의 킬러 스토리를 써내려가는 과정에서 위 사료 목록 중 자연스럽게 어울리는 사진이 있다면 해당 씬의 "anchored_photo_id": "<사료 ID>"로 지정하세요.
+3. 사료 목록에 사진이 없는 씬(유년기, 오디션 뒷이야기, 특정 미보유 대표작 등)은 주저하지 말고 "anchored_photo_id": null 로 비워두세요. (AI 시각 연속성이 그 빈자리를 완벽히 연출합니다!)
+"""
+
+    # scouted_meta에서 킬러 썰 및 핵심 키워드 추출
+    viral_story = ""
+    keywords_str = ""
+    trend_reason = ""
+    brief_desc = ""
+    if scouted_meta:
+        viral_story = scouted_meta.get("viral_story_point", "")
+        keywords_str = ", ".join(scouted_meta.get("keywords", []))
+        trend_reason = scouted_meta.get("trend_reason", "")
+        brief_desc = scouted_meta.get("brief", "")
 
     if mode.lower() == "am":
         tone_instruction = """- [AM 탄생 축하 모드 컬러/조명 철학 - 생생한 원색 풀컬러 (Vivid Full Color)]:
@@ -194,107 +271,65 @@ def generate_shorts_script(client, types, model, person_name, person_name_en, mo
 4. [공통 규격 강제]:
    - 모든 bg_prompt 끝에는 반드시 'vertical 9:16 portrait orientation, strictly tall phone screen framing, masterpiece, 8k, no text'를 명시하세요."""
 
-    prompt = f"""당신은 100만 유튜브 쇼츠 채널 '스타이즈본'의 메인 작가입니다.
+    prompt = f"""당신은 100만 유튜브 쇼츠 채널 '스타이즈본'의 메인 스토리텔러 작가입니다.
 인물 한글명: {person_name}
 인물 영문명: {person_name_en}
 모드: {mode_title}
 날짜: {date_str}
+
+[🔥 쇼츠 대본 절대 제1원칙: 단 하나의 킬러 썰 / 도파민 실화 중심 스토리텔링 🔥]
+우리는 이 인물에 대해 지루한 위키백과 연표(이력서 브리핑)를 낭독하려는 것이 아닙니다!
+시청자의 뇌관을 터뜨릴 '단 하나의 충격적인 비하인드 실화'를 뼈대로 삼아, 7개 씬 동안 손에 땀을 쥐게 만드는 미니 드라마(썰)를 풀어야 합니다!
+
+[이 스타의 검증된 킬러 바이럴 썰]:
+- 핵심 킬러 썰: {viral_story if viral_story else brief_desc}
+- 대표 상징 키워드: {keywords_str}
+- 대중 주목 이유: {trend_reason}
+
 검증된 팩트 데이터:
 {json.dumps(fact_data, ensure_ascii=False, indent=2)}
+{photo_anchor_section}
 
-[대본 작성 절대 룰 - 엄격 준수]
-1. 1분 컷으로 너무 조급하게 줄이지 마세요! 충분히 흥미진진한 썰을 풀 수 있도록 총 7개 씬(약 80초~100초)으로 구성합니다.
-2. 위인전 어투 절대 금지! 써에이스쇼/OverSimplified처럼 찰지고 유쾌한 구어체 사용.
-3. [핵심 채널 철학 - 긍정과 찬사(Celebration) & 따뜻한 추모와 헌정(Tribute)으로 가득 채울 것]:
-   - 이 채널의 절대적 목적은 '생일을 맞은 셀럽을 온 마음으로 축하하고, 세상을 떠난 레전드를 따뜻하게 추모하는 헌정 채널'입니다.
-   - [AM - 생일 축하 모드]: 시청자와 팬덤 모두가 감탄하고 진심으로 축하할 수 있는 '역대급 대기록', '치열한 노력과 끈기', '반전 실력과 신드롬', '감동적인 미담과 선한 영향력'을 칭찬과 긍정으로 가득 채우세요.
-   - [PM - 기일 추모 모드]: 자극적인 사망 경위나 비극적 사건 묘사는 엄격히 배제하고, 그가 남긴 '불멸의 명곡/명작', '전 세계 팬들의 청춘을 밝혀준 찬란한 순간', '음악과 예술적 유산에 대한 깊은 경의와 따뜻한 리스펙트'를 담으세요.
-   - [공통 금기 사항]: 사생활 가십, 세금/법적 분쟁, 성형 루머, 악의적 논란은 100% 원천 배제하세요.
-4. [자막 및 음성 대본 작성 1:1 분리 룰 - 엄격 준수]:
-   - [화면 자막용 (display_text)]: 시청자가 화면에서 한눈에 읽기 편하도록 모든 연도, 날짜, 수량은 반드시 시인성 높은 아라비아 숫자(예: 1982년 11월 22일, 100만 명)로 작성하세요.
-   - [성우 낭독용 (narration)]: AI 성우가 가장 자연스럽게 읽을 수 있는 한글 구어체 발음 표기(예: '천구백팔십이년 십일월 이십이일')로 작성하세요. 연도는 절대 '일천구백'으로 쓰지 말고 '천구백...'으로 작성합니다.
-   - [씬당 하이라이트 단어 (highlight_keyword)]: 그 씬에서 가장 시선을 사로잡아야 할 결정적 핵심 단어(숫자, 고유명사, 사건명) 단 1개만 지정하세요.
-   - [재창조 절대 금지]: display_text와 narration은 단어와 문맥이 1:1로 완전히 일치해야 하며 오직 표기(숫자 vs 발음)만 달라야 합니다.
-   - 채팅 자음(ㄱㄱ, ㄷㄷ, ㅋㅋ, ㅠㅠ, ㄹㅇ 등)이나 슬랭 약어 사용 절대 금지.
-5. [아웃트로(씬 7) 엔딩 작성 절대 룰 - 절제와 여운의 미학 (Dignified Understatement)]:
-   - 🚨 절대 금기 (피로감 유발 클리셰 100% 영구 배제):
-     * "구독과 좋아요 눌러주세요", "알림 설정까지!", "축하 댓글 남겨주세요", "여러분의 생각은?" 등의 유튜버식 구걸 멘트나 앵무새 같은 CTA를 일절 쓰지 마세요.
-   - 💡 핵심 철학:
-     시청자가 영상을 끝까지 보고 났을 때, 아무 말 없이 가슴이 뭉클해지거나 "진짜 멋진 인생이었다"라는 묵직한 여운이 남아 스스로 좋아요를 누르게 만들어야 합니다.
-   - 📐 씬 7 클로징 2단계 공식:
-     1단계 (삶을 관통하는 담담한 한 줄 헌사): 인물이 세상에 남긴 궤적이나 시련을 이겨낸 삶의 태도를 과장 없는 담백한 한 문장으로 정리.
-     2단계 (오늘 날짜의 의미를 짚는 마침표): 탄생(AM) 또는 별세(PM)의 날짜를 조용히 상기시키며 담담하게 완결.
-     * AM(생일) 모범 예시: "골목길의 거친 소년에서, 올드 트래포드를 호령한 전설로. 1985년 10월 24일, 오늘은 웨인 루니가 태어난 날입니다."
-     * PM(기일) 모범 예시: "조용한 용기로 세상을 바꾼 여인. 2005년 10월 24일, 영원한 자유의 어머니 로자 파크스가 우리 곁을 떠났습니다. 그녀가 남긴 위대한 한 걸음을 기억합니다."
-6. [비주얼 프롬프트 앵커 룰 - 중요]:
-   - 씬 1부터 씬 7까지 모든 bg_prompt 첫머리에 반드시 '{person_name_en} with his/her iconic features' 실명과 대표 외형 시그니처를 포함해야 합니다.
-   {visual_style_instruction}
+[🚨🚨 지루한 시대별 연표 브리핑(Chronological Overview) 100% 영구 퇴출 🚨🚨]
+- ❌ 절대 금기 (이력서 낭독): "몇 년도에 데뷔했고 ➔ 몇 년도에 무슨 드라마를 찍었고 ➔ 몇 년도에 무슨 영화를 찍었습니다" 식의 연도별 작품 나열 금지!
+- ❌ 절대 금기 (주요 대표작 누락): 사진이 없다는 핑계로 대중이 가장 열광하는 '국민 대표작/인생 캐릭터'를 대본에서 빼버리는 행위 엄벌!
 
-[서사 다변화 가이드 - 매일 다른 플롯 선택]
-인물의 특성과 팩트에 가장 잘 어울리는 아래 5가지 서사 플롯 중 하나를 자동 선택하여 7개 씬을 유기적으로 전개하세요:
+[⭕ 필수 서사 원칙: 단 하나의 썰 몰입형 7씬 롤러코스터 구조]:
+1. [씬 1: 도파민 대비 훅 (Contrast Hook) - 3초 만에 멱살 잡기]:
+   - 🚨 절대 금기: "1994년 11월 26일 세상에 한 아이가 태어났습니다" 같은 지루한 구연동화 도입부 100% 금지!
+   - 💡 필수 공식: 인물의 가장 충격적인 대비(처절한 결핍 vs 상상초월 성공) 또는 대본에도 없던 소름 돋는 충격 실화로 시작할 것!
+2. [씬 2: 충격 사건의 발단 / 비하인드 썰]:
+   - 대본에도 없던 자작 연기, 상상 초월의 오디션/작품 비화, 아무도 몰랐던 현장의 충격적인 시작.
+3. [씬 3: 위기와 극한의 몰입]:
+   - 감독이나 동료마저 기절 직전까지 몰고 간 미친 디테일, 처절한 독기나 극한의 고난.
+4. [씬 4: 반전의 독기 / 각성]:
+   - 이 지독한 집념의 뿌리 (뼈를 깎는 노력, 지옥의 감량, 무명 시절의 치열한 악바리 정신 등 반전 서사).
+5. [씬 5: 클라이맥스 대폭발 - 인생 대표작]:
+   - 전 국민을 뒤흔든 인생 최고의 대표작/인생 캐릭터로 판을 뒤집어버린 전율의 순간! (대중이 가장 사랑하는 인생작을 반드시 여기서 터뜨릴 것!)
+6. [씬 6: 한계 없는 광기 / 현재의 위상]:
+   - 배역을 위해 영혼까지 갈아 넣는 지독한 열정과 현재 대한민국/세계가 주목하는 독보적 위상.
+7. [씬 7: 묵직한 헌정 엔딩]:
+   - 구걸식 멘트("구독 좋아요") 배제, 인물의 삶을 관통하는 묵직한 한 줄 헌사와 오늘 날짜의 의미로 품격 있게 마무리.
 
-플롯 A. [상식 파괴 & 반전 추적형] (오해와 루머가 있거나 반전이 있는 인물):
-  - 씬 1: "우리가 알던 이 사실, 100% 가짜였다?!" 도발적 훅
-  - 씬 2~3: 당대 사람들이 왜 이 사람을 오해하고 비난했는가?
-  - 씬 4~5: 역사적 팩트와 결정적 증거로 밝혀낸 진짜 진실
-  - 씬 6~7: 역사의 재평가와 여운 + 간결한 CTA
-
-플롯 B. [언더독 카타르시스형] (밑바닥, 무명, 편견을 독기로 뚫어낸 인물):
-  - 씬 1: 가장 비참하게 내동댕이쳐졌던 절망의 순간
-  - 씬 2~3: 곰팡이 단칸방/비웃음 속에서 이를 악물고 갈고닦은 무기
-  - 씬 4~5: 단 한 번의 무대/기회에서 세상을 뒤집어버린 도파민 폭발
-  - 씬 6~7: 나를 무시하던 자들을 향한 가장 통쾌한 복수 + 간결한 CTA
-
-플롯 C. [세기의 맞대결 & 라이벌전] (치열한 승부와 라이벌이 있는 스포츠/테크 스타):
-  - 씬 1: 숨 막히는 격돌의 현장 오프닝
-  - 씬 2~3: 천재 vs 천재, 스타일과 성격의 극단적 대비
-  - 씬 4~5: 전 세계 수억 명이 숨죽인 결정적 명장면/충돌
-  - 씬 6~7: 승패를 초월한 리스펙트와 영원한 드라마 + 간결한 CTA
-
-플롯 D. [도파민 폭발 엽기 기행형] (유쾌한 썰과 기발한 천재성이 돋보이는 인물):
-  - 씬 1: "대체 왜 이런 짓을 했을까?" 황당한 돌발 상황 훅
-  - 씬 2~3: 상식을 와장창 깨부수는 기상천외한 실화 에피소드
-  - 씬 4~5: 방송사고나 위기를 역대급 마케팅/흥행으로 바꾼 천재성
-  - 씬 6~7: 미친 폼과 세상을 웃게 만든 매력 + 간결한 CTA
-
-플롯 E. [시네마틱 레거시 추모형] (전 국민의 가슴에 영원히 남은 레전드):
-  - 씬 1: 그날의 기억과 가슴 먹먹한 오프닝
-  - 씬 2~3: 시대의 청춘들을 위로했던 명곡/명연기와 진심
-  - 씬 4~5: 아픔 속에서도 마지막까지 무대와 사람을 지킨 불꽃
-  - 씬 6~7: 세월이 흘러도 여전히 우리 곁에 살아 숨 쉬는 별 + 헌사 CTA
-
-[대본 구성 절대 룰 - 1회차 시청자 100% 몰입 및 완벽한 기승전결]
-1. 씬 1 (오프닝 훅, 5~8초):
-   - 대뜸 "바로 ~였습니다"처럼 질문도 안 했는데 대답부터 하는 쌩뚱맞은 문장 절대 금지!
-   - 1회차 시청자가 들었을 때 즉시 귀를 기울이게 만드는 도발적인 질문, 호기심 폭발 명대사, 놀라운 반전 팩트로 자연스럽게 시작하세요.
-   - 예: "노래방 가면 무조건 부르는 전설의 명곡 'Maria'! 그런데 이 폭발적인 고음의 주인공이 가수가 아니라 여배우라는 사실, 알고 계셨나요? 오늘 태어난 스타, 김아중의 미친 반전 스토리입니다."
-2. 씬 2~6 (본문 전개, 각 12~17초):
-   - 선택한 플롯에 맞추어 기승전결 텐션 유지. 뼈를 깎는 노력과 극적인 반전, 카타르시스 폭발.
-3. 씬 7 (아웃트로, 8~10초):
-   - 말을 하다 말고 "...진짜 비결은..." 처럼 어색하게 문장을 뚝 끊어먹지 마세요!
-   - 시끄러운 구독/댓글 유도 없이, 인물의 삶을 관통하는 묵직한 한 줄 헌사와 오늘 날짜(탄생/기일)를 짚어주며 깊은 여운 속에 품격 있게 완결하세요.
-4. [시네마틱 카메라 연출 (camera_motion) - 씬별 지능형 동적 배정]:
-   - 씬 번호에 따라 기계적으로 순서를 매기지 마세요! 각 씬의 내레이션 감정선과 배경 상황(bg_prompt)을 분석하여 가장 알맞은 연출을 자유롭게 결정하세요:
-     * "face_zoom": 인물의 강렬한 표정, 감정선 집중, 오프닝 훅 (얼굴 클로즈업 줌)
-     * "push_in": 긴장감 넘치는 임팩트, 충격적인 진실, 반전 순간 (전진 푸시인)
-     * "pan_lr": 콘서트 무대, 영화 촬영장, 거대한 시상식, 넓은 군중/배경 (좌우 와이드 패닝)
-     * "tilt_up": 바닥에서 정상으로의 도약, 시련 극복의 카리스마 (아래에서 위로 상승 틸트)
-     * "vignette_zoom_out": 깊은 고독, 무명 시절, 슬픔, 시련, 위기의 순간 (외곽 암전 비네팅 + 줌아웃)
-     * "slow_drift": 잔잔한 감동, 음악적 유산, 묵직한 존경과 추모 (대각선 유려한 드리프트)
+8. [자막(display_text) vs 음성(narration) 1:1 완벽 분리]:
+   - [display_text]: 화면용. 연도, 날짜, 수량은 시인성 높은 아라비아 숫자 표기 (예: 1994년 11월 26일, 30kg, 1위)
+   - [narration]: 성우용. 자연스러운 한글 구어체 발음 표기 (예: 천구백구십사년 십일월 이십육일, 삼십 킬로그램, 일위)
+   - 두 문장은 단어와 문맥이 1:1로 일치해야 하며, 서면어가 아닌 자연스러운 입말로 작성하세요.
 
 [출력 JSON 규격]
 {{
-  "title": "쇼츠 썸네일 훅 제목 (10~14자 내외, 콜론(:)이나 인물 실명 반복 금지, 예: '버스 한 칸이 바꾼 세상')",
+  "title": "쇼츠 썸네일 훅 제목 (10~14자 내외, 콜론(:)이나 인물 실명 반복 금지)",
   "hook_quote": "오프닝 5초 핵심 훅 문구",
   "scenes": [
     {{
       "scene_no": 1,
-      "timing": "00:00-00:05",
-      "caption": "화면 상단 세련된 한글 챕터 제목 (10자 내외 간결한 명사형 구문, 영문 금지, 예: '꿈의 구단 맨유')",
-      "display_text": "화면 자막용 문장 (아라비아 숫자 표기, 예: '프로필에 적힌 1982년 2월 26일은...')",
-      "narration": "성우 낭독용 문장 (자연스러운 한글 구어체 발음 표기, 예: '프로필에 적힌 천구백팔십이년 이월 이십육일은...')",
-      "highlight_keyword": "이 씬에서 단 1개만 노란색으로 강조할 핵심 단어 (예: '송혜교')",
-      "camera_motion": "face_zoom 또는 pan_lr 등 위 6대 모션 중 택1",
+      "timing": "00:00-00:08",
+      "caption": "화면 상단 한글 챕터 제목 (10자 내외 간결한 구문)",
+      "display_text": "화면 자막용 2~3문장 (숫자/연도는 아라비아 표기, 60~90자 내외)",
+      "narration": "성우 낭독용 2~3문장 (한글 구어체 발음 표기, 60~90자 내외)",
+      "highlight_keyword": "이 씬에서 단 1개만 노란색으로 강조할 핵심 단어",
+      "anchored_photo_id": "확보된 사료 ID(예: 'real_001') 또는 null",
+      "camera_motion": "face_zoom 또는 pan_lr 등 6대 모션 중 택1",
       "bg_prompt": "English 9:16 vertical visual prompt starting with {person_name_en}"
     }},
     ... (총 7개 씬)
@@ -313,15 +348,28 @@ def generate_shorts_script(client, types, model, person_name, person_name_en, mo
         response_mime_type="application/json"
     )
     resp = generate_content_with_retry(client, model, contents=prompt, config=cfg)
+    raw_text = (resp.text or "").strip()
+    clean_text = re.sub(r"^```(?:json)?\s*", "", raw_text)
+    clean_text = re.sub(r"\s*```$", "", clean_text).strip()
     try:
-        return json.loads(resp.text)
+        data = json.loads(clean_text, strict=False)
     except Exception:
-        clean_text = re.sub(r"^```json\s*", "", resp.text.strip())
-        clean_text = re.sub(r"\s*```$", "", clean_text)
-        return json.loads(clean_text)
+        m = re.search(r"(\{[\s\S]*\})", clean_text)
+        if m:
+            data = json.loads(m.group(1), strict=False)
+        else:
+            raise
+
+    # 유튜브 메타데이터 팩트체크 블록 이중 보증 (LLM 누락 방지 가드)
+    if isinstance(data, dict) and "youtube_metadata" in data:
+        yt = data["youtube_metadata"]
+        if isinstance(yt, dict) and "description" in yt:
+            yt["description"] = ensure_fact_check_in_description(yt["description"], fact_data, tags=yt.get("tags"))
+
+    return data
 
 
-def run_pipeline(mode="am", date_str=None, person=None):
+def run_pipeline(mode="am", date_str=None, person=None, available_photos=None):
     from google import genai
     from google.genai import types
 
@@ -387,8 +435,8 @@ def run_pipeline(mode="am", date_str=None, person=None):
     # 팩트체크와 대본 생성 사이 쿨다운 (API 429 방지)
     time.sleep(3)
 
-    # 2. 대본 생성 (7개 씬 확장)
-    script_data = generate_shorts_script(client, types, model, person, person_en, mode, date_str, fact_data)
+    # 2. 대본 생성 (단 하나의 킬러 썰 몰입형 7씬 집필)
+    script_data = generate_shorts_script(client, types, model, person, person_en, mode, date_str, fact_data, available_photos=available_photos, scouted_meta=scouted_meta)
 
     # 3. 패키지 디렉토리에 script.json 저장
     result = {
@@ -397,6 +445,8 @@ def run_pipeline(mode="am", date_str=None, person=None):
             "target_date": date_str,
             "person_name": person,
             "person_name_en": person_en,
+            "wikidata_id": scouted_meta.get("wikidata_id") or scouted_meta.get("winner", {}).get("wikidata_id"),
+            "available_photos": available_photos or [],
             "model": model,
             "package_dir": str(pkg_dir),
             "created_at": datetime.datetime.now().isoformat()
@@ -407,6 +457,11 @@ def run_pipeline(mode="am", date_str=None, person=None):
 
     out_path = pkg_dir / "script.json"
     out_path.write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
+
+    # 유튜브 메타데이터 분리 영구 보존
+    if "youtube_metadata" in script_data:
+        yt_meta_path = pkg_dir / "youtube_metadata.json"
+        yt_meta_path.write_text(json.dumps(script_data["youtube_metadata"], ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"[Script] 완료! 저장 경로: {out_path}")
     print(f"         제목: {script_data.get('title')}")
     print(f"         씬 개수: {len(script_data.get('scenes', []))}씬")

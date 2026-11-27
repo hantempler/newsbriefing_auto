@@ -82,7 +82,7 @@ def main(script_path, overwrite_tts=False):
             print(f"[PilotRun] Scene {n} 이미지 이미 존재 (스킵)")
         else:
             print(f"\n[PilotRun] Scene {n}/{len(script['scenes'])} 이미지 생성 중...")
-            run_image(bg_prompt, out_path=str(img_file))
+            run_image(bg_prompt, out_path=str(img_file), scene_data=sc, meta_data=meta)
 
         narration = sc.get("narration_tts") or sc.get("narration", "")
         if tts_file.exists() and tts_file.stat().st_size > 5000 and not overwrite_tts:
@@ -114,6 +114,9 @@ def main(script_path, overwrite_tts=False):
         mode=mode,
         years=years
     )
+
+    # 갱신된 메타데이터 및 씬별 실사 정보 저장
+    p.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
 
     print(f"\n============================================================")
     print(f"[PilotRun] 성공! 모든 에셋 생성 완료:")
